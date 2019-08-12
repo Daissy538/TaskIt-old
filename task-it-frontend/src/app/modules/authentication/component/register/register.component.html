@@ -1,1 +1,32 @@
-<p>Hallo Register</p>
+<div class="register-container">
+  <form fxLayout="column" fxLayoutAlign="center">
+    <section class="mat-typography">
+      <h1 fxLayoutAlign="start center">
+        Registreer en creeër overzicht in je taken
+      </h1>
+    </section>
+    <div fxLayoutAlign="center center">
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Email" />
+      </mat-form-field>
+    </div>
+    <div fxLayoutAlign="center center">
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Nickname" />
+      </mat-form-field>
+    </div>
+    <div fxLayoutWrap fxLayoutAlign="center center">
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Wachtwoord" />
+      </mat-form-field>
+    </div>
+    <div fxLayoutWrap fxLayoutAlign="center center">
+      <mat-form-field appearance="outline">
+        <input matInput placeholder="Herhaal wachtwoord" />
+      </mat-form-field>
+    </div>
+    <button mat-raised-button color="primary" fxFlexAlign="end">
+      Registreren
+    </button>
+  </form>
+</div>
