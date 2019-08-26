@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskItApi.Models;
 
 namespace TaskItApi.Migrations
 {
     [DbContext(typeof(TaskItDbContext))]
-    partial class TaskItDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190821090846_changePaswword")]
+    partial class changePaswword
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,10 +94,7 @@ namespace TaskItApi.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<byte[]>("PasswordHash")
-                        .IsRequired();
-
-                    b.Property<byte[]>("PasswordSalt")
+                    b.Property<byte[]>("Password")
                         .IsRequired();
 
                     b.HasKey("ID");

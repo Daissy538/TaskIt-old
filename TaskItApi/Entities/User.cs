@@ -12,9 +12,11 @@ namespace TaskItApi.Entities
         [Required]
         public string Email { get; set; }
         [Required]
-        public string Password { get; set; }
+        public byte[] PasswordHash { get; set; }
         [Required]
-        public string Nickname { get; set; }
+        public byte[] PasswordSalt { get; set; }
+        [Required]
+        public string Name { get; set; }
         public ICollection<Subscription> Subscriptions { get; set; }
     }
 }

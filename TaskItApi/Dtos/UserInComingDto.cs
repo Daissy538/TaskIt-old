@@ -17,7 +17,7 @@ namespace TaskItApi.Dtos
         /// <summary>
         /// The nickname that is visable on TaskIt
         /// </summary>
-        public string NickName { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// The password that is used
         /// </summary>

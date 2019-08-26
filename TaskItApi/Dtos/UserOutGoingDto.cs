@@ -8,9 +8,9 @@ namespace TaskItApi.Dtos
     /// <summary>
     /// User information that can be returned to the frontend.
     /// </summary>
-    public class UserDto
+    public class UserOutGoingDto
     {
         public string Email { get; set; }
-        public string NickName { get; set; }
+        public string Name { get; set; }
     }
 }

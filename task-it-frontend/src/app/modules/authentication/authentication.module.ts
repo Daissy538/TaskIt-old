@@ -6,13 +6,18 @@ import { AuthenticationRouting } from './authentication.routing';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CoreModule } from 'src/app/core/core.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   imports: [
     AuthenticationRouting,
     MatFormFieldModule,
     MatInputModule,
-    CoreModule
+    FormsModule,
+    ReactiveFormsModule,
+    CoreModule,
+    CommonModule
   ],
   declarations: [LoginComponent, RegisterComponent]
 })

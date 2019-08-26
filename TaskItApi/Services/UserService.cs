@@ -14,12 +14,7 @@ namespace TaskItApi.Services
             throw new NotImplementedException();
         }
 
-        public void CreateUser(UserInComingDto userInComingData)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateUser(int Id, UserInComingDto userInComingDto)
+        public void UpdateUser(int Id, UserInComingDto changedUserInComingData)
         {
             throw new NotImplementedException();
         }

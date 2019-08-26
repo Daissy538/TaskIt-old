@@ -1,6 +1,8 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using TaskItApi.Dtos;
 using TaskItApi.Services.NewFolder;
 
@@ -27,11 +29,20 @@ namespace TaskItApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("Register")]
-        public ActionResult<UserDto> Register([FromBody]UserInComingDto userInComingData)
+        public ActionResult<UserOutGoingDto> Register([FromBody]UserInComingDto userInComingData)
         {
-            _userService.CreateUser(userInComingData);
-
-            return null;
+            try
+            {
+                _authenicationService.RegisterUser(userInComingData);
+                return null;
+            }catch(ArgumentException argumentException)
+            {
+                return StatusCode(422, argumentException.Message);
+            }
+            catch
+            {
+                return StatusCode(500, "Something went wrong. Contact the website owner.");
+            }          
         }
 
         /// <summary>
@@ -50,7 +61,7 @@ namespace TaskItApi.Controllers
         /// </summary>
         [HttpPost]
         [Route("{id:int}/Update")]
-        public ActionResult<UserDto> Update(int Id)
+        public ActionResult<UserOutGoingDto> Update(int Id)
         {
             return null;
         }

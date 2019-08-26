@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TaskItApi.Dtos;
 
 namespace TaskItApi.Services.NewFolder
@@ -18,5 +15,11 @@ namespace TaskItApi.Services.NewFolder
         /// <param name="userIncomingData">The incoming user data</param>
         /// <returns></returns>
         string AuthenicateUser(UserInComingDto userIncomingData);
+
+        /// <summary>
+        /// Register user based on incomingdata
+        /// </summary>
+        /// <param name="userInComingDto">The new user data</param>
+        void RegisterUser(UserInComingDto userInComingDto);
     }
 }

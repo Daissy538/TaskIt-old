@@ -19,10 +19,5 @@ namespace TaskItApi.Services.NewFolder
         /// <param name="Id">the user to be updated</param>
         /// <param name="changedUserInComingData">The changed data</param>
         void UpdateUser(int Id, UserInComingDto changedUserInComingData);
-        /// <summary>
-        /// Validate the data and add the user to the database
-        /// </summary>
-        /// <param name="userInComingData">The incoming user data of the new user</param>
-        void CreateUser(UserInComingDto userInComingData);
     }
 }
