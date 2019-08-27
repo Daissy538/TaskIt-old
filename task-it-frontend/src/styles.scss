@@ -4,6 +4,8 @@
 @import '~@angular/material/theming';
 
 $input-color: #c2185b;
+$error-color: #f5253a ;
+$succes-color: #a2db46;
 
 body {
   margin: 0;
@@ -25,6 +27,18 @@ $custom-typography: mat-typography-config(
   $headline: mat-typography-level(32px, 48px, 700),
   $body-1: mat-typography-level(16px, 24px, 500)
 );
+ 
+//SnackBar styling
+.custom-error {
+  background-color:$error-color !important;
+  color: white !important;
+}
+
+.custom-ok {
+  background-color: $succes-color !important;
+  color: white;
+}
+
 
 
 

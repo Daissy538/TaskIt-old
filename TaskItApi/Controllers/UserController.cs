@@ -41,7 +41,7 @@ namespace TaskItApi.Controllers
             }
             catch
             {
-                return StatusCode(500, "Something went wrong. Contact the website owner.");
+                return StatusCode(500, "Internal server error");
             }          
         }
 
