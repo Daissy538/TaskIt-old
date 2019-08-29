@@ -39,5 +39,16 @@ namespace TaskItApi.Repositories
             }
             
         }
+
+        public User GetUser(string email)
+        {
+            User user = TaskItDbContext.Users.FirstOrDefault(u => 
+                                        string.Equals(u.Email,
+                                                        email, 
+                                                        StringComparison.OrdinalIgnoreCase)
+                                        );
+
+            return user;
+        }
     }
 }

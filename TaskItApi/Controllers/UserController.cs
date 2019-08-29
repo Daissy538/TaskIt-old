@@ -37,7 +37,7 @@ namespace TaskItApi.Controllers
                 return null;
             }catch(ArgumentException argumentException)
             {
-                return StatusCode(422, argumentException.Message);
+                return BadRequest(argumentException.Message);
             }
             catch
             {
@@ -51,9 +51,20 @@ namespace TaskItApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("Auth")]
-        public ActionResult<string> Authenticate ()
+        public ActionResult<string> Authenticate ([FromBody]UserInComingDto userInComingData)
         {
-            return null;
+            try
+            {
+                string token = _authenicationService.AuthenicateUser(userInComingData);
+                var response = new
+                {
+                    token = token
+                };
+                return OkResult(response);
+            }catch
+            {
+               return BadRequest("Invalid email and/or password");
+            }
         }
 
         /// <summary>

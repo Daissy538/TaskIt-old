@@ -63,6 +63,7 @@ namespace TaskItApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                
             }
             else
             {

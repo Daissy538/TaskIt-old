@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace TaskItApi
 {
@@ -22,6 +23,18 @@ namespace TaskItApi
                     logging.ClearProviders();
                     logging.AddConsole();
                  })
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    var env = hostingContext.HostingEnvironment;
+                    if(env.IsDevelopment())
+                    {
+                        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+                        if (appAssembly != null)
+                        {
+                            config.AddUserSecrets(appAssembly, optional: true);
+                        }
+                    }
+                })
                 .UseStartup<Startup>();
             }
 }
