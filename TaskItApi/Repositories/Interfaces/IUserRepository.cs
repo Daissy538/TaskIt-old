@@ -18,6 +18,6 @@ namespace TaskItApi.Repositories.Interfaces
         /// </summary>
         /// <param name="email">The given user</param>
         /// <returns>The user. Returns null if the user doesn't exist.</returns>
-        User GetUser(string email)
+        User GetUser(string email);
     }
 }

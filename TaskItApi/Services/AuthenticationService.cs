@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using TaskItApi.Dtos;
@@ -93,7 +94,7 @@ namespace TaskItApi.Services
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
                 byte[] incommingPasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return incommingPasswordHash.Equals(passwordHash);
+                return incommingPasswordHash.SequenceEqual(passwordHash);
             }
         }
         

@@ -60,8 +60,9 @@ namespace TaskItApi.Controllers
                 {
                     token = token
                 };
-                return OkResult(response);
-            }catch
+
+                return Ok(response);
+            }catch(Exception exception)
             {
                return BadRequest("Invalid email and/or password");
             }
