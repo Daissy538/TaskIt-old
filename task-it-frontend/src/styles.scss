@@ -6,6 +6,7 @@
 $input-color: #c2185b;
 $error-color: #f5253a ;
 $succes-color: #a2db46;
+$link-color: #c2185b;
 
 body {
   margin: 0;
@@ -25,8 +26,18 @@ mat-form-field {
 $custom-typography: mat-typography-config(
   $font-family: 'Open Sans',
   $headline: mat-typography-level(32px, 48px, 700),
-  $body-1: mat-typography-level(16px, 24px, 500)
+  $body-1: mat-typography-level(16px, 24px, 500),
+  $caption: mat-typography-level(12px, 24px, 500),
+  $input: mat-typography-level(16px, 24px, 500)
 );
+
+span, a {
+  font-family: mat-font-family($custom-typography);
+}
+
+a {
+  color: $link-color!important;
+}
  
 //SnackBar styling
 .custom-error {

@@ -1,1 +1,47 @@
-<p>Login</p>
+<div class="login-container">
+  <form [formGroup]="loginForm" fxLayout="column" fxLayoutAlign="center">
+    <section class="mat-typography">
+      <h1 fxLayoutAlign="start center">
+        Login
+      </h1>
+    </section>
+    <div fxLayoutAlign="center center">
+      <mat-form-field appearance="outline">
+        <input
+          matInput="email"
+          placeholder="E-mail"
+          name="email"
+          formControlName="email"
+        />
+        <mat-error *ngIf="email.invalid">{{
+          getErrorMessage(email)
+        }}</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayoutWrap fxLayoutAlign="center center">
+      <mat-form-field appearance="outline">
+        <input
+          matInput="password"
+          type="password"
+          placeholder="Wachtwoord"
+          name="password"
+          formControlName="password"
+        />
+        <mat-error *ngIf="password.invalid">{{
+          getErrorMessage(password)
+        }}</mat-error>
+      </mat-form-field>
+    </div>
+    <span>Nog geen account? Registreer je dan <a [routerLink]="['/auth/register']">hier</a></span>
+    <button
+      mat-raised-button
+      type="submit"
+      (click)="login()"
+      color="primary"
+      fxFlexAlign="end"
+      [disabled]="!loginForm.valid"
+    >
+      Login
+    </button>
+  </form>
+</div>

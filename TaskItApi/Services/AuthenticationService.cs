@@ -1,6 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
 using TaskItApi.Models.Interfaces;
@@ -13,17 +19,32 @@ namespace TaskItApi.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger _logger;
+        private readonly IConfiguration _configuration;
 
-        public AuthenticationService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<IAuthenticationService> logger)
+        public AuthenticationService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<IAuthenticationService> logger, IConfiguration config)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _configuration = config;
         }
 
         public string AuthenicateUser(UserInComingDto userIncomingData)
         {
-            throw new NotImplementedException();
+            User user = _unitOfWork.UserRepository.GetUser(userIncomingData.Email);
+
+            bool userExist = !user.Equals(default(User));
+            bool passwordVerified = VerifyPasswordHash(userIncomingData.Password, user.PasswordHash, user.PasswordSalt);
+
+            if (!userExist && !passwordVerified)
+            {
+                _logger.LogTrace($"A user with email {userIncomingData.Email} tride to login but failed.");
+                throw new ArgumentException("Email and/or password is incorrect");
+            }
+
+            string token = CreateToken(user);
+
+            return token;
         }
 
         public void RegisterUser(UserInComingDto userInComingDto)
@@ -39,6 +60,13 @@ namespace TaskItApi.Services
             _logger.LogInformation($"User {newUser.Name} with email: {newUser.Email} is added to the databse");                     
         }
 
+        public bool UserExist(UserInComingDto userInComingDto)
+        {
+            User user = _unitOfWork.UserRepository.GetUser(userInComingDto.Email);
+            return !user.Equals(default(User));
+
+        }
+
         /// <summary>
         /// Hash the user password based on the password and a salt.
         /// </summary>
@@ -52,6 +80,51 @@ namespace TaskItApi.Services
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }            
+        }
+
+        /// <summary>
+        /// Verify the password of the incoming user with the user from the database.
+        /// </summary>
+        /// <param name="password">incoming password</param>
+        /// <param name="passwordHash">hashed password in database</param>
+        /// <param name="passwordSalt">satl in database</param>
+        /// <returns>Return true if it is a match, return false if it isn't</returns>
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            {
+                byte[] incommingPasswordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return incommingPasswordHash.SequenceEqual(passwordHash);
+            }
+        }
+        
+        /// <summary>
+        /// Create authentication token voor given user
+        /// </summary>
+        /// <param name="user">The user that want to login</param>
+        /// <returns>The created token</returns>
+        private string CreateToken(User user)
+        {
+            Claim[] claims = new Claim[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()),
+                new Claim(ClaimTypes.Name, user.Name)
+            };
+
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AppSettings:AppSecret"]));
+            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = credentials
+            };
+
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
         }
     }
 }

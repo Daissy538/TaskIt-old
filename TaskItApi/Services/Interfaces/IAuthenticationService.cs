@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.IdentityModel.Tokens;
+using System;
 using TaskItApi.Dtos;
 
 namespace TaskItApi.Services.NewFolder
@@ -13,7 +14,7 @@ namespace TaskItApi.Services.NewFolder
         /// On succes it will return a JWT string.
         /// </summary>
         /// <param name="userIncomingData">The incoming user data</param>
-        /// <returns></returns>
+        /// <returns>Authentication token for the given user</returns>
         string AuthenicateUser(UserInComingDto userIncomingData);
 
         /// <summary>
@@ -21,5 +22,11 @@ namespace TaskItApi.Services.NewFolder
         /// </summary>
         /// <param name="userInComingDto">The new user data</param>
         void RegisterUser(UserInComingDto userInComingDto);
+
+        /// <summary>
+        /// Check if the user exist
+        /// </summary>
+        /// <param name="userInComingDto"></param>
+        bool UserExist(UserInComingDto userInComingDto);
     }
 }

@@ -13,5 +13,11 @@ namespace TaskItApi.Repositories.Interfaces
         /// </summary>
         /// <param name="user">The user to be added</param>
         void AddUser(User user);
+        /// <summary>
+        /// Get user based on email
+        /// </summary>
+        /// <param name="email">The given user</param>
+        /// <returns>The user. Returns null if the user doesn't exist.</returns>
+        User GetUser(string email);
     }
 }

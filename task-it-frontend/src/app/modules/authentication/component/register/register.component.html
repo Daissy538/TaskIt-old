@@ -56,6 +56,7 @@
         <mat-error *ngIf="confirmPassword.invalid">{{ getErrorMessage(confirmPassword) }}</mat-error>
       </mat-form-field>
     </div>
+    
     <button mat-raised-button type="submit" (click)="register()" color="primary" fxFlexAlign="end" [disabled]="!registerForm.valid">
       Registreren
     </button>

@@ -1,21 +1,19 @@
 ﻿
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
-using System.Net;
 using System.Reflection;
-using TaskItApi.Helper;
-using TaskItApi.Maps;
+using System.Text;
 using TaskItApi.Models;
 using TaskItApi.Models.Interfaces;
 using TaskItApi.Repositories;
@@ -40,9 +38,6 @@ namespace TaskItApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-
             services.AddDbContext<TaskItDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("Server"))
                 );
@@ -53,6 +48,17 @@ namespace TaskItApi
             services.AddMvc()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+                                            .GetBytes(Configuration.GetSection("AppSettings:AppSecret").Value)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
 
             InitSwaggerGent(services);
         }
@@ -63,6 +69,7 @@ namespace TaskItApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                
             }
             else
             {
@@ -81,7 +88,7 @@ namespace TaskItApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskIt v1");
             });
-
+            app.UseAuthentication();
             app.UseMvc();
         }
 
