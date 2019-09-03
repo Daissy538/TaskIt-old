@@ -17,10 +17,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatSnackBarModule
   ],
-  declarations: [HeaderComponent, FooterComponent],
+  declarations: [],
   exports: [
-    HeaderComponent,
-    FooterComponent,
     FlexLayoutModule,
     MatToolbarModule,
     MatSidenavModule,

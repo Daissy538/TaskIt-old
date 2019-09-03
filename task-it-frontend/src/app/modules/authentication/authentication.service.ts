@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from 'src/environments/environment';
 import * as jwt_decode from 'jwt-decode';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,14 @@ export class AuthenticationService {
   private baseUrl: URL;
   private httpHeaders: HttpHeaders;
   private options: any;
+  private redirectUrl: string;
 
-  constructor(private http: HttpClient, private snackBar: MatSnackBar) {
+  constructor(
+    private http: HttpClient,
+    private snackBar: MatSnackBar,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.baseUrl = new URL('User', environment.baseUrlApi);
     this.httpHeaders = new HttpHeaders();
     this.httpHeaders.set('Content-Type', 'application/json');
@@ -44,9 +51,13 @@ export class AuthenticationService {
     const urlLogin = this.baseUrl.href + '/Auth';
     this.http.post(urlLogin, user, this.options).subscribe(value => {
       this.setSession(value['token']);
-      this.snackBar.open('gebruiker is ingelogd.', 'X', {
-        panelClass: ['custom-ok']
-      });
+
+      if (this.redirectUrl) {
+        this.router.navigateByUrl(this.redirectUrl);
+        return;
+      }
+
+      this.router.navigate(['../../dashboard'], {relativeTo: this.route} );
     });
   }
 
@@ -55,13 +66,23 @@ export class AuthenticationService {
    */
   logOut() {
     localStorage.clear();
+    this.router.navigate(['../auth/login'], {relativeTo: this.route} );
+  }
+
+  /**
+   * Set redirect url.
+   * This url will be used when the user is loggedin again.
+   * @param url old url
+   */
+  public setRedirectUrl(url: string) {
+    this.redirectUrl = url;
   }
 
   /**
    * Checks if there is a session active
    */
   public isLoggedIn(): boolean {
-    return localStorage.getItem('token') === null;
+    return localStorage.getItem('token') !== null;
   }
 
   /**

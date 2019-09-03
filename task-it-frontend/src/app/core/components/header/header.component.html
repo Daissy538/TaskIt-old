@@ -3,7 +3,7 @@
     <mat-toolbar-row>
       <span>TaskIt</span>
       <span class="empty-space"></span>
-      <span>menu</span>
+      <span *ngIf="canLogout()" (click)="logout()">Afmelden</span>
     </mat-toolbar-row>
   </mat-toolbar>
 </header>
