@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
 
     const expirationDate = this.authService.getExpirationDate();
     const currentTime = Date.now() / 1000;
-    console.log('ja', token, expirationDate, expirationDate <= currentTime);
+
     if (token && expirationDate > currentTime) {
       return true;
     }
