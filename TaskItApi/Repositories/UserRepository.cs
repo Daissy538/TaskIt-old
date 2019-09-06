@@ -50,5 +50,14 @@ namespace TaskItApi.Repositories
 
             return user;
         }
+
+        public User GetUser(int id)
+        {
+            User user = TaskItDbContext.Users.FirstOrDefault(u =>
+                            u.ID.Equals(id)
+                            );
+
+            return user;
+        }
     }
 }

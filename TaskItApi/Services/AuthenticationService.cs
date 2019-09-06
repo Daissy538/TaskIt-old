@@ -107,7 +107,7 @@ namespace TaskItApi.Services
         {
             Claim[] claims = new Claim[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.ID.ToString()),
+                new Claim(ClaimTypes.Name, user.ID.ToString()),
                 new Claim(ClaimTypes.Name, user.Name)
             };
 
@@ -116,7 +116,7 @@ namespace TaskItApi.Services
 
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(claims),
+                Subject = new ClaimsIdentity(claims, "jwt"),
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = credentials
             };

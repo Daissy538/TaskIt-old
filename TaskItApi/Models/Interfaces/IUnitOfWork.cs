@@ -10,6 +10,9 @@ namespace TaskItApi.Models.Interfaces
     {
         IUserRepository UserRepository { get; }
 
+        IGroupRepository GroupRepository { get; }
+        ISubscriptionRepository SubscriptionRepository { get; }
+
         int SaveChanges();
 
         void Dispose();

@@ -9,16 +9,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using TaskItApi.Extensions;
 using TaskItApi.Models;
 using TaskItApi.Models.Interfaces;
 using TaskItApi.Repositories;
 using TaskItApi.Repositories.Interfaces;
 using TaskItApi.Services;
+using TaskItApi.Services.Interfaces;
 using TaskItApi.Services.NewFolder;
 
 namespace TaskItApi
@@ -45,9 +49,8 @@ namespace TaskItApi
             InitDependicyInjection(services);
 
             services.AddCors();
-            services.AddMvc()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -61,6 +64,8 @@ namespace TaskItApi
                 });
 
             InitSwaggerGent(services);
+            services.AddMvc()
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,6 +93,7 @@ namespace TaskItApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskIt v1");
             });
+
             app.UseAuthentication();
             app.UseMvc();
         }
@@ -97,9 +103,12 @@ namespace TaskItApi
             //Services
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IGroupService, GroupService>();
             
             //Repositories
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IGroupRepository, GroupRepository>();
+            services.AddTransient<ISubscriptionRepository, SubscriptionRepository>();
 
             //Models
             services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -109,7 +118,21 @@ namespace TaskItApi
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TaskIt", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "Main API v1.0", Version = "v1.0" });
+
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                    {
+                        { "Bearer", new string[] { } }
+                    });
+
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
