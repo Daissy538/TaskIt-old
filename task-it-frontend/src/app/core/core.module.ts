@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 

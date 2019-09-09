@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationService } from 'src/app/modules/authentication/authentication.service';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor
+} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 /**
@@ -9,7 +14,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class TokenInterceptor implements HttpInterceptor {
+export class RequestInterceptor implements HttpInterceptor {
   constructor(private autService: AuthenticationService) {}
 
   intercept(
@@ -19,7 +24,9 @@ export class TokenInterceptor implements HttpInterceptor {
     if (this.autService.isLoggedIn()) {
       request = request.clone({
         setHeaders: {
-          Authorization: 'Bearer ' + this.autService.getToken()
+          Authorization: 'Bearer ' + this.autService.getToken(),
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
         }
       });
     }

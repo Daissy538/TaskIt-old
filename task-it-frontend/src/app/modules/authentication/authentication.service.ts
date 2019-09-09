@@ -11,8 +11,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class AuthenticationService {
   private baseUrl: URL;
-  private httpHeaders: HttpHeaders;
-  private options: any;
   private redirectUrl: string;
 
   constructor(
@@ -22,11 +20,6 @@ export class AuthenticationService {
     private route: ActivatedRoute
   ) {
     this.baseUrl = new URL('User', environment.baseUrlApi);
-    this.httpHeaders = new HttpHeaders();
-    this.httpHeaders.set('Content-Type', 'application/json');
-    this.httpHeaders.set('Access-Control-Allow-Origin', '*');
-
-    this.options = { headers: this.httpHeaders };
   }
 
   /**
@@ -36,7 +29,7 @@ export class AuthenticationService {
   registerUser(user: User) {
     const urlRegister = this.baseUrl.href + '/Register';
 
-    this.http.post(urlRegister, user, this.options).subscribe(value => {
+    this.http.post(urlRegister, user).subscribe(value => {
       this.snackBar.open('gebruiker is geregistreerd.', 'X', {
         panelClass: ['custom-ok']
       });
@@ -49,7 +42,7 @@ export class AuthenticationService {
    */
   loginUser(user: User) {
     const urlLogin = this.baseUrl.href + '/Auth';
-    this.http.post(urlLogin, user, this.options).subscribe(value => {
+    this.http.post(urlLogin, user).subscribe(value => {
       this.setSession(value['token']);
 
       if (this.redirectUrl) {
