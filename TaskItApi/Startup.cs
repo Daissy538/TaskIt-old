@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using TaskItApi.Extensions;
 using TaskItApi.Models;
 using TaskItApi.Models.Interfaces;
 using TaskItApi.Repositories;

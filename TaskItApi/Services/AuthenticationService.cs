@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
+using TaskItApi.Extentions;
 using TaskItApi.Models.Interfaces;
 using TaskItApi.Services.NewFolder;
 
@@ -105,12 +106,7 @@ namespace TaskItApi.Services
         /// <returns>The created token</returns>
         private string CreateToken(User user)
         {
-            Claim[] claims = new Claim[]
-            {
-                new Claim(ClaimTypes.Name, user.ID.ToString()),
-                new Claim(ClaimTypes.Name, user.Name)
-            };
-
+            Claim[] claims = ClaimExtension.GenerateUserClaims(user.ID, user.Name);
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AppSettings:AppSecret"]));
             SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 

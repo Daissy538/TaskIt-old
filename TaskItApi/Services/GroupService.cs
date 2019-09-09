@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
@@ -24,23 +26,30 @@ namespace TaskItApi.Services
         }
 
         public IEnumerable<Group> Create(GroupDto groupDto, int userId)
-        {
-            Group group = this._mapper.Map<Group>(groupDto);          
+        {                     
             User user = _unitOfWork.UserRepository.GetUser(userId);
+
+            if(user.Equals(default(User)))
+            {
+                _logger.LogError($"Couldn't delete group for non-existing user {userId}");
+                throw new NullReferenceException("Couldn't create group for non-existing user");
+            }
+
+            Group group = this._mapper.Map<Group>(groupDto);
             Subscription subscription = new Subscription();
 
             subscription.User = user;
             subscription.Group = group;
             subscription.DateOfSubscription = DateTime.UtcNow;
-
+            
             group.Members.Add(subscription);
             user.Subscriptions.Add(subscription);
 
             try
             {
                 _unitOfWork.GroupRepository.Create(group);
-                _unitOfWork.SubscriptionRepository.Create(subscription);
                 _unitOfWork.UserRepository.Update(user);
+                _unitOfWork.SubscriptionRepository.Create(subscription);                
                 _unitOfWork.SaveChanges();
             } catch(Exception exception)
             {
@@ -48,46 +57,60 @@ namespace TaskItApi.Services
                 throw exception;
             }
 
-            
-            IEnumerable<Group> groupsOfUser = _unitOfWork.GroupRepository.FindByCondition(
-                                                                            g => g.Members.Where(
-                                                                                m => m.User.Email.Equals(user.Email))
-                                                                            .Any());
+
+            IEnumerable<Group> groupsOfUser = _unitOfWork.GroupRepository.FindAllGroupOfUser(userId);
 
             _logger.LogInformation($"Created group: {groupDto.Name} by user: {userId}");
             return groupsOfUser;
         }
 
-        public IEnumerable<Group> Delete(int groupId, string userName)
+        public IEnumerable<Group> Delete(int groupId, int userId)
         {
-            User user = _unitOfWork.UserRepository.GetUser(userName);
-            Group group = _unitOfWork.GroupRepository.FindByCondition(g => g.ID.Equals(groupId) && 
-                                                                        g.Members.Where(m => m.User.Email.Equals(userName)).Any())
-                                                                        .FirstOrDefault();
+            User user = _unitOfWork.UserRepository.GetUser(userId);
+          
+            if (user.Equals(default(User)))
+            {
+                _logger.LogError($"Couldn't delete group for non-existing user {userId}");
+                throw new NullReferenceException("Couldn't delete group for non-existing user");
+            }
+
+            Group group = _unitOfWork.GroupRepository.FindGroupOfUser(groupId, userId);
 
             if (group.Equals(default(Group)))
             {
-                _logger.LogError($"Try to delete group with id: {groupId}. But group doesn't exist for user: {userName}");
-                throw new NullReferenceException($"Could not find group with id: {groupId} for user:{userName}");
+                _logger.LogError($"Try to delete group with id: {groupId}. But group doesn't exist for user: {userId}");
+                throw new NullReferenceException("User is not subscribed on given groups");
             }
 
-            group.Members.ToList().ForEach(m => {
-                m.User.Subscriptions.Remove(m);
-                _unitOfWork.UserRepository.Update(m.User);
-                _unitOfWork.SubscriptionRepository.Delete(m);
+            List<Subscription> subscriptions = group.Members.ToList();
+            subscriptions.ForEach(s => {
+                _unitOfWork.SubscriptionRepository.Delete(s);
             });
-
+            
             _unitOfWork.GroupRepository.Delete(group);
             _unitOfWork.SaveChanges();
 
-            IEnumerable<Group> groupsOfUser = _unitOfWork.GroupRepository.FindByCondition(
-                                                                g => g.Members.Where(
-                                                                    m => m.User.Email.Equals(userName))
-                                                                .Any());
+            IEnumerable<Group> groupsOfUser = _unitOfWork.GroupRepository.FindAllGroupOfUser(userId);
 
-            _logger.LogInformation($"Deleted group: {groupId} by user: {userName}");
+            _logger.LogInformation($"Deleted group: {groupId} by user: {userId}");
 
             return groupsOfUser;
         }
+
+        public IEnumerable<Group> GetGroups(int userId)
+        {
+            User user = _unitOfWork.UserRepository.GetUser(userId);
+
+            if (user.Equals(default(User)))
+            {
+                _logger.LogError($"Couldn't retrieve groups of non-existing user {userId}");
+                throw new NullReferenceException("Couldn't retrieve groups of non-existing user");
+            }
+
+            IEnumerable<Group> groups = _unitOfWork.GroupRepository.FindAllGroupOfUser(userId);
+            return groups;
+        }
+
+
     }
 }

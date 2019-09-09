@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -21,7 +22,11 @@ namespace TaskItApi.Repositories
 
         public void AddUser(User user)
         {
-            IEnumerable<User> ExistingUsersWithSameEmail = FindByCondition(u => string.Equals(u.Email, user.Email, StringComparison.OrdinalIgnoreCase));
+            IEnumerable<User> ExistingUsersWithSameEmail = FindByCondition(u => 
+                                                                           string.Equals(u.Email,
+                                                                                        user.Email, 
+                                                                                        StringComparison.OrdinalIgnoreCase))
+                                                           .ToList();
 
             if (ExistingUsersWithSameEmail.Any())
             {
@@ -42,20 +47,21 @@ namespace TaskItApi.Repositories
 
         public User GetUser(string email)
         {
-            User user = TaskItDbContext.Users.FirstOrDefault(u => 
+            User user = FindByCondition(u =>
                                         string.Equals(u.Email,
-                                                        email, 
-                                                        StringComparison.OrdinalIgnoreCase)
-                                        );
+                                                        email,
+                                                        StringComparison.OrdinalIgnoreCase))
+                .Include(u => u.Subscriptions)
+                .FirstOrDefault();
 
             return user;
         }
 
         public User GetUser(int id)
         {
-            User user = TaskItDbContext.Users.FirstOrDefault(u =>
-                            u.ID.Equals(id)
-                            );
+            User user = FindByCondition(u => u.ID.Equals(id))
+                        .Include(u => u.Subscriptions)
+                        .FirstOrDefault();
 
             return user;
         }

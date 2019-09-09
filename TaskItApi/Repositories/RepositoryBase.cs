@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using TaskItApi.Models;
@@ -27,12 +26,12 @@ namespace TaskItApi.Repositories
             this.TaskItDbContext.Set<T>().Remove(entity);
         }
 
-        public IEnumerable<T> FindAll()
+        public IQueryable<T> FindAll()
         {
             return this.TaskItDbContext.Set<T>().AsNoTracking();
         }
 
-        public IEnumerable<T> FindByCondition(Expression<Func<T, bool>> expression)
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
             return this.TaskItDbContext.Set<T>().Where(expression).AsNoTracking();
         }

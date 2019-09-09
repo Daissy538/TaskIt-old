@@ -18,12 +18,13 @@ namespace TaskItApi.Models
         public IGroupRepository GroupRepository { get; private set; }
         public ISubscriptionRepository SubscriptionRepository { get; private set; }
 
-        public UnitOfWork(TaskItDbContext taskItDbContext, IUserRepository userRepository, IGroupRepository groupRepository)
+        public UnitOfWork(TaskItDbContext taskItDbContext, IUserRepository userRepository, IGroupRepository groupRepository, ISubscriptionRepository subscriptionRepository)
         {
             _taskItDbContext = taskItDbContext;
 
             UserRepository = userRepository;
             GroupRepository = groupRepository;
+            SubscriptionRepository = subscriptionRepository;
         }
 
         /// <summary>
