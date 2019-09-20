@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -11,7 +11,8 @@ import { CoreModule } from './core/core.module';
 import { ErrorInterceptorProvider } from './core/services/error.interceptor';
 import { HeaderComponent } from './core/components/header/header.component';
 import { FooterComponent } from './core/components/footer/footer.component';
-
+import { RequestInterceptor } from './core/services/request.interceptor';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent],
@@ -20,9 +21,13 @@ import { FooterComponent } from './core/components/footer/footer.component';
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
+    DragDropModule,
     CoreModule
   ],
-  providers: [ErrorInterceptorProvider],
+  providers: [
+    ErrorInterceptorProvider,
+    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

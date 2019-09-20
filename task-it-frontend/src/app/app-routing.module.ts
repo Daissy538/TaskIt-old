@@ -6,15 +6,25 @@ const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () =>
-      import('./modules/authentication/authentication.module')
-      .then( mod => mod.AuthenticationModule )
+      import('./modules/authentication/authentication.module').then(
+        mod => mod.AuthenticationModule
+      )
   },
   {
     path: 'dashboard',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./modules/dashboard/dashboard.module')
-      .then( mod => mod.DashboardModule )
+      import('./modules/dashboard/dashboard.module').then(
+        mod => mod.DashboardModule
+      )
+  },
+  {
+    path: 'create',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./modules/create-steps/create-steps.module').then(
+        mod => mod.CreateStepsModule
+      )
   },
   {
     path: '',

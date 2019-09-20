@@ -42,7 +42,8 @@ export class RegisterComponent implements OnInit {
         email: this.email,
         name: this.name,
         password: this.password,
-        confirmPassword: this.confirmPassword
+        confirmPassword: this.confirmPassword,
+        floatLabel: 'auto'
       },
       { validator: this.passwordMatch() }
     );

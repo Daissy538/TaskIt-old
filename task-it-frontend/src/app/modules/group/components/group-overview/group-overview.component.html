@@ -1,0 +1,34 @@
+<div cdkDropListGroup class="group-overview-container">
+  <div class="groups-title" fxLayout="row">
+    <span fxLayoutAlign="start center">
+      <h3>
+        Groepen
+      </h3>
+    </span>
+    <span class="empty-space"></span>
+    <span fxLayoutAlign="end center">
+      <button mat-button>
+        <mat-icon (click)="onCreateGroup()">add</mat-icon>
+      </button>
+    </span>
+    <span fxLayoutAlign="end center">
+      <div cdkDropList #deleteList (cdkDropListDropped)="delete($event)">
+        <button mat-button>
+          <mat-icon (click)="onDeleteGroup()">delete</mat-icon>
+        </button>
+      </div>
+    </span>
+  </div>
+  <section class="group-cards">
+    <mat-grid-list cols="3" rowHeight="3:1">
+      <mat-grid-tile *ngFor="let item of groups">
+        <div cdkDropList 
+        #groupList
+        [cdkDropListConnectedTo]="[deleteList]"
+        [cdkDropListData]="item">
+          <app-group-item cdkDrag [group]="item"></app-group-item>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </section>
+</div>

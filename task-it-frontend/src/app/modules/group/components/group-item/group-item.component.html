@@ -1,0 +1,14 @@
+<div class="group-item-container">
+  <div fxLayout="row" fxFlexFill>
+    <section
+      class="group-icon"
+      fxLayoutAlign="center center"
+      [style.border-color]="group.color"
+    >
+      <mat-icon [style.color]="group.color"> {{ group.icon }}</mat-icon>
+    </section>
+    <section class="group-title" fxLayoutAlign="center center">
+      {{ group.name }}
+    </section>
+  </div>
+</div>

@@ -35,22 +35,22 @@ namespace TaskItApi.Services
                 throw new NullReferenceException("Couldn't create group for non-existing user");
             }
 
-            Group group = this._mapper.Map<Group>(groupDto);
+            Group group = new Group() { Color = groupDto.Color,
+                                        Name = groupDto.Name,
+                                        Icon = groupDto.Icon,
+                                        Description = groupDto.Description};            
+
             Subscription subscription = new Subscription();
 
-            subscription.User = user;
+            subscription.UserID = userId;
             subscription.Group = group;
             subscription.DateOfSubscription = DateTime.UtcNow;
             
-            group.Members.Add(subscription);
-            user.Subscriptions.Add(subscription);
-
             try
             {
                 _unitOfWork.GroupRepository.Create(group);
-                _unitOfWork.UserRepository.Update(user);
-                _unitOfWork.SubscriptionRepository.Create(subscription);                
-                _unitOfWork.SaveChanges();
+                _unitOfWork.SubscriptionRepository.Create(subscription);
+                _unitOfWork.SaveChanges();           
             } catch(Exception exception)
             {
                 _logger.LogError($"Could not create group: {groupDto.Name} by user:{userId} error: {exception.Message}");

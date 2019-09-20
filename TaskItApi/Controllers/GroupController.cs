@@ -70,8 +70,8 @@ namespace TaskItApi.Controllers
         /// <summary>
         /// Returns all subscribed groups of user.
         /// </summary>
-        [HttpPost]
-        [Route("Get/")]
+        [HttpGet]
+        [Route("All")]
         public ActionResult<IEnumerable<GroupDto>> GetGroups()
         {
             try

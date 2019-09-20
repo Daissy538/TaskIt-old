@@ -1,0 +1,33 @@
+.selector-toolbar {
+  background-color: white;
+  color: #c2185b;
+}
+
+.selector-toolbar-row {
+  padding: 0;
+}
+
+.selection-content-container {
+  padding: 25px;
+}
+
+mat-grid-tile .mat-icon {
+  font-size: 72px;
+  height: 72px;
+  width: 72px;
+}
+
+.selected{
+  border: 1.5px solid rgb(163, 151, 157); 
+  border-radius: 4px;
+}
+
+mat-grid-tile {
+  cursor: pointer;
+}
+
+mat-grid-tile:hover {
+  background: rgb(67,54,60);
+  background: radial-gradient(circle, rgba(67,54,60,0.03995101458552175) 100%, rgba(148,187,233,1) 100%);
+  border-radius: 4px;
+}

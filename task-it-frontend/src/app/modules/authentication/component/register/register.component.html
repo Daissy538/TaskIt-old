@@ -1,64 +1,71 @@
 <div class="register-container">
-  <form
-    [formGroup]="registerForm"
-    fxLayout="column"
-    fxLayoutAlign="center"
-  >
-    <section class="mat-typography">
+  <form [formGroup]="registerForm" fxLayout="column" fxLayoutAlign="center">
+    <section>
       <h1 fxLayoutAlign="start center">
         Registreer en creeër overzicht in je taken
       </h1>
     </section>
     <div fxLayoutAlign="center center">
-      <mat-form-field appearance="outline">
-        <input
-          matInput="email"
-          placeholder="E-mail"
-          name="email"
-          formControlName="email"
-        />
-        <mat-error *ngIf="email.invalid">{{ getErrorMessage(email) }}</mat-error>
+      <mat-form-field
+        appearance="outline"
+        [floatLabel]="registerForm.value.floatLabel"
+      >
+        <mat-label>E-mail</mat-label>
+        <input matInput="email" name="email" formControlName="email" />
+        <mat-error *ngIf="email.invalid">{{
+          getErrorMessage(email)
+        }}</mat-error>
       </mat-form-field>
     </div>
     <div fxLayoutAlign="center center">
-      <mat-form-field appearance="outline">
-        <input
-          matInput="text"
-          type="text"
-          placeholder="Naam"
-          name="name"
-          formControlName="name"
-        />
+      <mat-form-field
+        appearance="outline"
+        [floatLabel]="registerForm.value.floatLabel"
+      >
+        <mat-label>Naam</mat-label>
+        <input matInput="text" name="name" formControlName="name" />
         <mat-error *ngIf="name.invalid">{{ getErrorMessage(name) }}</mat-error>
       </mat-form-field>
     </div>
     <div fxLayoutWrap fxLayoutAlign="center center">
-      <mat-form-field appearance="outline">
-        <input
-          matInput="password"
-          type="password"
-          placeholder="Wachtwoord"
-          name="password"
-          formControlName="password"
-        />
-        <mat-error *ngIf="password.invalid">{{ getErrorMessage(password) }}</mat-error>
+      <mat-form-field
+        appearance="outline"
+        [floatLabel]="registerForm.value.floatLabel"
+      >
+        <mat-label>Wachtwoord</mat-label>
+        <input matInput="password" name="password" formControlName="password" />
+        <mat-error *ngIf="password.invalid">{{
+          getErrorMessage(password)
+        }}</mat-error>
       </mat-form-field>
     </div>
     <div fxLayoutWrap fxLayoutAlign="center center">
-      <mat-form-field appearance="outline">
+      <mat-form-field
+        appearance="outline"
+        [floatLabel]="registerForm.value.floatLabel"
+      >
+        <mat-label>Herhaal wachtwoord</mat-label>
         <input
           matInput="confirmPassword"
           type="password"
-          placeholder="Herhaal wachtwoord"
           name="confirmPassword"
           formControlName="confirmPassword"
         />
-        <mat-error *ngIf="confirmPassword.invalid">{{ getErrorMessage(confirmPassword) }}</mat-error>
+        <mat-error *ngIf="confirmPassword.invalid">{{
+          getErrorMessage(confirmPassword)
+        }}</mat-error>
       </mat-form-field>
     </div>
-    
-    <button mat-raised-button type="submit" (click)="register()" color="primary" fxFlexAlign="end" [disabled]="!registerForm.valid">
-      Registreren
+
+    <button
+      mat-raised-button
+      type="submit"
+      (click)="register()"
+      color="primary"
+      fxFlexAlign="end"
+      [disabled]="!registerForm.valid"
+    >
+      
     </button>
   </form>
 </div>

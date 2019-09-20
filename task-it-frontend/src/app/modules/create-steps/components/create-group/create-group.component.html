@@ -1,0 +1,89 @@
+<div class="content-container">
+  <div fxLayout="row">
+    <h1 fxLayoutAlign="start center">
+      Nieuwe groepen
+    </h1>
+  </div>
+
+  <div class="content-container">
+    <form
+      [formGroup]="groupCreateForm"
+      fxLayout="column"
+      fxLayoutAlign="center"
+    >
+      <div fxLayout="row">
+        <div fxFlex="50%" fxLayoutGap="10">
+          <mat-form-field
+            appearance="outline"
+            [floatLabel]="groupCreateForm.value.floatLabel"
+          >
+            <mat-label>Titel</mat-label>
+            <input matInput="text" name="title" formControlName="title" />
+            <mat-error *ngIf="title.invalid">{{
+              getErrorMessage(title)
+            }}</mat-error>
+          </mat-form-field>
+          <mat-form-field
+            appearance="outline"
+            [floatLabel]="groupCreateForm.value.floatLabel"
+          >
+            <mat-label>Omschrijving</mat-label>
+            <textarea
+              matInput="text"
+              name="description"
+              formControlName="description"
+            ></textarea>
+            <mat-error *ngIf="description.invalid">{{
+              getErrorMessage(description)
+            }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="50%" fxLayoutGap="10">
+          <mat-card class="card-card" fxLayout="row" (click)="selectIcon()">
+            <mat-card-content>
+              <mat-icon class="group-icon" [style.color]="color.value.value">{{
+                icon.value.value
+              }}</mat-icon>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-form-field
+            appearance="outline"
+            class="color-selector"
+            fxLayout="row"
+            fxLayoutAlign="center"
+          >
+            <mat-select formControlName="color">
+              <mat-option *ngFor="let color of colors" [value]="color">
+                {{ color.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row" fxFlexAlign="end">
+        <button
+          mat-raised-button
+          type="submit"
+          (click)="next()"
+          color="primary"
+          [disabled]="true"
+        >
+          Volgende <mat-icon>arrow_forward_ios</mat-icon>
+        </button>
+        <button
+          mat-raised-button
+          type="submit"
+          (click)="createGroup()"
+          color="primary"
+          [disabled]="!groupCreateForm.valid"
+        >
+          Voltooien <mat-icon>done</mat-icon>
+        </button>
+        <button mat-raised-button (click)="cancel()" color="primary">
+          Annuleren <mat-icon>clear</mat-icon>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

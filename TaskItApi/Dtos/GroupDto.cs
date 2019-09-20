@@ -7,9 +7,14 @@ namespace TaskItApi.Dtos
     {
         public int Id;
         [Required]
-        public string Name;
+        public string Name { get; set; }
 
-        public string Description;
+        public string Description { get; set; }
+
+        [Required]
+        public string Icon { get; set; }
+        [Required]
+        public string Color { get; set; }
 
         public IEnumerable<SubscriptionDto> Members;
     }

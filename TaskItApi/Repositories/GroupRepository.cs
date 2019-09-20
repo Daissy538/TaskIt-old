@@ -21,7 +21,7 @@ namespace TaskItApi.Repositories
         public IEnumerable<Group> FindAllGroupOfUser(int userId)
         {
             IEnumerable<Group> groups = this.FindByCondition(g => g.Members.Where(
-                                      m => m.User.ID.Equals(userId))
+                                      m => m.User.ID.Equals(userId))                                       
                                       .Any());
             return groups;
         }

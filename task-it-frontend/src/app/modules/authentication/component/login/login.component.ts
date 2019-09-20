@@ -29,7 +29,8 @@ export class LoginComponent implements OnInit {
 
     this.loginForm = this.formBuilder.group({
       email: this.email,
-      password: this.password
+      password: this.password,
+      floatLabel: 'auto'
     });
   }
 

@@ -1,15 +1,15 @@
 <div class="login-container">
   <form [formGroup]="loginForm" fxLayout="column" fxLayoutAlign="center">
-    <section class="mat-typography">
+    <section>
       <h1 fxLayoutAlign="start center">
         Login
       </h1>
     </section>
     <div fxLayoutAlign="center center">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" [floatLabel]="loginForm.value.floatLabel">
+        <mat-label>E-mail</mat-label>
         <input
           matInput="email"
-          placeholder="E-mail"
           name="email"
           formControlName="email"
         />
@@ -19,11 +19,11 @@
       </mat-form-field>
     </div>
     <div fxLayoutWrap fxLayoutAlign="center center">
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" [floatLabel]="loginForm.value.floatLabel">
+        <mat-label>Wachtwoord</mat-label>
         <input
           matInput="password"
           type="password"
-          placeholder="Wachtwoord"
           name="password"
           formControlName="password"
         />

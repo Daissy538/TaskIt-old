@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import '~@angular/material/theming';
+
+// Define a custom typography config that overrides the font-family as well as the
+// `headlines` and `body-1` levels.
+$custom-typography: mat-typography-config(
+  $font-family: 'Open Sans',
+  $display-4: mat-typography-level(32px, 112px, 300),
+  $display-3: mat-typography-level(24x, 56px, 400),
+  $display-2: mat-typography-level(16px, 48px, 400),
+  $display-1: mat-typography-level(12px, 34px, 400),
+  $headline: mat-typography-level(32px, 32px, 400),
+  $title: mat-typography-level(24px, 32px, 400),
+  $subheading-2: mat-typography-level(18px, 28px, 400),
+  $subheading-1: mat-typography-level(12px, 24px, 400),
+  $body-2: mat-typography-level(16px, 24px, 400),
+  $body-1: mat-typography-level(12px, 22px, 400),
+  $caption: mat-typography-level(12px, 22px, 400),
+  $button: mat-typography-level(16px, 24px, 500),
+  $input: mat-typography-level(12px, 1.125, 400)
+);
+
+body,
+html {
+  font-family: mat-font-family($custom-typography);
+}
+
+a {
+  font-size: mat-font-size($custom-typography, body-2);
+  line-height: mat-line-height($custom-typography, body-2);
+  font-weight: mat-font-weight($custom-typography, body-2);
+}
+
+h1 {
+  font-size: mat-font-size($custom-typography, headline);
+  line-height: mat-line-height($custom-typography, headline);
+  font-weight: mat-font-weight($custom-typography, headline);
+}
+
+h2 {
+  font-size: mat-font-size($custom-typography, title);
+  line-height: mat-line-height($custom-typography, title);
+  font-weight: mat-font-weight($custom-typography, title);
+}
+
+h3 {
+  font-size: mat-font-size($custom-typography, subheading-2);
+  line-height: mat-line-height($custom-typography, subheading-2);
+  font-weight: mat-font-weight($custom-typography, subheading-2);
+}
+
+.mat-button {
+    font-size: mat-font-size($custom-typography, button);
+    line-height: mat-line-height($custom-typography, button);
+    font-weight: mat-font-weight($custom-typography, button);
+  }
+  

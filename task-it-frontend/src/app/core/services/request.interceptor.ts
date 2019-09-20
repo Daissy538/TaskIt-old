@@ -11,9 +11,7 @@ import { Observable } from 'rxjs';
 /**
  * Injectable for adding the bearer token to a http request.
  */
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class RequestInterceptor implements HttpInterceptor {
   constructor(private autService: AuthenticationService) {}
 
@@ -24,9 +22,13 @@ export class RequestInterceptor implements HttpInterceptor {
     if (this.autService.isLoggedIn()) {
       request = request.clone({
         setHeaders: {
-          Authorization: 'Bearer ' + this.autService.getToken(),
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          Authorization: 'Bearer ' + this.autService.getToken()
+        }
+      });
+
+      request = request.clone({
+        setHeaders: {
+          'Content-Type': 'application/json'
         }
       });
     }

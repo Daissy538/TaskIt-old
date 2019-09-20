@@ -1,10 +1,10 @@
-
-@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+@import '~@angular/material/prebuilt-themes/pink-bluegrey.css';
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import '~@angular/material/theming';
 
 $input-color: #c2185b;
-$error-color: #f5253a ;
+$error-color: #f5253a;
 $succes-color: #a2db46;
 $link-color: #c2185b;
 
@@ -21,27 +21,17 @@ mat-form-field {
   width: 100%;
 }
 
-// Define a custom typography config that overrides the font-family as well as the
-// `headlines` and `body-1` levels.
-$custom-typography: mat-typography-config(
-  $font-family: 'Open Sans',
-  $headline: mat-typography-level(32px, 48px, 700),
-  $body-1: mat-typography-level(16px, 24px, 500),
-  $caption: mat-typography-level(12px, 24px, 500),
-  $input: mat-typography-level(16px, 24px, 500)
-);
-
-span, a {
-  font-family: mat-font-family($custom-typography);
+.mat-form-field-empty.mat-form-field-label {
+  color: white;
 }
 
 a {
-  color: $link-color!important;
+  color: $link-color !important;
 }
- 
+
 //SnackBar styling
 .custom-error {
-  background-color:$error-color !important;
+  background-color: $error-color !important;
   color: white !important;
 }
 
@@ -50,6 +40,22 @@ a {
   color: white;
 }
 
+.white-line-hor {
+  background-color: white;
+  height: 2px;
+  width: 100%;
+}
 
+.white-background {
+  background-color: white;
+}
 
+.empty-space {
+  flex: 1 1 auto;
+}
 
+.content-container {
+  width: 80%;
+  margin: 0 auto;
+  padding: 25px;
+}
