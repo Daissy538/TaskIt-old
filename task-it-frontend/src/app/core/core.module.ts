@@ -8,10 +8,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { IconSelectorComponent } from './components/icon-selector/icon-selector.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { CommonModule } from '@angular/common';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -24,9 +24,9 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatIconModule,
     MatGridListModule,
     CommonModule,
-    ScrollingModule
+    ScrollingModule,
+    MatTooltipModule
   ],
-  declarations: [IconSelectorComponent],
   exports: [
     FlexLayoutModule,
     MatToolbarModule,
@@ -35,10 +35,9 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatSnackBarModule,
     MatCardModule,
     MatIconModule,
-    IconSelectorComponent,
     MatGridListModule,
-    ScrollingModule
-  ],
-  entryComponents: [IconSelectorComponent]
+    ScrollingModule,
+    MatTooltipModule
+  ]
 })
 export class CoreModule {}

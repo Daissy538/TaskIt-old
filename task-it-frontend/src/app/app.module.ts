@@ -12,7 +12,6 @@ import { ErrorInterceptorProvider } from './core/services/error.interceptor';
 import { HeaderComponent } from './core/components/header/header.component';
 import { FooterComponent } from './core/components/footer/footer.component';
 import { RequestInterceptor } from './core/services/request.interceptor';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent],
@@ -21,7 +20,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
-    DragDropModule,
     CoreModule
   ],
   providers: [

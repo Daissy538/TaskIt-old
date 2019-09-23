@@ -15,7 +15,6 @@ export class GroupService {
 
   constructor(
     private http: HttpClient,
-    private snackBar: MatSnackBar,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -36,7 +35,7 @@ export class GroupService {
    * @param groupId the id of the group
    */
   public deleteGroup(groupId: number): Observable<Group[]> {
-    const deleteUrl = this.baseUrl.href + '/Create/' + groupId;
+    const deleteUrl = this.baseUrl.href + '/Delete/' + groupId;
     return this.http.delete<Group[]>(deleteUrl);
   }
 
@@ -45,7 +44,7 @@ export class GroupService {
    */
   public getGroups(): Observable<Group[]> {
     const retrieveUrl = this.baseUrl.href + '/All';
-    
+
     return this.http.get<Group[]>(retrieveUrl);
   }
 }

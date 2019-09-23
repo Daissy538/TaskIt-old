@@ -11,8 +11,6 @@ import { Icon } from 'src/app/core/models/Icon';
 import { Group } from 'src/app/core/models/group';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IconSelectorComponent } from 'src/app/core/components/icon-selector/icon-selector.component';
-import { Overlay, OverlayRef, ScrollStrategyOptions } from '@angular/cdk/overlay';
-import { ComponentPortal, Portal } from '@angular/cdk/portal';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
@@ -52,7 +50,7 @@ export class CreateGroupComponent implements OnInit {
     private formBuilder: FormBuilder,
     private groupService: GroupService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog,
+    private dialog: MatDialog,
     private router: Router
   ) {}
 
@@ -95,7 +93,6 @@ export class CreateGroupComponent implements OnInit {
 
   selectIcon() {
     const dialogConfig = new MatDialogConfig();
-
 
     dialogConfig.width = '700px';
     dialogConfig.height = '500px';

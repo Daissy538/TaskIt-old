@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'src/app/modules/authentication/authentication.service';
+import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,5 +15,4 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
 
   }
-
 }

@@ -48,7 +48,7 @@ namespace TaskItApi.Controllers
         /// <summary>
         /// Delete a group and returns all subscribed groups of user.
         /// </summary>
-        [HttpPost]
+        [HttpDelete]
         [Route("Delete/{id:int}")]
         public ActionResult<IEnumerable<GroupDto>> Delete(int id)
         {

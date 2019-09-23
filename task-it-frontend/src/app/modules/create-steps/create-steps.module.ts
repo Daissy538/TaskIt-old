@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
+import { IconSelectorComponent } from 'src/app/core/components/icon-selector/icon-selector.component';
 
 
 
@@ -23,6 +24,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatSelectModule,
     CoreModule
   ],
-  declarations: [CreateGroupComponent]
+  declarations: [CreateGroupComponent, IconSelectorComponent],
+  entryComponents: [IconSelectorComponent]
 })
 export class CreateStepsModule { }
