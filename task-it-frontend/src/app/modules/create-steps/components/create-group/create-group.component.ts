@@ -94,11 +94,11 @@ export class CreateGroupComponent implements OnInit {
   selectIcon() {
     const dialogConfig = new MatDialogConfig();
 
-    dialogConfig.width = '700px';
-    dialogConfig.height = '500px';
+    dialogConfig.width = '800px';
+    dialogConfig.height = 'fit-content';
+    dialogConfig.panelClass = 'dialog-select-icons';
 
     dialogConfig.data = {
-      autofocus: false,
       icons: this.icons,
       icon: this.icon.value,
       color: this.color.value
@@ -106,7 +106,9 @@ export class CreateGroupComponent implements OnInit {
 
     const dialog = this.dialog.open(IconSelectorComponent, dialogConfig);
     dialog.afterClosed().subscribe(response => {
-      this.icon.setValue(response.icon);
+      if (response) {
+        this.icon.setValue(response.icon);
+      }
     });
   }
 

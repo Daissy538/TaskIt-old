@@ -10,6 +10,7 @@
   color: grey;
   margin: 0 auto;
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
 .color-selector {
@@ -21,8 +22,11 @@ button {
   margin: 5px !important;
 }
 
-::ng-deep .mat-dialog-container {
-  background-color: white !important;
-  color: unset;
-  padding: 0 !important;
+::ng-deep .dialog-select-icons {
+  .mat-dialog-container {
+    background-color: white !important;
+    color: unset;
+    padding: 0 !important;
+    overflow-y: hidden;
+  }
 }

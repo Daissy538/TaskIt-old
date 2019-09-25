@@ -7,10 +7,6 @@
   padding: 0;
 }
 
-.selection-content-container {
-  padding: 25px;
-}
-
 mat-grid-tile .mat-icon {
   font-size: 72px;
   height: 72px;
@@ -30,4 +26,8 @@ mat-grid-tile:hover {
   background: rgb(67,54,60);
   background: radial-gradient(circle, rgba(67,54,60,0.03995101458552175) 100%, rgba(148,187,233,1) 100%);
   border-radius: 4px;
+}
+
+.mat-dialog-content{
+  margin: 0;
 }

@@ -2,7 +2,6 @@
   width: fit-content;
   height: 50px;
   padding: 5px;
-  margin: 5px;
   cursor: move;
   display: flex;
   border-color: white;
@@ -28,19 +27,25 @@
 }
 
 .group-icon {
-  border-right: 2px solid #c2185b;
   padding-right: 10px;
   padding-left: 10px;
 }
 
-.group-title {
-  color: #c2185b;
-  font-size: 18px;
-  margin: auto;
-  padding-right: 10px;
-  padding-left: 15px;
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE10+/Edge */
-  user-select: none; /* Standard */
+@media screen and (min-width: 1000px)
+{
+  .group-icon {
+    border-right: 2px solid #c2185b;
+  }  
+
+  .group-title {
+    color: #c2185b;
+    font-size: 18px;
+    margin: auto;
+    padding-right: 10px;
+    padding-left: 15px;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+  }
 }

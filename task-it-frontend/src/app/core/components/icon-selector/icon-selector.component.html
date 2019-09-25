@@ -7,8 +7,7 @@
   </mat-toolbar>
 </div>
 <div mat-dialog-content>
-  <div class="selection-content-container">
-    <mat-grid-list cols="3" rowHeight="2:1">
+    <mat-grid-list cols="3" rowHeight="1:1" *ngIf="screenWidth < 1000">
       <mat-grid-tile
         *ngFor="let item of iconsList"
         [ngClass]="{ selected: item.value == icon.value }"
@@ -19,5 +18,15 @@
         >
       </mat-grid-tile>
     </mat-grid-list>
-  </div>
+    <mat-grid-list cols="3" rowHeight="2:1" *ngIf="screenWidth >= 1000">
+      <mat-grid-tile
+        *ngFor="let item of iconsList"
+        [ngClass]="{ selected: item.value == icon.value }"
+        (click)="setIcon(item)"
+      >
+        <mat-icon [style.color]="color.value"
+          ><div class="grid-item">{{ item.value }}</div></mat-icon
+        >
+      </mat-grid-tile>
+    </mat-grid-list>
 </div>

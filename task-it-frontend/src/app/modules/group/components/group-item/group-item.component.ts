@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { Group } from 'src/app/core/models/group';
 
 @Component({
@@ -11,9 +11,17 @@ export class GroupItemComponent implements OnInit {
   @Input()
   group: Group;
 
+  screenWidth: number;
+
   constructor() { }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.screenWidth = window.innerWidth;
+  }
+
   ngOnInit() {
+    this.screenWidth = window.innerWidth;
   }
 
 }

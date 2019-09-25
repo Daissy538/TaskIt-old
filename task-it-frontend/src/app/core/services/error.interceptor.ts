@@ -9,7 +9,7 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { MatSnackBar} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -25,12 +25,15 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError(error => {
         if (error instanceof HttpErrorResponse) {
           let errorMessage = '';
-          if(error.error instanceof ErrorEvent) {
+          if (error.error instanceof ErrorEvent) {
             errorMessage = `Error: ${error.message}`;
           } else {
             errorMessage = `Error Code: ${error.status}\nMessage: ${error.error}`;
           }
-          this.snackBar.open(error.error, 'X', {panelClass: ['custom-error']});
+
+          this.snackBar.open(error.error, 'X', {
+            panelClass: ['custom-error']
+          });
           return throwError(errorMessage);
         }
       })

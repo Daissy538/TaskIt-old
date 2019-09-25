@@ -8,20 +8,15 @@
   border-bottom: 1px solid white;
 }
 
-.group-cards {
-    margin: 8px;    
-}
-
 .empty-space {
   flex: 1 1 auto;
 }
 
 .list-group {
-  flex:1 1 100%;
+  flex: 1 1 100%;
   cursor: move;
 }
 
-.hide{
+.hide {
   visibility: hidden;
 }
-

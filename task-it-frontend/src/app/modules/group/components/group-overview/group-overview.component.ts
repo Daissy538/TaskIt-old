@@ -2,21 +2,16 @@ import {
   Component,
   OnInit,
   QueryList,
-  ViewChildren
+  ViewChildren,
+  HostListener
 } from '@angular/core';
 import { GroupService } from '../../group.service';
 import { Group } from 'src/app/core/models/group';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import {
-  CdkDragDrop,
-  moveItemInArray,
-  CdkDropList,
-  CdkDragEnter
-} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from 'src/app/core/components/confirmation-dialog/confirmation-dialog.component';
-
 
 @Component({
   selector: 'app-group-overview',
@@ -25,8 +20,8 @@ import { ConfirmationDialogComponent } from 'src/app/core/components/confirmatio
 })
 export class GroupOverviewComponent implements OnInit {
   groups: Group[];
-  dropList: CdkDropList[];
   inDraggingModus: boolean;
+  screenWidth: number;
 
   constructor(
     private dialog: MatDialog,
@@ -36,10 +31,15 @@ export class GroupOverviewComponent implements OnInit {
   ) {}
 
   @ViewChildren(CdkDropList) dropsQuery: QueryList<CdkDropList>;
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.screenWidth = window.innerWidth;
+  }
 
   ngOnInit() {
     this.getGroups();
     this.inDraggingModus = false;
+    this.screenWidth = window.innerWidth;
   }
 
   onCreateGroup() {
@@ -50,12 +50,6 @@ export class GroupOverviewComponent implements OnInit {
     const index = Number(event.item.data);
     const group = this.groups[index];
     this.deleteGroup(group);
-  }
-
-  entered($event: CdkDragEnter) {
-    if ($event.container.id !== 'deleteList') {
-      moveItemInArray(this.groups, $event.item.data, $event.container.data);
-    }
   }
 
   isDragging(isDragging: boolean) {
@@ -77,6 +71,7 @@ export class GroupOverviewComponent implements OnInit {
       cancelButtonText: 'Nee',
       confirmButtonText: 'Ja'
     };
+
     const dialog = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
     dialog.afterClosed().subscribe(data => {
       if (data) {
