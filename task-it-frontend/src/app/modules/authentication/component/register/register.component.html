@@ -33,7 +33,7 @@
         [floatLabel]="registerForm.value.floatLabel"
       >
         <mat-label>Wachtwoord</mat-label>
-        <input matInput="password" name="password" formControlName="password" />
+        <input matInput="password" name="password" type="password" formControlName="password" />
         <mat-error *ngIf="password.invalid">{{
           getErrorMessage(password)
         }}</mat-error>
@@ -65,7 +65,7 @@
       fxFlexAlign="end"
       [disabled]="!registerForm.valid"
     >
-      
+      Register
     </button>
   </form>
 </div>

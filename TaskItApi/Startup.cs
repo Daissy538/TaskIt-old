@@ -2,17 +2,14 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -28,12 +25,9 @@ namespace TaskItApi
 {
     public class Startup
     {
-        private readonly ILogger<Startup> _logger;
-
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _logger = logger;
         }
 
         public IConfiguration Configuration { get; }
@@ -47,50 +41,48 @@ namespace TaskItApi
 
             InitDependicyInjection(services);
 
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    });
+            });
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => {
-                    options.TokenValidationParameters = new TokenValidationParameters
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(jwtBearerOption => {
+                jwtBearerOption.TokenValidationParameters = new TokenValidationParameters()
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
                                             .GetBytes(Configuration.GetSection("AppSettings:AppSecret").Value)),
                         ValidateIssuer = false,
                         ValidateAudience = false
-                    };
+                      };
                 });
 
             InitSwaggerGent(services);
-            services.AddMvc()
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddMvc(options => options.EnableEndpointRouting = false)            
+            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                
-            }
-            else
-            {
-                app.UseHsts();
-            }
+            app.UseCors();
 
-            app.UseCors(
-                options => options.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials()
-             );
-
-            app.UseSwagger();
+            app.UseSwagger(c => c.SerializeAsV2 = true);
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskIt v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskIt Api");
             });
 
             app.UseAuthentication();
@@ -117,20 +109,15 @@ namespace TaskItApi
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Main API v1.0", Version = "v1.0" });
-
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "TaskIt Api", Version = "v1" });
+                
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
                 });
-
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
-                    {
-                        { "Bearer", new string[] { } }
-                    });
 
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
 

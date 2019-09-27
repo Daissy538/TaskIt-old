@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
+using TaskItApi.Exceptions;
 using TaskItApi.Models.Interfaces;
 using TaskItApi.Services.Interfaces;
 
@@ -31,7 +32,7 @@ namespace TaskItApi.Services
 
             if(user.Equals(default(User)))
             {
-                _logger.LogError($"Couldn't delete group for non-existing user {userId}");
+                _logger.LogError($"Couldn't create group for non-existing user {userId}");
                 throw new NullReferenceException("Couldn't create group for non-existing user");
             }
 
@@ -79,7 +80,7 @@ namespace TaskItApi.Services
             if (group.Equals(default(Group)))
             {
                 _logger.LogError($"Try to delete group with id: {groupId}. But group doesn't exist for user: {userId}");
-                throw new NullReferenceException("User is not subscribed on given groups");
+                throw new InvalidInputException("User is not subscribed on given groups");
             }
 
             List<Subscription> subscriptions = group.Members.ToList();

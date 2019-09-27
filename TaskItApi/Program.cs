@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using System.Reflection;
+using Microsoft.Extensions.Hosting;
 
 namespace TaskItApi
 {
@@ -15,26 +16,30 @@ namespace TaskItApi
                 .Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                 .ConfigureLogging(logging =>
-                  {
+        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                 .ConfigureWebHostDefaults(webBuilder =>
+                 {
+                     webBuilder.ConfigureLogging(logging =>
+                     {
 
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                 })
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    var env = hostingContext.HostingEnvironment;
-                    if(env.IsDevelopment())
+                         logging.ClearProviders();
+                         logging.AddConsole();
+                     })
+                    .ConfigureAppConfiguration((hostingContext, config) =>
                     {
-                        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-                        if (appAssembly != null)
+                        var env = hostingContext.HostingEnvironment;
+                        if (env.IsDevelopment())
                         {
-                            config.AddUserSecrets(appAssembly, optional: true);
+                            var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+                            if (appAssembly != null)
+                            {
+                                config.AddUserSecrets(appAssembly, optional: true);
+                            }
                         }
-                    }
-                })
-                .UseStartup<Startup>();
+                    })
+                    .ConfigureKestrel((context, options) => { })
+                    .UseStartup<Startup>();
+                 });
             }
 }

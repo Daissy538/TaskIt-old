@@ -15,7 +15,7 @@ namespace TaskItApi.Services.NewFolder
         /// </summary>
         /// <param name="userIncomingData">The incoming user data</param>
         /// <returns>Authentication token for the given user</returns>
-        string AuthenicateUser(UserInComingDto userIncomingData);
+        TokenDto AuthenicateUser(UserInComingDto userIncomingData);
 
         /// <summary>
         /// Register user based on incomingdata

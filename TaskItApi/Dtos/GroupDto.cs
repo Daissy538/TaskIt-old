@@ -5,7 +5,7 @@ namespace TaskItApi.Dtos
 {
     public class GroupDto
     {
-        public int Id;
+        public int ID { get; set; }
         [Required]
         public string Name { get; set; }
 

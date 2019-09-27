@@ -7,9 +7,9 @@ namespace TaskItApi.Dtos
 {
     public class SubscriptionDto
     {
-        public int UserId { get; set; }
+        public int UserID { get; set; }
         public string UserName { get; set; }
-        public int GroupId { get; set; }
+        public int GroupID { get; set; }
         public string GroupName { get; set; }
         public DateTime DateOfSubscription { get; set; }
     }

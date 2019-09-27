@@ -18,27 +18,27 @@ namespace TaskItApi.Repositories
 
         public void Create(T entity)
         {
-            this.TaskItDbContext.Set<T>().Add(entity);
+            TaskItDbContext.Set<T>().Add(entity);
         }
 
         public void Delete(T entity)
         {            
-            this.TaskItDbContext.Set<T>().Remove(entity);
+            TaskItDbContext.Set<T>().Remove(entity);
         }
 
         public IQueryable<T> FindAll()
         {
-            return this.TaskItDbContext.Set<T>().AsNoTracking();
+            return TaskItDbContext.Set<T>().AsNoTracking();
         }
 
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
         {
-            return this.TaskItDbContext.Set<T>().Where(expression).AsNoTracking();
+            return TaskItDbContext.Set<T>().Where(expression).AsNoTracking();
         }
 
         public void Update(T entity)
         {
-            this.TaskItDbContext.Set<T>().Update(entity);
+            TaskItDbContext.Set<T>().Update(entity);
         }
     }
 }

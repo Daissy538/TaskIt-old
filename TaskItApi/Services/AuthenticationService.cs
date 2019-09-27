@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
+using TaskItApi.Exceptions;
 using TaskItApi.Extentions;
 using TaskItApi.Models.Interfaces;
 using TaskItApi.Services.NewFolder;
@@ -30,7 +31,7 @@ namespace TaskItApi.Services
             _configuration = config;
         }
 
-        public string AuthenicateUser(UserInComingDto userIncomingData)
+        public TokenDto AuthenicateUser(UserInComingDto userIncomingData)
         {
             User user = _unitOfWork.UserRepository.GetUser(userIncomingData.Email);
 
@@ -40,12 +41,15 @@ namespace TaskItApi.Services
             if (!userExist && !passwordVerified)
             {
                 _logger.LogTrace($"A user with email {userIncomingData.Email} tride to login but failed.");
-                throw new ArgumentException("Email and/or password is incorrect");
+                throw new InvalidInputException("Email and/or password is incorrect");
             }
 
             string token = CreateToken(user);
 
-            return token;
+            TokenDto tokenDto = new TokenDto();
+            tokenDto.Token = token;
+
+            return tokenDto;
         }
 
         public void RegisterUser(UserInComingDto userInComingDto)

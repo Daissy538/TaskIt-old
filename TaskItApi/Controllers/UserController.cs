@@ -1,25 +1,29 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using TaskItApi.Dtos;
+using TaskItApi.Exceptions;
 using TaskItApi.Services.NewFolder;
 
 namespace TaskItApi.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IAuthenticationService _authenicationService;
+        private readonly ILogger<UserController> _logger;
 
         public UserController(IUserService userService
-                              ,IAuthenticationService authenticationService)
+                              ,IAuthenticationService authenticationService, ILogger<UserController> logger)
         {
             _userService = userService;
             _authenicationService = authenticationService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -33,13 +37,15 @@ namespace TaskItApi.Controllers
             try
             {
                 _authenicationService.RegisterUser(userInComingData);
-                return null;
-            }catch(ArgumentException argumentException)
+                return Ok();
+            }catch(InvalidInputException invalidInputException)
             {
-                return BadRequest(argumentException.Message);
+                _logger.LogInformation($"Could not register user", userInComingData, invalidInputException);
+                return BadRequest("Could not register user");
             }
-            catch
+            catch(Exception exception)
             {
+                _logger.LogError($"Could not register user", userInComingData, exception);
                 return StatusCode(500, "Internal server error");
             }          
         }
@@ -54,16 +60,19 @@ namespace TaskItApi.Controllers
         {
             try
             {
-                string token = _authenicationService.AuthenicateUser(userInComingData);
-                var response = new
-                {
-                    token = token
-                };
-
-                return Ok(response);
-            }catch(Exception exception)
+                TokenDto token = _authenicationService.AuthenicateUser(userInComingData);
+                
+                return Ok(token);
+            }
+            catch (InvalidInputException invalidInputException)
             {
-               return BadRequest("Invalid email and/or password");
+                _logger.LogInformation($"Could not authenitcate user", userInComingData, invalidInputException);
+                return BadRequest("Invalid email and/or password");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Could not authenitcate user", userInComingData, exception);
+                return StatusCode(500, "Internal server error");
             }
         }
 

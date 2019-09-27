@@ -15,9 +15,9 @@ namespace TaskItApi.Maps
             CreateMap<Group, GroupDto>();
 
             CreateMap<Subscription, SubscriptionDto>()
-                .ForMember(dto => dto.GroupId, s => s.MapFrom(src => src.Group.ID))
+                .ForMember(dto => dto.GroupID, s => s.MapFrom(src => src.Group.ID))
                 .ForMember(dto => dto.GroupName, s => s.MapFrom(src => src.Group.Name))
-                .ForMember(dto => dto.UserId, s => s.MapFrom(src => src.User.ID))
+                .ForMember(dto => dto.UserID, s => s.MapFrom(src => src.User.ID))
                 .ForMember(dto => dto.UserName, s => s.MapFrom(src => src.User.Name));
         }
     }
