@@ -1,0 +1,4 @@
+D:\Projects\TaskIt\TaskItApiTest\obj\Debug\netcoreapp2.1\TaskItApiTest.csprojAssemblyReference.cache
+D:\Projects\TaskIt\TaskItApiTest\obj\Debug\netcoreapp2.1\TaskItApiTest.csproj.CoreCompileInputs.cache
+D:\Projects\TaskIt\TaskItApiTest\obj\Debug\netcoreapp2.1\TaskItApiTest.AssemblyInfoInputs.cache
+D:\Projects\TaskIt\TaskItApiTest\obj\Debug\netcoreapp2.1\TaskItApiTest.AssemblyInfo.cs
