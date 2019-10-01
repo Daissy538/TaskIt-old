@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using TaskItApi.Dtos;
+using TaskItApi.Entities;
 
-namespace TaskItApi.Services.NewFolder
+namespace TaskItApi.Services.Interfaces
 {
     /// <summary>
     /// Interface for authenication
@@ -21,7 +22,7 @@ namespace TaskItApi.Services.NewFolder
         /// Register user based on incomingdata
         /// </summary>
         /// <param name="userInComingDto">The new user data</param>
-        void RegisterUser(UserInComingDto userInComingDto);
+        User RegisterUser(UserInComingDto userInComingDto);
 
         /// <summary>
         /// Check if the user exist

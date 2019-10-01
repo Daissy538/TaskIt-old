@@ -1,6 +1,6 @@
 ﻿using TaskItApi.Dtos;
 
-namespace TaskItApi.Services.NewFolder
+namespace TaskItApi.Services.Interfaces
 {
     /// <summary>
     /// Interface for managing the users

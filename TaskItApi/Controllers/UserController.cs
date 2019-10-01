@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 using TaskItApi.Dtos;
 using TaskItApi.Exceptions;
-using TaskItApi.Services.NewFolder;
+using TaskItApi.Services.Interfaces;
 
 namespace TaskItApi.Controllers
 {
@@ -32,7 +33,7 @@ namespace TaskItApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("Register")]
-        public ActionResult<UserOutGoingDto> Register([FromBody]UserInComingDto userInComingData)
+        public async Task<ActionResult<UserOutGoingDto>> Register([FromBody]UserInComingDto userInComingData)
         {
             try
             {
@@ -56,11 +57,11 @@ namespace TaskItApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("Auth")]
-        public ActionResult<string> Authenticate ([FromBody]UserInComingDto userInComingData)
+        public async Task<ActionResult<string>> Authenticate ([FromBody]UserInComingDto userInComingData)
         {
             try
             {
-                TokenDto token = _authenicationService.AuthenicateUser(userInComingData);
+                TokenDto token =  _authenicationService.AuthenicateUser(userInComingData);
                 
                 return Ok(token);
             }
@@ -81,7 +82,7 @@ namespace TaskItApi.Controllers
         /// </summary>
         [HttpPost]
         [Route("{id:int}/Update")]
-        public ActionResult<UserOutGoingDto> Update(int Id)
+        public async Task<ActionResult<UserOutGoingDto>> Update(int Id)
         {
             return null;
         }
@@ -92,7 +93,7 @@ namespace TaskItApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("{id:int}/Delete")]
-        public ActionResult Delete(int Id)
+        public async Task<ActionResult> Delete(int Id)
         {
             return null;
         }

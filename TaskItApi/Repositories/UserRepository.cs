@@ -14,7 +14,7 @@ namespace TaskItApi.Repositories
     {
         private readonly ILogger _logger;
 
-        public UserRepository(TaskItDbContext taskItDbContext, ILogger<UserRepository> logger)
+        public UserRepository(TaskItDbContext taskItDbContext, ILogger<IUserRepository> logger)
             :base(taskItDbContext)
         {
             _logger = logger;

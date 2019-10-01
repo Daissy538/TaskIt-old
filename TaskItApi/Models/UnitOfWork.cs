@@ -1,5 +1,4 @@
 ﻿using TaskItApi.Models.Interfaces;
-using TaskItApi.Repositories;
 using TaskItApi.Repositories.Interfaces;
 
 namespace TaskItApi.Models

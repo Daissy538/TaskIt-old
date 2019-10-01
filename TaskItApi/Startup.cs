@@ -19,7 +19,7 @@ using TaskItApi.Repositories;
 using TaskItApi.Repositories.Interfaces;
 using TaskItApi.Services;
 using TaskItApi.Services.Interfaces;
-using TaskItApi.Services.NewFolder;
+using TaskItApi.Services.Interfaces;
 
 namespace TaskItApi
 {

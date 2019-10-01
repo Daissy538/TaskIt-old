@@ -12,7 +12,7 @@ namespace TaskItApi.Repositories
     {
         private readonly ILogger _logger;
 
-        public GroupRepository(TaskItDbContext taskItDbContext, ILogger<GroupRepository> logger)
+        public GroupRepository(TaskItDbContext taskItDbContext, ILogger<IGroupRepository> logger)
             : base(taskItDbContext)
         {
             _logger = logger;
@@ -20,16 +20,18 @@ namespace TaskItApi.Repositories
 
         public IEnumerable<Group> FindAllGroupOfUser(int userId)
         {
-            IEnumerable<Group> groups = this.FindByCondition(g => g.Members.Where(
-                                      m => m.User.ID == userId)                                       
-                                      .Any());
+            IEnumerable<Group> groups = FindByCondition(g => g.Members.Where(
+                                              m => m.User.ID == userId)                                       
+                                              .Any())
+                                        .AsEnumerable();
             return groups;
         }
 
         public Group FindGroupOfUser(int groupId, int userId)
         {
             Group group = FindByCondition(g => g.ID ==  groupId &&
-                                               g.Members.Where(m => m.User.ID == userId).Any())
+                                               g.Members.Where(m => m.User.ID == userId)
+                                               .Any())
                                           .Include(g => g.Members)
                                           .FirstOrDefault();
 

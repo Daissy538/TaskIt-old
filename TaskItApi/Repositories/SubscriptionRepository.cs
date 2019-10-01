@@ -9,7 +9,7 @@ namespace TaskItApi.Repositories
     {
         private readonly ILogger _logger;
 
-        public SubscriptionRepository(TaskItDbContext taskItDbContext, ILogger<Subscription> logger)
+        public SubscriptionRepository(TaskItDbContext taskItDbContext, ILogger<ISubscriptionRepository> logger)
             : base(taskItDbContext)
         {
             _logger = logger;

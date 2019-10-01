@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ namespace TaskItApi.Controllers
         /// </summary>
         [HttpPost]
         [Route("Create")]
-        public ActionResult<IEnumerable<GroupDto>> Create([FromBody]GroupDto groupDto)
+        public async Task<ActionResult<IEnumerable<GroupDto>>> Create([FromBody]GroupDto groupDto)
         {
             int userId = HttpContext.User.GetCurrentUserId();
             try
@@ -60,7 +61,7 @@ namespace TaskItApi.Controllers
         /// </summary>
         [HttpDelete]
         [Route("Delete/{id:int}")]
-        public ActionResult<IEnumerable<GroupDto>> Delete(int id)
+        public async Task<ActionResult<IEnumerable<GroupDto>>> Delete(int id)
         {
             int userId = HttpContext.User.GetCurrentUserId();
 
@@ -88,7 +89,7 @@ namespace TaskItApi.Controllers
         /// </summary>
         [HttpGet]
         [Route("All")]
-        public ActionResult<IEnumerable<GroupDto>> GetGroups()
+        public async Task<ActionResult<IEnumerable<GroupDto>>> GetGroups()
         {
             int userId = HttpContext.User.GetCurrentUserId();
             try

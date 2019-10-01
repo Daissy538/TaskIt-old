@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
@@ -30,16 +29,13 @@ namespace TaskItApi.Services
         {                     
             User user = _unitOfWork.UserRepository.GetUser(userId);
 
-            if(user.Equals(default(User)))
+            if(user == default(User))
             {
                 _logger.LogError($"Couldn't create group for non-existing user {userId}");
                 throw new NullReferenceException("Couldn't create group for non-existing user");
             }
 
-            Group group = new Group() { Color = groupDto.Color,
-                                        Name = groupDto.Name,
-                                        Icon = groupDto.Icon,
-                                        Description = groupDto.Description};            
+            Group group = _mapper.Map<Group>(groupDto);
 
             Subscription subscription = new Subscription();
 
@@ -69,7 +65,7 @@ namespace TaskItApi.Services
         {
             User user = _unitOfWork.UserRepository.GetUser(userId);
           
-            if (user.Equals(default(User)))
+            if (user == (default(User)))
             {
                 _logger.LogError($"Couldn't delete group for non-existing user {userId}");
                 throw new NullReferenceException("Couldn't delete group for non-existing user");
@@ -77,7 +73,7 @@ namespace TaskItApi.Services
 
             Group group = _unitOfWork.GroupRepository.FindGroupOfUser(groupId, userId);
 
-            if (group.Equals(default(Group)))
+            if (group == (default(Group)))
             {
                 _logger.LogError($"Try to delete group with id: {groupId}. But group doesn't exist for user: {userId}");
                 throw new InvalidInputException("User is not subscribed on given groups");
@@ -102,7 +98,7 @@ namespace TaskItApi.Services
         {
             User user = _unitOfWork.UserRepository.GetUser(userId);
 
-            if (user.Equals(default(User)))
+            if (user == default(User))
             {
                 _logger.LogError($"Couldn't retrieve groups of non-existing user {userId}");
                 throw new NullReferenceException("Couldn't retrieve groups of non-existing user");
