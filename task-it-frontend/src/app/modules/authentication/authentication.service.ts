@@ -43,9 +43,6 @@ export class AuthenticationService {
   loginUser(user: User) {
     const urlLogin = this.baseUrl.href + '/Auth';
 
-    const date = new Date();
-    const startTime = date.getTime();
-
     this.http.post(urlLogin, user).subscribe(value => {
       this.setSession(value['token']);
       if (this.redirectUrl) {
