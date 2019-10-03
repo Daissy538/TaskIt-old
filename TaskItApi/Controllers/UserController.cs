@@ -1,11 +1,13 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using TaskItApi.Dtos;
 using TaskItApi.Exceptions;
+using TaskItApi.Resources;
 using TaskItApi.Services.Interfaces;
 
 namespace TaskItApi.Controllers
@@ -18,13 +20,15 @@ namespace TaskItApi.Controllers
         private readonly IUserService _userService;
         private readonly IAuthenticationService _authenicationService;
         private readonly ILogger<UserController> _logger;
+        private readonly IStringLocalizer<ApiResponse> _localizer;
 
         public UserController(IUserService userService
-                              ,IAuthenticationService authenticationService, ILogger<UserController> logger)
+                              ,IAuthenticationService authenticationService, ILogger<UserController> logger, IStringLocalizer<ApiResponse> localizer)
         {
             _userService = userService;
             _authenicationService = authenticationService;
             _logger = logger;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -42,12 +46,12 @@ namespace TaskItApi.Controllers
             }catch(InvalidInputException invalidInputException)
             {
                 _logger.LogInformation($"Could not register user", userInComingData, invalidInputException);
-                return BadRequest("Could not register user");
+                return BadRequest(_localizer["RegisterUser_Error"].Value);
             }
             catch(Exception exception)
             {
                 _logger.LogError($"Could not register user", userInComingData, exception);
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, _localizer["InternalError"].Value);
             }          
         }
 
@@ -68,12 +72,12 @@ namespace TaskItApi.Controllers
             catch (InvalidInputException invalidInputException)
             {
                 _logger.LogInformation($"Could not authenitcate user", userInComingData, invalidInputException);
-                return BadRequest("Invalid email and/or password");
+                return BadRequest(_localizer["AuthenticateUser_Error"].Value);
             }
             catch (Exception exception)
             {
                 _logger.LogError($"Could not authenitcate user", userInComingData, exception);
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, _localizer["InternalError"].Value);
             }
         }
 

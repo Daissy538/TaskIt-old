@@ -2,7 +2,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -17,8 +21,8 @@ using TaskItApi.Models;
 using TaskItApi.Models.Interfaces;
 using TaskItApi.Repositories;
 using TaskItApi.Repositories.Interfaces;
+using TaskItApi.Resources;
 using TaskItApi.Services;
-using TaskItApi.Services.Interfaces;
 using TaskItApi.Services.Interfaces;
 
 namespace TaskItApi
@@ -70,14 +74,32 @@ namespace TaskItApi
 
             InitSwaggerGent(services);
 
-            services.AddMvc(options => options.EnableEndpointRouting = false)            
-            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddMvc(options => options.EnableEndpointRouting = false)
+            .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+            .AddDataAnnotationsLocalization(options =>
+            {
+                options.DataAnnotationLocalizerProvider = (type, factory) =>
+                factory.Create(typeof(ApiResponse));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
             app.UseCors();
+            var supportedCultures = new List<CultureInfo>
+            {
+                new CultureInfo("nl")
+            };
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("nl"),
+                // Formatting numbers, dates, etc.
+                SupportedCultures = supportedCultures,
+                // UI strings that we have localized.
+                SupportedUICultures = supportedCultures              
+            });
 
             app.UseSwagger(c => c.SerializeAsV2 = true);
             app.UseSwaggerUI(c =>

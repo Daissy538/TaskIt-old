@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
 using TaskItApi.Exceptions;
 using TaskItApi.Extentions;
+using TaskItApi.Resources;
 using TaskItApi.Services.Interfaces;
 
 namespace TaskItApi.Controllers
@@ -21,12 +23,15 @@ namespace TaskItApi.Controllers
         private readonly IGroupService _groupService ;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
+        private readonly IStringLocalizer<ApiResponse> _localizer;
 
-        public GroupController(IGroupService groupService, IMapper mapper, ILogger<GroupController> logger)
+        public GroupController(IGroupService groupService, IMapper mapper, ILogger<GroupController> logger, IStringLocalizer<ApiResponse> localizer)
         {
             _groupService = groupService;
             _mapper = mapper;
             _logger = logger;
+
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -46,13 +51,13 @@ namespace TaskItApi.Controllers
             }
             catch (InvalidInputException invalidInputException)
             {
-                _logger.LogInformation($"User {userId} could not create groupd", groupDto, invalidInputException);
-                return BadRequest("Could not create group");
+                _logger.LogInformation($"User {userId} could not create group", groupDto, invalidInputException);
+                return BadRequest(_localizer["CreateGroup_Error"].Value);
             }
             catch (Exception exception)
             {
                 _logger.LogError($"User {userId} could not create group", groupDto, exception);
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, _localizer["InternalError"].Value);
             }
         }
 
@@ -75,12 +80,12 @@ namespace TaskItApi.Controllers
             catch (InvalidInputException invalidInputException)
             {
                 _logger.LogInformation($"User {userId} could not delete groupd with id: {id}", invalidInputException);
-                return BadRequest("Could not delete group");
+                return BadRequest(_localizer["DeleteGroup_Error"].Value);
             }
             catch(Exception exception)
             {
                 _logger.LogError($"User {userId} could not delete groupd with id: {id}", exception);
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, _localizer["InternalError"].Value);
             }
         }
 
@@ -102,7 +107,7 @@ namespace TaskItApi.Controllers
             catch (Exception exception)
             {
                 _logger.LogError($"User {userId} could not retrieve subscribed groups", exception);
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, _localizer["InternalError"].Value);
             }
         }
 
