@@ -32,7 +32,6 @@ export class GroupUpdateComponent implements OnInit, OnChanges {
   icons: Icon[];
   @Input()
   colors: Color[];
-
   @Output()
   onUpdate = new EventEmitter<GroupOutgoing>();
 

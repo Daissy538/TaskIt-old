@@ -56,6 +56,7 @@ namespace TaskItApiTest.ServiceTests
             _userRepositoryMock.Setup(u => u.AddUser(It.Is<User>(u => u.Email.ToLower() == this._mockEmail))).Throws(new InvalidInputException("User already exist"));
             _userRepositoryMock.Setup(u => u.GetUser(It.Is<int>(i => i == this._mockID))).Returns(user);
             _userRepositoryMock.Setup(u => u.ContainceUser(It.Is<int>(i => i == this._mockID))).Returns(true);
+            _userRepositoryMock.Setup(u => u.ContainceUser(It.Is<int>(i => i != this._mockID))).Throws(new InvalidInputException("User doesn't exist"));
             _userRepositoryMock.Setup(u => u.GetUser(It.Is<string>(s => s.ToLower() == this._mockEmail))).Returns(user);
             _userRepositoryMock.Setup(u => u.GetUser(It.Is<string>(s => s.ToLower() != this._mockEmail))).Throws(new InvalidInputException("User doesn't exist"));
 
@@ -117,8 +118,7 @@ namespace TaskItApiTest.ServiceTests
             };
 
             _groupRepositoryMock.Setup(u => u.FindAllGroupOfUser(1)).Returns(mockGroupResponse(newGroup));
-            groupService.Create(newGroup, 2);
-
+            Assert.Throws<InvalidInputException>(() => groupService.Create(newGroup, 2));
         }
 
         [Fact]
@@ -257,7 +257,7 @@ namespace TaskItApiTest.ServiceTests
             _groupRepositoryMock.Setup(u => u.FindGroupOfUser(1, 1)).Returns(existingGroup);
             int incorrectUserId = 3;
 
-            Assert.Throws<Exception>(() => groupService.Update(existingGroup.ID, updateGroup, incorrectUserId));
+            Assert.Throws<InvalidInputException>(() => groupService.Update(existingGroup.ID, updateGroup, incorrectUserId));
         }
 
         //Mock group response
