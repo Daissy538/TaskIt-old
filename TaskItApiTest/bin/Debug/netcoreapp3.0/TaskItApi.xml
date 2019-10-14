@@ -245,11 +245,11 @@
             </summary>
             <returns>List of colors</returns>
         </member>
-        <member name="M:TaskItApi.Repositories.Interfaces.IColorRepository.GetColorByValue(System.String)">
+        <member name="M:TaskItApi.Repositories.Interfaces.IColorRepository.GetColorByValue(System.Int32)">
             <summary>
             Get 
             </summary>
-            <param name="colorValue"></param>
+            <param name="colorID"></param>
             <returns></returns>
         </member>
         <member name="M:TaskItApi.Repositories.Interfaces.IGroupRepository.FindAllGroupOfUser(System.Int32)">
@@ -273,11 +273,11 @@
             </summary>
             <returns>List of icons</returns>
         </member>
-        <member name="M:TaskItApi.Repositories.Interfaces.IIconRepository.GetIconByValue(System.String)">
+        <member name="M:TaskItApi.Repositories.Interfaces.IIconRepository.GetIconByValue(System.Int32)">
             <summary>
             Get icon by value
             </summary>
-            <param name="iconValue"></param>
+            <param name="iconID"></param>
             <returns>the icon based on the given value</returns>
         </member>
         <member name="M:TaskItApi.Repositories.Interfaces.IRepositoryBase`1.FindAll">

@@ -82,9 +82,9 @@ namespace TaskItApiTest.ServiceTests
 
             GroupIncomingDTO newGroup = new GroupIncomingDTO()
             {
-                ColorID = "#5c6bc0",
+                ColorID = 1,
                 Description = "Test description",
-                IconID = "nature_people",
+                IconID = 1,
                 Name = "House"
             };
 
@@ -102,9 +102,9 @@ namespace TaskItApiTest.ServiceTests
 
             GroupIncomingDTO newGroup = new GroupIncomingDTO()
             {
-                ColorID = "#5c6bc0",
+                ColorID = 1,
                 Description = "Test description",
-                IconID = "nature_people",
+                IconID = 1,
                 Name = "House"
             };
 
