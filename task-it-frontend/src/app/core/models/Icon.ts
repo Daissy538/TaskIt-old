@@ -1,4 +1,11 @@
 export class Icon {
-    value: string;
-    description: string;
+  id: number;
+  name: string;
+  value: string;
+
+  public constructor(id: number, name: string, value: string) {
+    this.id = id;
+    this.name = name;
+    this.value = value;
+  }
 }

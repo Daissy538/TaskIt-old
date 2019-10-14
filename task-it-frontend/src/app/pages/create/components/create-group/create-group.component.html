@@ -41,21 +41,20 @@
         <div fxFlex="50">
           <mat-card class="card-card" (click)="selectIcon()">
             <mat-card-content>
-              <mat-icon class="group-icon" [style.color]="color.value.value">{{
-                icon.value.value
+              <mat-icon class="group-icon" [style.color]="selectedColor?.value">{{
+                selectedIcon?.value
               }}</mat-icon>
             </mat-card-content>
           </mat-card>
-
           <mat-form-field
             appearance="outline"
             class="color-selector"
             fxLayout="row"
             fxLayoutAlign="center"
           >
-            <mat-select formControlName="color">
-              <mat-option *ngFor="let color of colors" [value]="color">
-                {{ color.viewValue }}
+            <mat-select formControlName="color" (selectionChange)="selectColor($event)">
+              <mat-option *ngFor="let color of colors" [value]="color" >
+                {{ color?.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>

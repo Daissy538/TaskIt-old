@@ -17,9 +17,11 @@ namespace TaskItApi.Entities
         public string Name { get; set;}
         public string Description { get; set; }
         [Required]
-        public string Icon { get; set; }
+        public int IconID { get; set; }
+        public Icon Icon { get; set; }
         [Required]
-        public string Color { get; set; }
+        public int ColorID { get; set; }
+        public Color Color { get; set; }
         public ICollection<Subscription> Members { get; set; }
     }
 }

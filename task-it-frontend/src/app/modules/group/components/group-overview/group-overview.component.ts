@@ -6,12 +6,14 @@ import {
   HostListener
 } from '@angular/core';
 import { GroupService } from '../../group.service';
-import { Group } from 'src/app/core/models/group';
+import { GroupOutgoing, GroupIncoming } from 'src/app/core/models/group';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from 'src/app/core/components/confirmation-dialog/confirmation-dialog.component';
+import { delay } from 'rxjs/operators';
+import { del } from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-group-overview',
@@ -19,7 +21,7 @@ import { ConfirmationDialogComponent } from 'src/app/core/components/confirmatio
   styleUrls: ['./group-overview.component.scss']
 })
 export class GroupOverviewComponent implements OnInit {
-  groups: Group[];
+  groups: GroupIncoming[];
   inDraggingModus: boolean;
   screenWidth: number;
 
@@ -30,7 +32,6 @@ export class GroupOverviewComponent implements OnInit {
     private router: Router
   ) {}
 
-  @ViewChildren(CdkDropList) dropsQuery: QueryList<CdkDropList>;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.screenWidth = window.innerWidth;
@@ -46,12 +47,30 @@ export class GroupOverviewComponent implements OnInit {
     this.router.navigate(['create/group']);
   }
 
+  /**
+   * Deletes group element
+   * @param event  the drop event
+   */
   delete(event: CdkDragDrop<string[]>) {
     const index = Number(event.item.data);
     const group = this.groups[index];
     this.deleteGroup(group);
   }
 
+  /**
+   * Navigate to group details
+   * @param group the outgoing groupdetails
+   */
+  groupDetails(group: GroupOutgoing) {
+    if (!this.inDraggingModus) {
+      this.router.navigate(['details/group/', group.id]);
+    }
+  }
+
+  /**
+   * Determines whether element is dragging
+   * @param isDragging true if dragging, false otherwise
+   */
   isDragging(isDragging: boolean) {
     this.inDraggingModus = isDragging;
   }
@@ -61,7 +80,7 @@ export class GroupOverviewComponent implements OnInit {
    * On succes show snackbar + current subscribed groups
    * @param groupId the id of the group to be deleted
    */
-  private deleteGroup(groupSelected: Group) {
+  private deleteGroup(groupSelected: GroupIncoming) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.data = {
       autofocus: false,

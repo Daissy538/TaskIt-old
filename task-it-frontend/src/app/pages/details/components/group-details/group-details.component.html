@@ -1,0 +1,11 @@
+<div class="content-container">
+  <div fxLayout="row">
+    <div *ngIf="(screenWidth >= 1000)" fxLayout="column" class="back-arrow" fxLayoutAlign="start center">
+      <mat-icon (click)="previousPage()" >arrow_back_ios</mat-icon>
+    </div>
+    <div fxLayout="column" class="group-details">
+      <app-group-update [group]="group" [icons]="icons" [colors]="colors" (onUpdate)="updateGroup($event)"></app-group-update>
+    </div>
+    <div fxLayout="column"></div>
+  </div>
+</div>

@@ -8,7 +8,7 @@ import {
 import { GroupService } from 'src/app/modules/group/group.service';
 import { Color } from 'src/app/core/models/color';
 import { Icon } from 'src/app/core/models/Icon';
-import { Group } from 'src/app/core/models/group';
+import { GroupOutgoing } from 'src/app/core/models/group';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IconSelectorComponent } from 'src/app/core/components/icon-selector/icon-selector.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -26,25 +26,10 @@ export class CreateGroupComponent implements OnInit {
   icon: FormControl;
   color: FormControl;
 
-  colors: Color[] = [
-    { value: '#ec407a', viewValue: 'Pink' },
-    { value: '#ef5350', viewValue: 'Orange' },
-    { value: '#ab47bc', viewValue: 'Purple' },
-    { value: '#5c6bc0', viewValue: 'Blue' }
-  ];
-
-  icons: Icon[] = [
-    { value: 'house', description: 'House' },
-    { value: 'work', description: 'Work' },
-    { value: 'directions_run', description: 'Sport' },
-    { value: 'school', description: 'Education' },
-    { value: 'headset_mic', description: 'Game' },
-    { value: 'music_note', description: 'Music' },
-    { value: 'nature_people', description: 'Nature' },
-    { value: 'loyalty', description: 'Voluntary work' },
-    { value: 'pets', description: 'Animal' },
-    { value: 'color_lens', description: 'Art' }
-  ];
+  selectedColor: Color;
+  selectedIcon: Icon;
+  colors: Color[] = [];
+  icons: Icon[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -57,8 +42,8 @@ export class CreateGroupComponent implements OnInit {
   ngOnInit() {
     this.title = new FormControl('', [Validators.required]);
     this.description = new FormControl();
-    this.icon = new FormControl(this.icons[0]);
-    this.color = new FormControl(this.colors[0]);
+    this.icon = new FormControl();
+    this.color = new FormControl();
 
     this.groupCreateForm = this.formBuilder.group({
       title: this.title,
@@ -67,6 +52,8 @@ export class CreateGroupComponent implements OnInit {
       color: this.color,
       floatLabel: 'auto'
     });
+
+    this.initDefaults();
   }
 
   getErrorMessage(controller: FormControl) {
@@ -74,12 +61,12 @@ export class CreateGroupComponent implements OnInit {
   }
 
   createGroup() {
-    const group = new Group(
+    const group = new GroupOutgoing(
       -1,
       this.title.value,
       this.description.value,
-      this.icon.value.value,
-      this.color.value.value
+      this.selectedIcon.id,
+      this.selectedColor.id
     );
 
     this.groupService.createGroup(group).subscribe(response => {
@@ -108,8 +95,13 @@ export class CreateGroupComponent implements OnInit {
     dialog.afterClosed().subscribe(response => {
       if (response) {
         this.icon.setValue(response.icon);
+        this.selectedIcon = response.icon;
       }
     });
+  }
+
+  selectColor(event) {
+    this.selectedColor = event.value;
   }
 
   cancel() {
@@ -117,4 +109,21 @@ export class CreateGroupComponent implements OnInit {
   }
 
   next() {}
+
+  /**
+   * Init the default values of colors and icons.
+   */
+  private initDefaults() {
+    this.groupService.getDefaultColors().subscribe(response => {
+      this.colors = response;
+      this.selectedColor = this.colors[0];
+      this.color.setValue(this.selectedColor);
+    });
+
+    this.groupService.getDefaultIcons().subscribe(response => {
+      this.icons = response;
+      this.selectedIcon = this.icons[0];
+      this.icon.setValue(this.selectedIcon);
+    });
+  }
 }

@@ -4,7 +4,17 @@
         <name>TaskItApi</name>
     </assembly>
     <members>
-        <member name="M:TaskItApi.Controllers.GroupController.Create(TaskItApi.Dtos.GroupDto)">
+        <member name="M:TaskItApi.Controllers.DefaultsController.GetColors">
+            <summary>
+            Returns all default colors
+            </summary>
+        </member>
+        <member name="M:TaskItApi.Controllers.DefaultsController.GetIcons">
+            <summary>
+            Returns all default colors
+            </summary>
+        </member>
+        <member name="M:TaskItApi.Controllers.GroupController.Create(TaskItApi.Dtos.GroupIncomingDTO)">
             <summary>
             Create a group and returns all subscribed groups of user.
             </summary>
@@ -14,9 +24,19 @@
             Delete a group and returns all subscribed groups of user.
             </summary>
         </member>
+        <member name="M:TaskItApi.Controllers.GroupController.Update(System.Int32,TaskItApi.Dtos.GroupIncomingDTO)">
+            <summary>
+            Create a group and returns all subscribed groups of user.
+            </summary>
+        </member>
         <member name="M:TaskItApi.Controllers.GroupController.GetGroups">
             <summary>
             Returns all subscribed groups of user.
+            </summary>
+        </member>
+        <member name="M:TaskItApi.Controllers.GroupController.GetGroup(System.Int32)">
+            <summary>
+            Return group details based on id
             </summary>
         </member>
         <member name="M:TaskItApi.Controllers.UserController.Register(TaskItApi.Dtos.UserInComingDto)">
@@ -40,23 +60,104 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:TaskItApi.Models.UnitOfWork">
+        <member name="T:TaskItApi.Dtos.GroupIncomingDTO">
             <summary>
-            Used the repository and Unit of Work patterns to centralise database actions.
-            So that multiple repositories can be used in one service.
-            After writing all the request call the Complete function. Then all the request in the dbContext instance memory will be executed.
-            To remove all the allocated resources of the dbContext call the dispose function.
+            The incoming data of a group
             </summary>
         </member>
-        <member name="M:TaskItApi.Models.UnitOfWork.SaveChanges">
+        <member name="P:TaskItApi.Dtos.GroupIncomingDTO.Name">
             <summary>
-            Save changes that where made in the dbContext memory to the database.
+            The name of the group
             </summary>
-            <returns></returns>
         </member>
-        <member name="M:TaskItApi.Models.UnitOfWork.Dispose">
+        <member name="P:TaskItApi.Dtos.GroupIncomingDTO.Description">
             <summary>
-            Release all the allocated resources of the dbContext.
+            The description of the group
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.GroupIncomingDTO.IconID">
+            <summary>
+            The id of the icon
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.GroupIncomingDTO.ColorID">
+            <summary>
+            The id of the color
+            </summary>
+        </member>
+        <member name="T:TaskItApi.Dtos.GroupOutgoingDTO">
+            <summary>
+            The outgoing group data
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.GroupOutgoingDTO.ID">
+            <summary>
+            The unique database id
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.GroupOutgoingDTO.Name">
+            <summary>
+            The name of the group
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.GroupOutgoingDTO.Description">
+            <summary>
+            The description of the group
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.GroupOutgoingDTO.IconValue">
+            <summary>
+            The icon value
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.GroupOutgoingDTO.IconName">
+            <summary>
+            The icon name that the user will see
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.GroupOutgoingDTO.ColorValue">
+            <summary>
+            The color value
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.GroupOutgoingDTO.ColorName">
+            <summary>
+            The color name that the user will see
+            </summary>
+        </member>
+        <member name="F:TaskItApi.Dtos.GroupOutgoingDTO.Members">
+            <summary>
+            The member that are subscribed on the group
+            </summary>
+        </member>
+        <member name="T:TaskItApi.Dtos.SubscriptionOutgoingDto">
+            <summary>
+            The subscription of a user to a group
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.SubscriptionOutgoingDto.UserID">
+            <summary>
+            The id of the subscribed user
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.SubscriptionOutgoingDto.UserName">
+            <summary>
+            The name of the subscribed user
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.SubscriptionOutgoingDto.GroupID">
+            <summary>
+            The group id where the user is subscribed to
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.SubscriptionOutgoingDto.GroupName">
+            <summary>
+            The group name where the user is subscribed to
+            </summary>
+        </member>
+        <member name="P:TaskItApi.Dtos.SubscriptionOutgoingDto.DateOfSubscription">
+            <summary>
+            The data of the subscription
             </summary>
         </member>
         <member name="T:TaskItApi.Dtos.UserInComingDto">
@@ -84,10 +185,22 @@
             User information that can be returned to the frontend.
             </summary>
         </member>
+        <member name="T:TaskItApi.Entities.Color">
+            <summary>
+            The color of a group icon.
+            This database table will be automated seeded
+            </summary>
+        </member>
         <member name="T:TaskItApi.Entities.Group">
             <summary>
             A group of people that want to devide tasks.
             For example a houshold, company or society
+            </summary>
+        </member>
+        <member name="T:TaskItApi.Entities.Icon">
+            <summary>
+            The Icon of a group.
+            This database table will be automated seeded
             </summary>
         </member>
         <member name="T:TaskItApi.Entities.Subscription">
@@ -107,6 +220,38 @@
             <param name="user">The claimPrincinpal that repecence the active user</param>
             <returns>THe user id</returns>
         </member>
+        <member name="T:TaskItApi.Models.UnitOfWork">
+            <summary>
+            Used the repository and Unit of Work patterns to centralise database actions.
+            So that multiple repositories can be used in one service.
+            After writing all the request call the Complete function. Then all the request in the dbContext instance memory will be executed.
+            To remove all the allocated resources of the dbContext call the dispose function.
+            </summary>
+        </member>
+        <member name="M:TaskItApi.Models.UnitOfWork.SaveChanges">
+            <summary>
+            Save changes that where made in the dbContext memory to the database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:TaskItApi.Models.UnitOfWork.Dispose">
+            <summary>
+            Release all the allocated resources of the dbContext.
+            </summary>
+        </member>
+        <member name="M:TaskItApi.Repositories.Interfaces.IColorRepository.GetAllColors">
+            <summary>
+            Get all default colors
+            </summary>
+            <returns>List of colors</returns>
+        </member>
+        <member name="M:TaskItApi.Repositories.Interfaces.IColorRepository.GetColorByValue(System.String)">
+            <summary>
+            Get 
+            </summary>
+            <param name="colorValue"></param>
+            <returns></returns>
+        </member>
         <member name="M:TaskItApi.Repositories.Interfaces.IGroupRepository.FindAllGroupOfUser(System.Int32)">
             <summary>
             Find all the groups where the user is subscribed on
@@ -121,6 +266,19 @@
             <param name="groupId">The group id</param>
             <param name="userId">The active user id</param>
             <returns>Returns the group if the user is subscribed on it</returns>
+        </member>
+        <member name="M:TaskItApi.Repositories.Interfaces.IIconRepository.GetAllIcons">
+            <summary>
+            Get all default icon
+            </summary>
+            <returns>List of icons</returns>
+        </member>
+        <member name="M:TaskItApi.Repositories.Interfaces.IIconRepository.GetIconByValue(System.String)">
+            <summary>
+            Get icon by value
+            </summary>
+            <param name="iconValue"></param>
+            <returns>the icon based on the given value</returns>
         </member>
         <member name="M:TaskItApi.Repositories.Interfaces.IRepositoryBase`1.FindAll">
             <summary>
@@ -168,6 +326,20 @@
             <param name="id">The id of the user</param>
             <returns>The user. Returns null if the user doesn't exist.</returns>
         </member>
+        <member name="M:TaskItApi.Repositories.Interfaces.IUserRepository.ContainceUser(System.Int32)">
+            <summary>
+            Check if user exist
+            </summary>
+            <param name="id">the user id</param>
+            <returns>true if the user exist, false otherwise</returns>
+        </member>
+        <member name="M:TaskItApi.Repositories.Interfaces.IUserRepository.ContainceUser(System.String)">
+            <summary>
+            Check if user exist
+            </summary>
+            <param name="email">the user email</param>
+            <returns>true if the user exist, false otherwise</returns>
+        </member>
         <member name="M:TaskItApi.Services.AuthenticationService.CreatePasswordHash(System.String,System.Byte[]@,System.Byte[]@)">
             <summary>
             Hash the user password based on the password and a salt.
@@ -191,6 +363,33 @@
             </summary>
             <param name="user">The user that want to login</param>
             <returns>The created token</returns>
+        </member>
+        <member name="M:TaskItApi.Services.DefaultService.GetAllColors">
+            <summary>
+            Get all default colors
+            </summary>
+            <returns>List of colors</returns>
+        </member>
+        <member name="M:TaskItApi.Services.DefaultService.GetAllIcons">
+            <summary>
+            Get all the default icons
+            </summary>
+            <returns>List of icons</returns>
+        </member>
+        <member name="M:TaskItApi.Services.GroupService.RetrieveGroupById(System.Int32,System.Int32)">
+            <summary>
+            Get group based on the groupId. If the user is subscribed on it
+            </summary>
+            <param name="groupId">The group id</param>
+            <param name="userId">The active user</param>
+            <returns>the group, null if the group doesn't exist or the user is not a subscriber</returns>
+        </member>
+        <member name="M:TaskItApi.Services.GroupService.UserExist(System.Int32)">
+            <summary>
+            Check if the user exist
+            </summary>
+            <param name="userId">the active user id</param>
+            <returns>true if the user exist, false otherwise</returns>
         </member>
         <member name="T:TaskItApi.Services.Interfaces.IAuthenticationService">
             <summary>
@@ -217,16 +416,33 @@
             </summary>
             <param name="userInComingDto"></param>
         </member>
+        <member name="T:TaskItApi.Services.Interfaces.IDefaultService">
+            <summary>
+            Service for default values that can be  used by the api clients
+            </summary>
+        </member>
+        <member name="M:TaskItApi.Services.Interfaces.IDefaultService.GetAllColors">
+            <summary>
+            Get all default colors
+            </summary>
+            <returns>List of colors</returns>
+        </member>
+        <member name="M:TaskItApi.Services.Interfaces.IDefaultService.GetAllIcons">
+            <summary>
+            Get all the default icons
+            </summary>
+            <returns>List of icons</returns>
+        </member>
         <member name="T:TaskItApi.Services.Interfaces.IGroupService">
             <summary>
             Interface for managing groups
             </summary>
         </member>
-        <member name="M:TaskItApi.Services.Interfaces.IGroupService.Create(TaskItApi.Dtos.GroupDto,System.Int32)">
+        <member name="M:TaskItApi.Services.Interfaces.IGroupService.Create(TaskItApi.Dtos.GroupIncomingDTO,System.Int32)">
             <summary>
             Create a group by an user
             </summary>
-            <param name="groupDto">The group details</param>
+            <param name="newgroup">The group details</param>
             <param name="userId">The user that create the group</param>
             <returns>The current subscripted groups of the user</returns>
         </member>
@@ -244,6 +460,23 @@
             </summary>
             <param name="userId">The active user</param>
             <returns>The subscribed groups of the user</returns>
+        </member>
+        <member name="M:TaskItApi.Services.Interfaces.IGroupService.GetGroup(System.Int32,System.Int32)">
+            <summary>
+            Get group details based on the groupId. If the user is subscribed on
+            </summary>
+            <param name="groupId">The group id</param>
+            <param name="userId">The active user</param>
+            <returns>the group, null if the group doesn't exist or the user is not a subscriber</returns>
+        </member>
+        <member name="M:TaskItApi.Services.Interfaces.IGroupService.Update(System.Int32,TaskItApi.Dtos.GroupIncomingDTO,System.Int32)">
+            <summary>
+            Update the selected groupd
+            </summary>
+            <param name="groupId">The group to be updated</param>
+            <param name="newGroupData">the updated group data</param>
+            <param name="userId">the user that requested the update</param>
+            <returns></returns>
         </member>
         <member name="T:TaskItApi.Services.Interfaces.IUserService">
             <summary>

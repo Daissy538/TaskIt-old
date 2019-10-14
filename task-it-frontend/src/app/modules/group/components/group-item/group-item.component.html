@@ -3,9 +3,9 @@
     <section
       class="group-icon"
       fxLayoutAlign="center center"
-      [style.border-color]="group.color"
+      [style.border-color]="group.colorValue"
     >
-      <mat-icon [style.color]="group.color"> {{ group.icon }}</mat-icon>
+      <mat-icon [style.color]="group.colorValue"> {{ group.iconValue }}</mat-icon>
     </section>
     <section class="group-title" fxLayoutAlign="center center" *ngIf="screenWidth >= 1000">
       {{ (group.name .length>6)? (group.name  | slice:0:6)+'..':(group.name ) }}

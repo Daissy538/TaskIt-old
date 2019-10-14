@@ -13,10 +13,10 @@ namespace TaskItApi.Services.Interfaces
         /// <summary>
         /// Create a group by an user
         /// </summary>
-        /// <param name="groupDto">The group details</param>
+        /// <param name="newgroup">The group details</param>
         /// <param name="userId">The user that create the group</param>
         /// <returns>The current subscripted groups of the user</returns>
-        IEnumerable<Group> Create(GroupDto groupDto, int userId);
+        IEnumerable<Group> Create(GroupIncomingDTO newgroup, int userId);
 
         /// <summary>
         /// Delete a group by group id
@@ -32,5 +32,22 @@ namespace TaskItApi.Services.Interfaces
         /// <param name="userId">The active user</param>
         /// <returns>The subscribed groups of the user</returns>
         IEnumerable<Group> GetGroups(int userId);
+
+        /// <summary>
+        /// Get group details based on the groupId. If the user is subscribed on
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <param name="userId">The active user</param>
+        /// <returns>the group, null if the group doesn't exist or the user is not a subscriber</returns>
+        Group GetGroup(int groupId, int userId);
+
+        /// <summary>
+        /// Update the selected groupd
+        /// </summary>
+        /// <param name="groupId">The group to be updated</param>
+        /// <param name="newGroupData">the updated group data</param>
+        /// <param name="userId">the user that requested the update</param>
+        /// <returns></returns>
+        Group Update(int groupId, GroupIncomingDTO newGroupData, int userId);
     }
 }

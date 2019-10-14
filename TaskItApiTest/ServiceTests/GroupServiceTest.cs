@@ -52,6 +52,7 @@ namespace TaskItApiTest.ServiceTests
             _userRepositoryMock = new Mock<IUserRepository>();
             _userRepositoryMock.Setup(u => u.AddUser(It.Is<User>(u => u.Email.ToLower() == this._mockEmail))).Throws(new InvalidInputException("User already exist"));
             _userRepositoryMock.Setup(u => u.GetUser(It.Is<int>(i => i == this._mockID))).Returns(user);
+            _userRepositoryMock.Setup(u => u.ContainceUser(It.Is<int>(i => i == this._mockID))).Returns(true);
             _userRepositoryMock.Setup(u => u.GetUser(It.Is<string>(s => s.ToLower() == this._mockEmail))).Returns(user);
             _userRepositoryMock.Setup(u => u.GetUser(It.Is<string>(s => s.ToLower() != this._mockEmail))).Throws(new InvalidInputException("User doesn't exist"));
 
@@ -77,13 +78,13 @@ namespace TaskItApiTest.ServiceTests
         [Fact]
         public async System.Threading.Tasks.Task Test_CreateGroup()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());           
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());
 
-            GroupDto newGroup = new GroupDto()
+            GroupIncomingDTO newGroup = new GroupIncomingDTO()
             {
-                Color = "#5c6bc0",
+                ColorID = "#5c6bc0",
                 Description = "Test description",
-                Icon = "nature_people",
+                IconID = "nature_people",
                 Name = "House"
             };
 
@@ -99,11 +100,11 @@ namespace TaskItApiTest.ServiceTests
         {
             GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());
 
-            GroupDto newGroup = new GroupDto()
+            GroupIncomingDTO newGroup = new GroupIncomingDTO()
             {
-                Color = "#5c6bc0",
+                ColorID = "#5c6bc0",
                 Description = "Test description",
-                Icon = "nature_people",
+                IconID = "nature_people",
                 Name = "House"
             };
 
@@ -117,12 +118,26 @@ namespace TaskItApiTest.ServiceTests
         {
             GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());
 
+            Color color = new Color()
+            {
+                ID = 1,
+                Name = "Pink",
+                Value = "#5c6bc0"
+            };
+
+            Icon icon = new Icon()
+            {
+                ID = 1,
+                Name = "Natuur",
+                Value = "nature_people"
+            };
+
             Group existingGroup = new Group()
             {
                 ID = 1,
-                Color = "#5c6bc0",
+                Color = color,
                 Description = "Test description",
-                Icon = "nature_people",
+                Icon = icon,
                 Name = "House",
                 Members = new List<Subscription>()
             };
@@ -145,7 +160,7 @@ namespace TaskItApiTest.ServiceTests
 
         //Mock group response
         //Without including subscribtion data
-        private IEnumerable<Group> mockGroupResponse(GroupDto groupDto)
+        private IEnumerable<Group> mockGroupResponse(GroupIncomingDTO groupDto)
         {
             Group group = _mapper.Map<Group>(groupDto);
 

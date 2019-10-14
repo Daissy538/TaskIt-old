@@ -1,0 +1,49 @@
+.ReadMode {
+  border: none;
+}
+
+.WriteMode {
+  border: 1px solid white;
+  border-radius: 4px;
+  .group-icon {
+    cursor: pointer;
+    background-color: white;
+    border-radius: 4px;
+  }
+}
+
+::ng-deep .dialog-select-icons {
+  .mat-dialog-container {
+    background-color: white !important;
+    color: unset;
+    padding: 0 !important;
+    overflow-y: hidden;
+  }
+}
+
+.group-icon {
+  font-size: 45px;
+  height: 45px;
+  width: 45px;
+  margin: 10px;
+}
+
+.group-container {
+  padding: 20px;
+}
+
+.group-cursor {
+  cursor: pointer;
+  font-size: 18px;
+  height: 20px;
+  width: 20px;
+  color: white;
+}
+
+.group-name {
+  margin: 0;
+}
+
+.group-description {
+  margin: 10px;
+}

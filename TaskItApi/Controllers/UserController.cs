@@ -61,7 +61,7 @@ namespace TaskItApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("Auth")]
-        public async Task<ActionResult<string>> Authenticate ([FromBody]UserInComingDto userInComingData)
+        public ActionResult<string> Authenticate ([FromBody]UserInComingDto userInComingData)
         {
             try
             {

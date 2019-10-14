@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthenticationService } from 'src/app/modules/authentication/authentication.service';
+import { AuthenticationService } from 'src/app/pages/authentication/authentication.service';
 import {
   HttpRequest,
   HttpHandler,
@@ -15,23 +15,20 @@ import { Observable } from 'rxjs';
 export class RequestInterceptor implements HttpInterceptor {
   constructor(private autService: AuthenticationService) {}
 
-  intercept(
-    request: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (this.autService.isLoggedIn()) {
       request = request.clone({
         setHeaders: {
           Authorization: 'Bearer ' + this.autService.getToken()
         }
       });
-
-      request = request.clone({
-        setHeaders: {
-          'Content-Type': 'application/json'
-        }
-      });
     }
+
+    request = request.clone({
+      setHeaders: {
+        'Content-Type': 'application/json'
+      }
+    });
 
     return next.handle(request);
   }

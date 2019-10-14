@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from 'src/app/modules/authentication/authentication.service';
-import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+import { AuthenticationService } from 'src/app/pages/authentication/authentication.service';
 
 @Component({
   selector: 'app-dashboard',

@@ -39,7 +39,8 @@
             [group]="item"
             [cdkDragData]="i"
             (cdkDragStarted)="isDragging(true)"
-            (cdkDragEnded)="isDragging(false)"
+            (cdkDragEnded)="isDragging(false)"            
+            (mouseup) = "groupDetails(item)"
           >
             <div *cdkDragPlaceholder></div>
           </app-group-item>
@@ -52,10 +53,12 @@
           <app-group-item
             cdkDrag
             id="{{ item.id }}"
+            class="group-item"
             [group]="item"
             [cdkDragData]="i"
             (cdkDragStarted)="isDragging(true)"
             (cdkDragEnded)="isDragging(false)"
+            (mouseup) = "groupDetails(item)"
           >
             <div *cdkDragPlaceholder></div>
           </app-group-item>

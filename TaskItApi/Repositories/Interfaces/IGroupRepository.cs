@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TaskItApi.Entities;
 
 namespace TaskItApi.Repositories.Interfaces
@@ -21,5 +18,7 @@ namespace TaskItApi.Repositories.Interfaces
         /// <param name="userId">The active user id</param>
         /// <returns>Returns the group if the user is subscribed on it</returns>
         Group FindGroupOfUser(int groupId, int userId);
+
+
     }
 }

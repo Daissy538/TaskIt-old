@@ -21,13 +21,27 @@ namespace TaskItApiTest.dbTest
                 PasswordSalt = salt
             }) ;
 
+            Color color = new Color()
+            {
+                ID = 1,
+                Name = "Pink",
+                Value = "#5c6bc0"
+            };
+
+            Icon icon = new Icon()
+            {
+                ID = 1,
+                Name = "Huis",
+                Value = "house"
+            };
+
             dbContext.Groups.Add(new Group
             {
                 ID = 1,
                 Name = "Thuis",
                 Description = "Test Omschrijving",
-                Color = "#5c6bc0",
-                Icon = "house"
+                Color = color,
+                Icon = icon
             });
 
             dbContext.Groups.Add(new Group
@@ -35,8 +49,8 @@ namespace TaskItApiTest.dbTest
                 ID = 2,
                 Name = "Sport",
                 Description = "Test Omschrijving",
-                Color = "#5c6bc0",
-                Icon = "nature_people"
+                Color = color,
+                Icon = icon
             });
 
             dbContext.Subscriptions.Add(new Subscription

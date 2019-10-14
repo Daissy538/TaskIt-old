@@ -23,6 +23,8 @@ namespace TaskItApi.Repositories
             IEnumerable<Group> groups = FindByCondition(g => g.Members.Where(
                                               m => m.User.ID == userId)                                       
                                               .Any())
+                                        .Include(g => g.Icon)
+                                        .Include(g => g.Color)
                                         .AsEnumerable();
             return groups;
         }
@@ -32,11 +34,12 @@ namespace TaskItApi.Repositories
             Group group = FindByCondition(g => g.ID ==  groupId &&
                                                g.Members.Where(m => m.User.ID == userId)
                                                .Any())
+                                          .Include(g => g.Icon)
+                                          .Include(g => g.Color)
                                           .Include(g => g.Members)
                                           .FirstOrDefault();
 
             return group;
         }
-
     }
 }

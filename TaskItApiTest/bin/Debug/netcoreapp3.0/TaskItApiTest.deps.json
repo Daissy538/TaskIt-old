@@ -2921,12 +2921,18 @@
           "Microsoft.EntityFrameworkCore.Relational": "3.0.0",
           "Microsoft.EntityFrameworkCore.SqlServer": "3.0.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.0.0",
+          "Microsoft.Extensions.Logging.Debug": "3.0.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "3.0.0",
           "Swashbuckle.AspNetCore": "5.0.0-rc3",
           "System.IdentityModel.Tokens.Jwt": "5.5.0"
         },
         "runtime": {
           "TaskItApi.dll": {}
+        },
+        "resources": {
+          "nl/TaskItApi.resources.dll": {
+            "locale": "nl"
+          }
         },
         "compile": {
           "TaskItApi.dll": {}

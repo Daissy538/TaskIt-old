@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, HostListener } from '@angular/core';
-import { Group } from 'src/app/core/models/group';
+import { GroupIncoming } from 'src/app/core/models/group';
 
 @Component({
   selector: 'app-group-item',
@@ -9,7 +9,7 @@ import { Group } from 'src/app/core/models/group';
 export class GroupItemComponent implements OnInit {
 
   @Input()
-  group: Group;
+  group: GroupIncoming;
 
   screenWidth: number;
 

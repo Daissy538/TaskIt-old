@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
@@ -45,16 +43,7 @@ namespace TaskItApi
 
             InitDependicyInjection(services);
 
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                    });
-            });
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddAuthentication(options =>
@@ -74,6 +63,17 @@ namespace TaskItApi
 
             InitSwaggerGent(services);
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                    });
+            });
+
             services.AddMvc(options => options.EnableEndpointRouting = false)
             .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
             .AddDataAnnotationsLocalization(options =>
@@ -87,6 +87,7 @@ namespace TaskItApi
         public void Configure(IApplicationBuilder app)
         {
             app.UseCors();
+
             var supportedCultures = new List<CultureInfo>
             {
                 new CultureInfo("nl")
@@ -117,11 +118,14 @@ namespace TaskItApi
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IGroupService, GroupService>();
+            services.AddTransient<IDefaultService, DefaultService>();
             
             //Repositories
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IGroupRepository, GroupRepository>();
             services.AddTransient<ISubscriptionRepository, SubscriptionRepository>();
+            services.AddTransient<IColorRepository, ColorRepository>();
+            services.AddTransient<IIconRepository, IconRepository>();
 
             //Models
             services.AddTransient<IUnitOfWork, UnitOfWork>();

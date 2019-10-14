@@ -63,5 +63,17 @@ namespace TaskItApi.Repositories
 
             return user;
         }
+
+        public bool ContainceUser(int id)
+        {
+            bool result = FindByCondition(u => u.ID == id).Any();
+            return result;
+        }
+
+        public bool ContainceUser(string email)
+        {
+            bool result = FindByCondition(u => u.Email == email).Any();
+            return result;
+        }
     }
 }

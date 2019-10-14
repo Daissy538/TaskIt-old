@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () =>
-      import('./modules/authentication/authentication.module').then(
+      import('./pages/authentication/authentication.module').then(
         mod => mod.AuthenticationModule
       )
   },
@@ -14,7 +14,7 @@ const routes: Routes = [
     path: 'dashboard',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./modules/dashboard/dashboard.module').then(
+      import('./pages/dashboard/dashboard.module').then(
         mod => mod.DashboardModule
       )
   },
@@ -22,9 +22,17 @@ const routes: Routes = [
     path: 'create',
     canActivate: [AuthGuard],
     loadChildren: () =>
-      import('./modules/create-steps/create-steps.module').then(
-        mod => mod.CreateStepsModule
+      import('./pages/create/create.module').then(
+        mod => mod.CreateModule
       )
+  },
+  {
+    path: 'details',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+    import('./pages/details/details.module').then(
+      mod => mod.DetailsModule
+    )
   },
   {
     path: '',

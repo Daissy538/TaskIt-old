@@ -1,9 +1,9 @@
 import { Routes, RouterModule } from '@angular/router';
-import { CreateGroupComponent } from './components/create-group/create-group.component';
+import { GroupDetailsComponent } from './components/group-details/group-details.component';
 import { NgModule } from '@angular/core';
 
 const routes: Routes = [
-  { path: 'group', component: CreateGroupComponent },
+  { path: 'group/:id', component: GroupDetailsComponent },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
 
@@ -12,4 +12,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 
-export class CreateStepsRouting {}
+export class DetailsRouting {}
