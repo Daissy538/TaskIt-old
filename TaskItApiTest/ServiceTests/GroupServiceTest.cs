@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
+using System;
 using System.Collections.Generic;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
@@ -21,6 +22,8 @@ namespace TaskItApiTest.ServiceTests
         private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IGroupRepository> _groupRepositoryMock;
         private readonly Mock<ISubscriptionRepository> _subscriptionRepositoryMock;
+        private readonly Mock<IColorRepository> _colorRepositoryMock;
+        private readonly Mock<IIconRepository> _iconRepositoryMock;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IConfiguration> _configMock;
         private readonly IMapper _mapper;
@@ -58,14 +61,19 @@ namespace TaskItApiTest.ServiceTests
 
             _groupRepositoryMock = new Mock<IGroupRepository>();
             _subscriptionRepositoryMock = new Mock<ISubscriptionRepository>();
+            _colorRepositoryMock = new Mock<IColorRepository>();
+            _iconRepositoryMock = new Mock<IIconRepository>();
 
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _unitOfWorkMock.Setup(u => u.UserRepository).Returns(_userRepositoryMock.Object);
             _unitOfWorkMock.Setup(u => u.GroupRepository).Returns(_groupRepositoryMock.Object);
             _unitOfWorkMock.Setup(u => u.SubscriptionRepository).Returns(_subscriptionRepositoryMock.Object);
+            _unitOfWorkMock.Setup(u => u.ColorRepository).Returns(_colorRepositoryMock.Object);
+            _unitOfWorkMock.Setup(u => u.IconRepository).Returns(_iconRepositoryMock.Object);
 
             _configMock = new Mock<IConfiguration>();
             _configMock.Setup(c => c[It.Is<string>(s => s.Equals("AppSettings:AppSecret"))]).Returns("TESTSTRINGSECRET");
+
 
             var mappingConfig = new MapperConfiguration(mc =>
             {
@@ -156,6 +164,100 @@ namespace TaskItApiTest.ServiceTests
             GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());
 
             Assert.Throws<InvalidInputException>(() => groupService.Delete(2, this._mockID));
+        }
+
+        [Fact]
+        public async System.Threading.Tasks.Task Test_UpdateGroup()
+        {
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());
+
+            Color color = new Color()
+            {
+                ID = 1,
+                Name = "Pink",
+                Value = "#5c6bc0"
+            };
+
+            Icon icon = new Icon()
+            {
+                ID = 1,
+                Name = "Natuur",
+                Value = "nature_people"
+            };
+
+            Group existingGroup = new Group()
+            {
+                ID = 1,
+                Color = color,
+                Description = "Test description",
+                Icon = icon,
+                Name = "House",
+                Members = new List<Subscription>()
+            };
+
+            GroupIncomingDTO updateGroup = new GroupIncomingDTO()
+            {
+                ColorID = 1,
+                Description = "hallo",
+                IconID = 1,
+                Name = "Test"
+            };
+
+            _colorRepositoryMock.Setup(u => u.GetColorByValue(updateGroup.ColorID)).Returns(color);
+            _iconRepositoryMock.Setup(u => u.GetIconByValue(updateGroup.IconID)).Returns(icon);
+
+            _groupRepositoryMock.Setup(u => u.FindGroupOfUser(1, 1)).Returns(existingGroup);
+            Group result = groupService.Update(existingGroup.ID, updateGroup, _mockID);
+
+            Assert.NotNull(result);
+            Assert.Equal(updateGroup.Name, result.Name);
+            Assert.Equal(updateGroup.Description, result.Description);
+        }
+
+        [Fact]
+        public async System.Threading.Tasks.Task Test_UpdateGroup_InvalidUser()
+        {
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());
+
+            Color color = new Color()
+            {
+                ID = 1,
+                Name = "Pink",
+                Value = "#5c6bc0"
+            };
+
+            Icon icon = new Icon()
+            {
+                ID = 1,
+                Name = "Natuur",
+                Value = "nature_people"
+            };
+
+            Group existingGroup = new Group()
+            {
+                ID = 1,
+                Color = color,
+                Description = "Test description",
+                Icon = icon,
+                Name = "House",
+                Members = new List<Subscription>()
+            };
+
+            GroupIncomingDTO updateGroup = new GroupIncomingDTO()
+            {
+                ColorID = 1,
+                Description = "hallo",
+                IconID = 1,
+                Name = "Test"
+            };
+
+            _colorRepositoryMock.Setup(u => u.GetColorByValue(updateGroup.ColorID)).Returns(color);
+            _iconRepositoryMock.Setup(u => u.GetIconByValue(updateGroup.IconID)).Returns(icon);
+
+            _groupRepositoryMock.Setup(u => u.FindGroupOfUser(1, 1)).Returns(existingGroup);
+            int incorrectUserId = 3;
+
+            Assert.Throws<Exception>(() => groupService.Update(existingGroup.ID, updateGroup, incorrectUserId));
         }
 
         //Mock group response
