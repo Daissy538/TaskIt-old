@@ -6,6 +6,7 @@ using System.Text;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
 using TaskItApi.Exceptions;
+using TaskItApi.Handlers.Interfaces;
 using TaskItApi.Maps;
 using TaskItApi.Models.Interfaces;
 using TaskItApi.Repositories.Interfaces;
@@ -21,6 +22,7 @@ namespace TaskItApiTest.ServiceTests
         private readonly Mock<IUserRepository> _userRepositoryMock;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IConfiguration> _configMock;
+        private readonly Mock<ITokenHandler> _tokenHandler;
         private readonly IMapper _mapper;
 
         //Mock user
@@ -60,6 +62,8 @@ namespace TaskItApiTest.ServiceTests
 
             _configMock = new Mock<IConfiguration>();
             _configMock.Setup(c => c[It.Is<string>(s => s.Equals("AppSettings:AppSecret"))]).Returns("TESTSTRINGSECRET");
+            
+            _tokenHandler = new Mock<ITokenHandler>();
 
             var mappingConfig = new MapperConfiguration(mc => 
             {
@@ -80,7 +84,7 @@ namespace TaskItApiTest.ServiceTests
                 Password = this.mockName
             };
 
-            AuthenticationService authenticationService = new AuthenticationService(_mapper , _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IAuthenticationService>(), _configMock.Object);
+            AuthenticationService authenticationService = new AuthenticationService(_mapper , _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IAuthenticationService>(), _tokenHandler.Object);
 
             Assert.NotNull(authenticationService.RegisterUser(newUser));
         }
@@ -97,7 +101,7 @@ namespace TaskItApiTest.ServiceTests
                 Password = this.mockPassword
             };           
 
-            AuthenticationService authenticationService = new AuthenticationService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IAuthenticationService>(), _configMock.Object);
+            AuthenticationService authenticationService = new AuthenticationService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IAuthenticationService>(), _tokenHandler.Object);
 
             Assert.Throws<InvalidInputException>(() => authenticationService.RegisterUser(newUser));
         }
@@ -114,7 +118,7 @@ namespace TaskItApiTest.ServiceTests
                 Password = this.mockPassword
             };
 
-            AuthenticationService authenticationService = new AuthenticationService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IAuthenticationService>(), _configMock.Object);
+            AuthenticationService authenticationService = new AuthenticationService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IAuthenticationService>(), _tokenHandler.Object);
             TokenDto result = authenticationService.AuthenicateUser(newUser);
 
             Assert.NotNull(result);
@@ -131,7 +135,7 @@ namespace TaskItApiTest.ServiceTests
                 Password = "Test123!"
             };
 
-            AuthenticationService authenticationService = new AuthenticationService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IAuthenticationService>(), _configMock.Object);
+            AuthenticationService authenticationService = new AuthenticationService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IAuthenticationService>(), _tokenHandler.Object);
 
             Assert.Throws<InvalidInputException>(() => authenticationService.AuthenicateUser(newUser));
         }
@@ -146,7 +150,7 @@ namespace TaskItApiTest.ServiceTests
                 Password = this.mockPassword
             };
 
-            AuthenticationService authenticationService = new AuthenticationService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IAuthenticationService>(), _configMock.Object);
+            AuthenticationService authenticationService = new AuthenticationService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IAuthenticationService>(), _tokenHandler.Object);
 
             Assert.Throws<InvalidInputException>(() => authenticationService.AuthenicateUser(newUser));
         }

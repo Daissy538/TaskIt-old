@@ -1,17 +1,12 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
 using TaskItApi.Exceptions;
-using TaskItApi.Extentions;
+using TaskItApi.Handlers.Interfaces;
 using TaskItApi.Models.Interfaces;
 using TaskItApi.Services.Interfaces;
 
@@ -22,14 +17,14 @@ namespace TaskItApi.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger _logger;
-        private readonly IConfiguration _configuration;
+        private readonly ITokenHandler _tokenHandler;
 
-        public AuthenticationService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<IAuthenticationService> logger, IConfiguration config)
+        public AuthenticationService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<IAuthenticationService> logger, ITokenHandler tokenHandler)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _logger = logger;
-            _configuration = config;
+            _tokenHandler = tokenHandler;
         }
 
         public TokenDto AuthenicateUser(UserInComingDto userIncomingData)
@@ -45,7 +40,7 @@ namespace TaskItApi.Services
                 throw new InvalidInputException("Email and/or password is incorrect");
             }
 
-            string token = CreateToken(user);
+            string token = _tokenHandler.CreateAuthenticationToken(user);
 
             TokenDto tokenDto = new TokenDto();
             tokenDto.Token = token;
@@ -112,31 +107,6 @@ namespace TaskItApi.Services
                 return incommingPasswordHash.SequenceEqual(passwordHash);
             }
         }
-        
-        /// <summary>
-        /// Create authentication token voor given user
-        /// </summary>
-        /// <param name="user">The user that want to login</param>
-        /// <returns>The created token</returns>
-        private string CreateToken(User user)
-        {
-            Claim[] claims = ClaimExtension.GenerateUserClaims(user.ID, user.Name);
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AppSettings:AppSecret"]));
-            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-            
-            IdentityModelEventSource.ShowPII = true;
-
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims, "jwt"),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = credentials           
-            };
-
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
-        }
+       
     }
 }

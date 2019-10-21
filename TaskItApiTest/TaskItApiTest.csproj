@@ -26,4 +26,9 @@
     <ProjectReference Include="..\TaskItApi\TaskItApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\EmailTemplates\GroupInvitation.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
-using System;
 using System.Collections.Generic;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
 using TaskItApi.Exceptions;
+using TaskItApi.Handlers.Interfaces;
 using TaskItApi.Maps;
 using TaskItApi.Models.Interfaces;
 using TaskItApi.Repositories.Interfaces;
@@ -26,6 +26,7 @@ namespace TaskItApiTest.ServiceTests
         private readonly Mock<IIconRepository> _iconRepositoryMock;
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IConfiguration> _configMock;
+        private readonly Mock<IEmailHandler> _emailHandler;
         private readonly IMapper _mapper;
 
         //Mock user
@@ -75,6 +76,7 @@ namespace TaskItApiTest.ServiceTests
             _configMock = new Mock<IConfiguration>();
             _configMock.Setup(c => c[It.Is<string>(s => s.Equals("AppSettings:AppSecret"))]).Returns("TESTSTRINGSECRET");
 
+            _emailHandler = new Mock<IEmailHandler>();
 
             var mappingConfig = new MapperConfiguration(mc =>
             {
@@ -87,7 +89,7 @@ namespace TaskItApiTest.ServiceTests
         [Fact]
         public async System.Threading.Tasks.Task Test_CreateGroup()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object);
 
             GroupIncomingDTO newGroup = new GroupIncomingDTO()
             {
@@ -107,7 +109,7 @@ namespace TaskItApiTest.ServiceTests
         
         public async System.Threading.Tasks.Task Test_CreateGroup_NonExistingUser()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object);
 
             GroupIncomingDTO newGroup = new GroupIncomingDTO()
             {
@@ -124,7 +126,7 @@ namespace TaskItApiTest.ServiceTests
         [Fact]
         public async System.Threading.Tasks.Task Test_DeleteGroup()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object);
 
             Color color = new Color()
             {
@@ -161,7 +163,7 @@ namespace TaskItApiTest.ServiceTests
         [Fact]
         public async System.Threading.Tasks.Task Test_DeleteGroup_NotExisting()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object);
 
             Assert.Throws<InvalidInputException>(() => groupService.Delete(2, this._mockID));
         }
@@ -169,7 +171,7 @@ namespace TaskItApiTest.ServiceTests
         [Fact]
         public async System.Threading.Tasks.Task Test_UpdateGroup()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object);
 
             Color color = new Color()
             {
@@ -217,7 +219,7 @@ namespace TaskItApiTest.ServiceTests
         [Fact]
         public async System.Threading.Tasks.Task Test_UpdateGroup_InvalidUser()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>());
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object);
 
             Color color = new Color()
             {

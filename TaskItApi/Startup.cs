@@ -15,6 +15,9 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using TaskItApi.Handlers;
+using TaskItApi.Handlers.Interfaces;
+using TaskItApi.Helper;
 using TaskItApi.Models;
 using TaskItApi.Models.Interfaces;
 using TaskItApi.Repositories;
@@ -114,11 +117,19 @@ namespace TaskItApi
 
         private void InitDependicyInjection(IServiceCollection services)
         {
+            //Handlers
+            services.AddTransient<IEmailHandler, EmailHandler>();
+            services.AddTransient<ITokenHandler, Handlers.TokenHandler>();
+
+            //Helpers
+            services.AddTransient<IResourcesHelper, ResourcesHelper>();
+
             //Services
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IGroupService, GroupService>();
             services.AddTransient<IDefaultService, DefaultService>();
+            services.AddTransient<IEmailHandler, EmailHandler>(); 
             
             //Repositories
             services.AddTransient<IUserRepository, UserRepository>();

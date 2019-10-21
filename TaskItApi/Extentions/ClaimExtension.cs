@@ -8,6 +8,7 @@ namespace TaskItApi.Extentions
     {
         private readonly static string userIdClaim = ClaimTypes.NameIdentifier;
         private readonly static string userNameclaim = ClaimTypes.Name;
+        private readonly static string userDataclaim = ClaimTypes.UserData;
 
         /// <summary>
         /// Get the user id from the ClaimsPrincipal
@@ -28,6 +29,17 @@ namespace TaskItApi.Extentions
                 {
                 new Claim(userIdClaim, userId.ToString()),
                 new Claim(userNameclaim, userName)
+                };
+
+            return claims;
+        }
+
+        public static Claim[] GenerateInviteClaims(int userID, int groupID)
+        {
+            Claim[] claims = new Claim[]
+                {
+                new Claim(userIdClaim, userID.ToString()),
+                new Claim(userDataclaim, groupID.ToString())
                 };
 
             return claims;

@@ -493,3 +493,4 @@ D:\Projects\TaskIt\TaskItApiTest\obj\Debug\netcoreapp3.0\TaskItApiTest.AssemblyI
 D:\Projects\TaskIt\TaskItApiTest\obj\Debug\netcoreapp3.0\TaskItApiTest.csproj.CopyComplete
 D:\Projects\TaskIt\TaskItApiTest\obj\Debug\netcoreapp3.0\TaskItApiTest.dll
 D:\Projects\TaskIt\TaskItApiTest\obj\Debug\netcoreapp3.0\TaskItApiTest.pdb
+D:\Projects\TaskIt\TaskItApiTest\bin\Debug\netcoreapp3.0\Resources\EmailTemplates\GroupInvitation.html

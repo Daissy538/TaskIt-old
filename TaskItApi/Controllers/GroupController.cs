@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using TaskItApi.Dtos;
+using TaskItApi.Dtos.Api;
 using TaskItApi.Entities;
 using TaskItApi.Exceptions;
 using TaskItApi.Extentions;
@@ -170,5 +171,45 @@ namespace TaskItApi.Controllers
 
         }
 
+        /// <summary>
+        /// Subscribe user to a group
+        /// </summary>
+        [HttpPost]
+        [Route("{ID}/Invite")]
+        public async Task<ActionResult<Boolean>> InviteUserToGroup( int ID, [FromBody]InviteIncomingDTO inviteIncoming)
+        {
+            int userId = HttpContext.User.GetCurrentUserId();
+
+            try
+            {
+                _groupService.InviteUserToGroup(userId, inviteIncoming.RecievingMail, ID);
+                return Ok(true);
+            }
+            catch(Exception exception)
+            {
+                _logger.LogError($"User {userId} could not send invite email for group: {ID} to: {inviteIncoming.RecievingMail}", exception);
+                return StatusCode(500, _localizer["InternalError"].Value);
+            }   
+        }
+
+        /// <summary>
+        /// Subscribe user to a group
+        /// </summary>
+        [HttpPost]
+        [Route("Subscribe/{token}")]
+        public async Task<ActionResult<Boolean>> SubscribeToGroup(string token)
+        {
+            int userId = HttpContext.User.GetCurrentUserId();
+
+            try
+            {
+
+            }catch(Exception exception)
+            {
+
+            }
+
+            return Ok(true);
+        }
     }
 }

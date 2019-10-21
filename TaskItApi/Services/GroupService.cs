@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -7,6 +6,7 @@ using System.Linq;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
 using TaskItApi.Exceptions;
+using TaskItApi.Handlers.Interfaces;
 using TaskItApi.Models.Interfaces;
 using TaskItApi.Services.Interfaces;
 
@@ -17,12 +17,14 @@ namespace TaskItApi.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger _logger;
+        private readonly IEmailHandler _emailHandler;        
 
-        public GroupService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<IGroupService> logger)
+        public GroupService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<IGroupService> logger, IEmailHandler emailHandler)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _emailHandler = emailHandler;          
         }
 
         public IEnumerable<Group> Create(GroupIncomingDTO groupDto, int userId)
@@ -159,6 +161,32 @@ namespace TaskItApi.Services
             return group;
         }
 
+        public bool InviteUserToGroup(int sendingUserID, string emailAddress, int groupID)
+        {
+            User recievingUser = _unitOfWork.UserRepository.GetUser(emailAddress);
+            User sendingUser = _unitOfWork.UserRepository.GetUser(sendingUserID);
+            Group group = RetrieveGroupById(groupID, sendingUserID);
+
+            if (recievingUser == default(User) && sendingUser == default(User) && group == default(Group))
+            {
+                _logger.LogError($"Couldn't send invation to {emailAddress} from {sendingUserID} for group {groupID}: Incomplete or Incorrect data");
+                throw new NullReferenceException("Couldn't send invation");
+            }
+
+            try
+            {
+                EmailDTO emailData = _emailHandler.CreateInviteEmail(recievingUser, sendingUser, group);
+                _emailHandler.SendInviteEmail(emailData);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Could not send invite email to {emailAddress}");
+                throw exception;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Get group based on the groupId. If the user is subscribed on it
         /// </summary>
@@ -167,12 +195,6 @@ namespace TaskItApi.Services
         /// <returns>the group, null if the group doesn't exist or the user is not a subscriber</returns>
         private Group RetrieveGroupById (int groupId, int userId)
         {
-            if (!UserExist(userId))
-            {
-                _logger.LogError($"Couldn't retrieve groups of non-existing user {userId}");
-                throw new NullReferenceException("Couldn't retrieve groups of non-existing user");
-            }
-
             Group group = _unitOfWork.GroupRepository.FindGroupOfUser(groupId, userId);
 
             if (group == (default(Group)))
@@ -182,6 +204,16 @@ namespace TaskItApi.Services
             }
 
             return group;
+        }
+
+        /// <summary>
+        /// Check if the user exist
+        /// </summary>
+        /// <param name="userEmail">the active user email</param>
+        /// <returns>true if the user exist, false otherwise</returns>
+        private bool UserExist(string userEmail)
+        {
+            return _unitOfWork.UserRepository.ContainceUser(userEmail);
         }
 
         /// <summary>

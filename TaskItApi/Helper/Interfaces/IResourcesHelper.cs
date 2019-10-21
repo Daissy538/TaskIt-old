@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace TaskItApi.Helper
 {
-    public class AppSettings
+    public interface IResourcesHelper
     {
-        public string Secret { get; set; }
+
+        string GetInviteEmailTemplatePath();
+
     }
 }
