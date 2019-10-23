@@ -1,7 +1,9 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using TaskItApi.Dtos;
+using TaskItApi.Entities;
 
-namespace TaskItApi.Services.NewFolder
+namespace TaskItApi.Services.Interfaces
 {
     /// <summary>
     /// Interface for authenication
@@ -13,13 +15,19 @@ namespace TaskItApi.Services.NewFolder
         /// On succes it will return a JWT string.
         /// </summary>
         /// <param name="userIncomingData">The incoming user data</param>
-        /// <returns></returns>
-        string AuthenicateUser(UserInComingDto userIncomingData);
+        /// <returns>Authentication token for the given user</returns>
+        TokenDto AuthenicateUser(UserInComingDto userIncomingData);
 
         /// <summary>
         /// Register user based on incomingdata
         /// </summary>
         /// <param name="userInComingDto">The new user data</param>
-        void RegisterUser(UserInComingDto userInComingDto);
+        User RegisterUser(UserInComingDto userInComingDto);
+
+        /// <summary>
+        /// Check if the user exist
+        /// </summary>
+        /// <param name="userInComingDto"></param>
+        bool UserExist(UserInComingDto userInComingDto);
     }
 }

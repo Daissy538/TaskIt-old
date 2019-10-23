@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-root',
@@ -8,3 +9,4 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'task-it-frontend';
 }
+

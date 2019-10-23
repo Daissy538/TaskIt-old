@@ -1,0 +1,32 @@
+<div mat-dialog-title>
+  <mat-toolbar class="selector-toolbar">
+    <mat-toolbar-row class="selector-toolbar-row">
+      <span class="empty-space"></span>
+      <button mat-button (click)="close()"><mat-icon>clear</mat-icon></button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
+<div mat-dialog-content>
+    <mat-grid-list cols="3" rowHeight="1:1" *ngIf="screenWidth < 1000">
+      <mat-grid-tile
+        *ngFor="let item of iconsList"
+        [ngClass]="{ selected: item.value == icon.value }"
+        (click)="setIcon(item)"
+      >
+        <mat-icon [style.color]="color.value"
+          ><div class="grid-item">{{ item.value }}</div></mat-icon
+        >
+      </mat-grid-tile>
+    </mat-grid-list>
+    <mat-grid-list cols="3" rowHeight="2:1" *ngIf="screenWidth >= 1000">
+      <mat-grid-tile
+        *ngFor="let item of iconsList"
+        [ngClass]="{ selected: item.value == icon.value }"
+        (click)="setIcon(item)"
+      >
+        <mat-icon [style.color]="color.value"
+          ><div class="grid-item">{{ item.value }}</div></mat-icon
+        >
+      </mat-grid-tile>
+    </mat-grid-list>
+</div>

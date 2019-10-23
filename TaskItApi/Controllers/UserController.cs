@@ -1,26 +1,34 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 using TaskItApi.Dtos;
-using TaskItApi.Services.NewFolder;
+using TaskItApi.Exceptions;
+using TaskItApi.Resources;
+using TaskItApi.Services.Interfaces;
 
 namespace TaskItApi.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IAuthenticationService _authenicationService;
+        private readonly ILogger<UserController> _logger;
+        private readonly IStringLocalizer<ApiResponse> _localizer;
 
         public UserController(IUserService userService
-                              ,IAuthenticationService authenticationService)
+                              ,IAuthenticationService authenticationService, ILogger<UserController> logger, IStringLocalizer<ApiResponse> localizer)
         {
             _userService = userService;
             _authenicationService = authenticationService;
+            _logger = logger;
+            _localizer = localizer;
         }
 
         /// <summary>
@@ -29,19 +37,21 @@ namespace TaskItApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("Register")]
-        public ActionResult<UserOutGoingDto> Register([FromBody]UserInComingDto userInComingData)
+        public async Task<ActionResult<UserOutGoingDto>> Register([FromBody]UserInComingDto userInComingData)
         {
             try
             {
                 _authenicationService.RegisterUser(userInComingData);
-                return null;
-            }catch(ArgumentException argumentException)
+                return Ok();
+            }catch(InvalidInputException invalidInputException)
             {
-                return StatusCode(422, argumentException.Message);
+                _logger.LogInformation($"Could not register user", userInComingData, invalidInputException);
+                return BadRequest(_localizer["RegisterUser_Error"].Value);
             }
-            catch
+            catch(Exception exception)
             {
-                return StatusCode(500, "Something went wrong. Contact the website owner.");
+                _logger.LogError($"Could not register user", userInComingData, exception);
+                return StatusCode(500, _localizer["InternalError"].Value);
             }          
         }
 
@@ -51,9 +61,24 @@ namespace TaskItApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("Auth")]
-        public ActionResult<string> Authenticate ()
+        public ActionResult<string> Authenticate ([FromBody]UserInComingDto userInComingData)
         {
-            return null;
+            try
+            {
+                TokenDto token =  _authenicationService.AuthenicateUser(userInComingData);
+                
+                return Ok(token);
+            }
+            catch (InvalidInputException invalidInputException)
+            {
+                _logger.LogInformation($"Could not authenitcate user", userInComingData, invalidInputException);
+                return BadRequest(_localizer["AuthenticateUser_Error"].Value);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Could not authenitcate user", userInComingData, exception);
+                return StatusCode(500, _localizer["InternalError"].Value);
+            }
         }
 
         /// <summary>
@@ -61,7 +86,7 @@ namespace TaskItApi.Controllers
         /// </summary>
         [HttpPost]
         [Route("{id:int}/Update")]
-        public ActionResult<UserOutGoingDto> Update(int Id)
+        public async Task<ActionResult<UserOutGoingDto>> Update(int Id)
         {
             return null;
         }
@@ -72,7 +97,7 @@ namespace TaskItApi.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("{id:int}/Delete")]
-        public ActionResult Delete(int Id)
+        public async Task<ActionResult> Delete(int Id)
         {
             return null;
         }

@@ -1,0 +1,22 @@
+.group-overview-container {
+  width: 100%;
+  min-width: 300px;
+  margin: 0 auto;
+}
+
+.groups-title {
+  border-bottom: 1px solid white;
+}
+
+.empty-space {
+  flex: 1 1 auto;
+}
+
+.list-group {
+  flex: 1 1 100%;
+  cursor: move;
+}
+
+.hide {
+  visibility: hidden;
+}

@@ -1,28 +1,43 @@
 import { NgModule } from '@angular/core';
-import { HeaderComponent } from './components/header/header.component';
-import { FooterComponent } from './components/footer/footer.component';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { CommonModule } from '@angular/common';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
     FlexLayoutModule,
     MatToolbarModule,
     MatSidenavModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSnackBarModule,
+    MatCardModule,
+    MatIconModule,
+    MatGridListModule,
+    CommonModule,
+    ScrollingModule,
+    MatTooltipModule
   ],
-  declarations: [HeaderComponent, FooterComponent],
   exports: [
-    HeaderComponent,
-    FooterComponent,
     FlexLayoutModule,
     MatToolbarModule,
     MatSidenavModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSnackBarModule,
+    MatCardModule,
+    MatIconModule,
+    MatGridListModule,
+    ScrollingModule,
+    MatTooltipModule
   ]
 })
 export class CoreModule {}

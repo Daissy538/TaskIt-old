@@ -1,0 +1,32 @@
+.group-icon {
+  font-size: 150px;
+  height: 150px;
+  width: 150px;
+}
+
+.card-card {
+  background-color: white;
+  width: fit-content;
+  color: grey;
+  margin: 0 auto;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.color-selector {
+  width: 150px;
+  margin: 0 auto;
+}
+
+button {
+  margin: 5px !important;
+}
+
+::ng-deep .dialog-select-icons {
+  .mat-dialog-container {
+    background-color: white !important;
+    color: unset;
+    padding: 0 !important;
+    overflow-y: hidden;
+  }
+}

@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
+using System.Text;
 using TaskItApi.Dtos;
 using TaskItApi.Entities;
+using TaskItApi.Exceptions;
+using TaskItApi.Handlers.Interfaces;
 using TaskItApi.Models.Interfaces;
-using TaskItApi.Services.NewFolder;
+using TaskItApi.Services.Interfaces;
 
 namespace TaskItApi.Services
 {
@@ -13,30 +17,63 @@ namespace TaskItApi.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger _logger;
+        private readonly ITokenHandler _tokenHandler;
 
-        public AuthenticationService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<IAuthenticationService> logger)
+        public AuthenticationService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<IAuthenticationService> logger, ITokenHandler tokenHandler)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _logger = logger;
+            _tokenHandler = tokenHandler;
         }
 
-        public string AuthenicateUser(UserInComingDto userIncomingData)
+        public TokenDto AuthenicateUser(UserInComingDto userIncomingData)
         {
-            throw new NotImplementedException();
+           User user = _unitOfWork.UserRepository.GetUser(userIncomingData.Email);
+
+            bool userExist = user != default(User);
+            bool passwordVerified = VerifyPasswordHash(userIncomingData.Password, user.PasswordHash, user.PasswordSalt);
+
+            if (!userExist || !passwordVerified)
+            {
+                _logger.LogTrace($"A user with email {userIncomingData.Email} tride to login but failed.");
+                throw new InvalidInputException("Email and/or password is incorrect");
+            }
+
+            string token = _tokenHandler.CreateAuthenticationToken(user);
+
+            TokenDto tokenDto = new TokenDto();
+            tokenDto.Token = token;
+
+            return tokenDto;
         }
 
-        public void RegisterUser(UserInComingDto userInComingDto)
+        public User RegisterUser(UserInComingDto userInComingDto)
         {
             CreatePasswordHash(userInComingDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            User newUser = this._mapper.Map<User>(userInComingDto);
+            User newUser = _mapper.Map<User>(userInComingDto);
             newUser.PasswordHash = passwordHash;
             newUser.PasswordSalt = passwordSalt;
 
-            _unitOfWork.UserRepository.AddUser(newUser);
-            _unitOfWork.SaveChanges();
-            _logger.LogInformation($"User {newUser.Name} with email: {newUser.Email} is added to the databse");                     
+            try
+            {
+                _unitOfWork.UserRepository.AddUser(newUser);
+                _unitOfWork.SaveChanges();
+                _logger.LogInformation($"User {newUser.Name} with email: {newUser.Email} is registered|");
+                return newUser;
+            }catch(Exception ex)
+            {
+                _logger.LogError($"Could not register user {newUser.Name} with email: {newUser.Email}");
+                throw ex;
+            }     
+        }
+
+        public bool UserExist(UserInComingDto userInComingDto)
+        {
+            User user = _unitOfWork.UserRepository.GetUser(userInComingDto.Email);
+            return user != default(User);
+
         }
 
         /// <summary>
@@ -50,8 +87,26 @@ namespace TaskItApi.Services
             using(var hmac = new System.Security.Cryptography.HMACSHA512())
             {
                 passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             }            
         }
+
+        /// <summary>
+        /// Verify the password of the incoming user with the user from the database.
+        /// </summary>
+        /// <param name="password">incoming password</param>
+        /// <param name="passwordHash">hashed password in database</param>
+        /// <param name="passwordSalt">satl in database</param>
+        /// <returns>Return true if it is a match, return false if it isn't</returns>
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            {
+                byte[] incommingPasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+                
+                return incommingPasswordHash.SequenceEqual(passwordHash);
+            }
+        }
+       
     }
 }

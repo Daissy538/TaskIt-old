@@ -1,6 +1,6 @@
 ﻿using System;
 using TaskItApi.Dtos;
-using TaskItApi.Services.NewFolder;
+using TaskItApi.Services.Interfaces;
 
 namespace TaskItApi.Services
 {

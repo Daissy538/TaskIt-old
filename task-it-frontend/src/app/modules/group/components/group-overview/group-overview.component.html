@@ -1,0 +1,69 @@
+<div cdkDropListGroup class="group-overview-container">
+  <div class="groups-title" fxLayout="row">
+    <span fxLayoutAlign="start center">
+      <h3>
+        Groepen
+      </h3>
+    </span>
+    <span class="empty-space"></span>
+    <span fxLayoutAlign="end center">
+      <div
+        cdkDropList
+        #deleteList="cdkDropList"
+        id="deleteList"
+        (cdkDropListDropped)="delete($event)"
+      >
+        <button
+          mat-button
+          [ngClass]="{ hide: !inDraggingModus }"
+          matTooltip="Verwijderen"
+          [matTooltipPosition]="'above'"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </span>
+    <span fxLayoutAlign="end center">
+      <button mat-button (click)="onCreateGroup()" [ngClass]="{ hide: inDraggingModus }">
+        <mat-icon>add</mat-icon>
+      </button>
+    </span>
+  </div>
+  <section class="group-cards">
+    <mat-grid-list *ngIf="(screenWidth >= 1000)" cols="3" rowHeight="2:1">
+      <mat-grid-tile *ngFor="let item of groups; let i = index">
+        <div cdkDropList #groupList="cdkDropList" [cdkDropListData]="i">
+          <app-group-item
+            cdkDrag
+            id="{{ item.id }}"
+            [group]="item"
+            [cdkDragData]="i"
+            (cdkDragStarted)="isDragging(true)"
+            (cdkDragEnded)="isDragging(false)"            
+            (mouseup) = "groupDetails(item)"
+          >
+            <div *cdkDragPlaceholder></div>
+          </app-group-item>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+    <mat-grid-list *ngIf="(screenWidth < 1000) " cols="3" rowHeight="1:1">
+      <mat-grid-tile *ngFor="let item of groups; let i = index">
+        <div cdkDropList #groupList="cdkDropList" [cdkDropListData]="i">
+          <app-group-item
+            cdkDrag
+            id="{{ item.id }}"
+            class="group-item"
+            [group]="item"
+            [cdkDragData]="i"
+            (cdkDragStarted)="isDragging(true)"
+            (cdkDragEnded)="isDragging(false)"
+            (mouseup) = "groupDetails(item)"
+          >
+            <div *cdkDragPlaceholder></div>
+          </app-group-item>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </section>
+</div>

@@ -15,37 +15,178 @@ namespace TaskItApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("TaskItApi.Entities.Color", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Colors");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            Name = "Pink",
+                            Value = "#ec407a"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Name = "Orange",
+                            Value = "#ef5350"
+                        },
+                        new
+                        {
+                            ID = 3,
+                            Name = "Purple",
+                            Value = "#ab47bc"
+                        },
+                        new
+                        {
+                            ID = 4,
+                            Name = "Blue",
+                            Value = "#5c6bc0"
+                        });
+                });
 
             modelBuilder.Entity("TaskItApi.Entities.Group", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description");
+                    b.Property<int>("ColorID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IconID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
+                    b.HasIndex("ColorID");
+
+                    b.HasIndex("IconID");
+
                     b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("TaskItApi.Entities.Icon", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Icons");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            Name = "House",
+                            Value = "house"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Name = "Work",
+                            Value = "work"
+                        },
+                        new
+                        {
+                            ID = 3,
+                            Name = "Sport",
+                            Value = "directions_run"
+                        },
+                        new
+                        {
+                            ID = 4,
+                            Name = "Education",
+                            Value = "school"
+                        },
+                        new
+                        {
+                            ID = 5,
+                            Name = "Game",
+                            Value = "headset_mic"
+                        },
+                        new
+                        {
+                            ID = 6,
+                            Name = "Music",
+                            Value = "music_note"
+                        },
+                        new
+                        {
+                            ID = 7,
+                            Name = "Nature",
+                            Value = "nature_people"
+                        },
+                        new
+                        {
+                            ID = 8,
+                            Name = "Voluntary work",
+                            Value = "loyalty"
+                        },
+                        new
+                        {
+                            ID = 9,
+                            Name = "Animal",
+                            Value = "pets"
+                        },
+                        new
+                        {
+                            ID = 10,
+                            Name = "Art",
+                            Value = "color_lens"
+                        });
                 });
 
             modelBuilder.Entity("TaskItApi.Entities.Subscription", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DateOfSubscription");
+                    b.Property<DateTime>("DateOfSubscription")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("GroupID");
+                    b.Property<int>("GroupID")
+                        .HasColumnType("int");
 
-                    b.Property<int>("UserID");
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
 
                     b.HasKey("ID");
 
@@ -60,18 +201,24 @@ namespace TaskItApi.Migrations
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("From");
+                    b.Property<DateTime>("From")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("GroupID");
+                    b.Property<int>("GroupID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Until");
+                    b.Property<DateTime>("Until")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ID");
 
@@ -84,23 +231,43 @@ namespace TaskItApi.Migrations
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("PasswordHash")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<byte[]>("PasswordSalt")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("ID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("TaskItApi.Entities.Group", b =>
+                {
+                    b.HasOne("TaskItApi.Entities.Color", "Color")
+                        .WithMany()
+                        .HasForeignKey("ColorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TaskItApi.Entities.Icon", "Icon")
+                        .WithMany()
+                        .HasForeignKey("IconID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TaskItApi.Entities.Subscription", b =>
@@ -108,12 +275,14 @@ namespace TaskItApi.Migrations
                     b.HasOne("TaskItApi.Entities.Group", "Group")
                         .WithMany("Members")
                         .HasForeignKey("GroupID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TaskItApi.Entities.User", "User")
                         .WithMany("Subscriptions")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TaskItApi.Entities.Task", b =>
@@ -121,7 +290,8 @@ namespace TaskItApi.Migrations
                     b.HasOne("TaskItApi.Entities.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

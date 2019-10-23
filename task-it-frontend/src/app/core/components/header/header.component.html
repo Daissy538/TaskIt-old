@@ -1,9 +1,10 @@
 <header>
   <mat-toolbar color="primary">
     <mat-toolbar-row>
-      <span>TaskIt</span>
+      <span><h1 (click)="navigate()">TaskIt</h1></span>
       <span class="empty-space"></span>
-      <span>menu</span>
+      <span *ngIf="canLogout()" ><button mat-button (click)="logout()">Afmelden</button></span>
+      <span *ngIf="!canLogout()" ><button mat-button [routerLink]="['/auth/login']" routerLinkActive="router-link-active" >Aanmelden</button></span>
     </mat-toolbar-row>
   </mat-toolbar>
 </header>

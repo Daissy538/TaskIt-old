@@ -1,0 +1,70 @@
+<div [ngClass]="{ WriteMode: inWriteMode }" class="group-container">
+  <div fxLayout="row">
+    <div fxLayout="column" fxFlex="95%" *ngIf="!inWriteMode">
+      <div fxLayout="row" fxLayoutAlign="start center">
+        <mat-icon class="group-icon" [style.color]="group?.colorValue">{{
+          group?.iconValue
+        }}</mat-icon>
+        <h1 class="group-name">{{ group?.name }}</h1>
+      </div>
+      <div
+        fxLayout="row"
+        class="group-description"
+        fxLayoutAlign="start center"
+      >
+        <span>{{ group?.description }}</span>
+      </div>
+    </div>
+    <div fxLayout="column" fxFlex="95%" *ngIf="inWriteMode">
+      <form
+        [formGroup]="groupUpdateForm"
+        fxLayout="column"
+        fxLayoutAlign="center"
+      >
+        <div fxLayout="row" fxLayoutAlign="start">
+          <mat-icon class="group-icon" [style.color]="color?.value.value" (click)="selectIcon()">
+            {{ icon.value.value }}
+          </mat-icon>
+          <mat-form-field class="group-title">
+            <input
+              matInput
+              placeholder="Naam"
+              formControlName="title"
+            />
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start">
+          <mat-form-field class="group-description">
+            <textarea
+              matInput
+              formControlName="description"
+              placeholder="Omschrijving"
+            ></textarea>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="start">
+            <mat-form-field
+            appearance="outline"
+            class="color-selector"
+          >
+            <mat-select formControlName="color" (selectionChange)="selectColor($event)">
+              <mat-option *ngFor="let color of colors" [value]="color" >
+                {{ color?.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="end">
+          <button mat-raised-button (click)="update()" color="primary">
+            Opslaan <mat-icon>save</mat-icon>
+          </button>
+        </div>
+      </form>
+    </div>
+    <div fxLayout="column" fxFlex="5%" fxLayoutAlign="start end">
+      <mat-icon class="edit-icon group-cursor" (click)="setMode()">{{
+        !inWriteMode ? 'edit' : 'cancel'
+      }}</mat-icon>
+    </div>
+  </div>
+</div>
