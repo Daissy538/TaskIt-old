@@ -35,6 +35,14 @@ const routes: Routes = [
     )
   },
   {
+    path: 'verification',
+    canActivate: [AuthGuard],
+    loadChildren: () =>
+    import('./pages/emailVerification/emailVerification.module').then(
+      mod => mod.EmailVerificationModule
+    )
+  },
+  {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'

@@ -10,6 +10,9 @@ using TaskItApi.Helper;
 
 namespace TaskItApi.Handlers
 {
+    /// <summary>
+    /// Handler for sending and creating emails
+    /// </summary>
     public class EmailHandler: IEmailHandler
     {
         private readonly SmtpClient smtpClient;
@@ -45,6 +48,10 @@ namespace TaskItApi.Handlers
             };
         }
 
+        /// <summary>
+        /// Send invite email to user
+        /// </summary>
+        /// <param name="email">the email data</param>
         public void SendInviteEmail(EmailDTO email)
         {
            MailMessage mailMessage = new MailMessage(email.SendingAdrdress, email.RecievingAdrress, email.Subject, email.Message);
@@ -52,6 +59,13 @@ namespace TaskItApi.Handlers
            smtpClient.Send(mailMessage);
         }
 
+        /// <summary>
+        /// Create invite email
+        /// </summary>
+        /// <param name="recievingUser">User that recieves the invite</param>
+        /// <param name="sendingUser">User that send the invite</param>
+        /// <param name="group">The group where the reciever is invited for</param>
+        /// <returns>The email data</returns>
         public EmailDTO CreateInviteEmail(User recievingUser, User sendingUser, Group group)
         {           
             string filePath = _resourcesHelper.GetInviteEmailTemplatePath();
@@ -90,13 +104,10 @@ namespace TaskItApi.Handlers
         {
             string jwtToken = _tokenHandler.CreateInviteToken(user, group);            
 
-            string apiBaseUrl = _configuration.GetSection("ApiBaseUrl").Value;
+            string apiBaseUrl = _configuration.GetSection("InviteEmailUrl").Value;
             UriBuilder uriBuilder = new UriBuilder(apiBaseUrl);
 
-            string controllerPath = Path.Combine("Group", "Subscribe");
-            string subscribePath = Path.Combine(controllerPath, jwtToken);
-
-            uriBuilder.Path = subscribePath;
+            uriBuilder.Path = Path.Combine(uriBuilder.Path, jwtToken);
 
             return uriBuilder.ToString();
         }

@@ -1,11 +1,25 @@
 <div class="content-container">
   <div fxLayout="row">
-    <div *ngIf="(screenWidth >= 1000)" fxLayout="column" class="back-arrow" fxLayoutAlign="start center">
-      <mat-icon (click)="previousPage()" >arrow_back_ios</mat-icon>
+    <div
+      *ngIf="screenWidth >= 1000"
+      fxFlex="5%"
+      fxLayout="column"
+      class="back-arrow"
+      fxLayoutAlign="start center"
+    >
+      <mat-icon (click)="previousPage()">arrow_back_ios</mat-icon>
     </div>
-    <div fxLayout="column" class="group-details">
-      <app-group-update [group]="group" [icons]="icons" [colors]="colors" (onUpdate)="updateGroup($event)"></app-group-update>
+    <div fxLayout="column" fxFlex="40%">
+      <app-group-update
+        [group]="group"
+        [icons]="icons"
+        [colors]="colors"
+        (onUpdate)="updateGroup($event)"
+      ></app-group-update>
     </div>
-    <div fxLayout="column"></div>
+    <div fxLayout="column" fxFlex="10%"></div>
+    <div fxLayout="column" fxFlex="50%">
+      <app-user-overview [members]="group?.members" (sendInvitation)="sendInviteEmail($event)"></app-user-overview>
+    </div>
   </div>
 </div>

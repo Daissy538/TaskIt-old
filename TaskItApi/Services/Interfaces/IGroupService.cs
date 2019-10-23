@@ -47,7 +47,7 @@ namespace TaskItApi.Services.Interfaces
         /// <param name="groupId">The group to be updated</param>
         /// <param name="newGroupData">the updated group data</param>
         /// <param name="userId">the user that requested the update</param>
-        /// <returns></returns>
+        /// <returns>The updated group</returns>
         Group Update(int groupId, GroupIncomingDTO newGroupData, int userId);
 
         /// <summary>
@@ -58,5 +58,13 @@ namespace TaskItApi.Services.Interfaces
         /// <param name="sendingUserID">The id of the user that is sending the invitation</param>
         /// <returns>true if the invitation is send, false otherwise</returns>
         bool InviteUserToGroup(int sendingUserID, string emailAddress, int groupID);
+
+        /// <summary>
+        /// Subscribe to group
+        /// </summary>
+        /// <param name="userID">The active user id</param>
+        /// <param name="token">The subscribe token</param>
+        /// <returns>true if succesfull subscribed</returns>
+        bool SubscribeToGroup(int userID, string token);
     }
 }

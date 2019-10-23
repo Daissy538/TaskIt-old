@@ -1,19 +1,15 @@
 import {
   Component,
   OnInit,
-  QueryList,
-  ViewChildren,
   HostListener
 } from '@angular/core';
 import { GroupService } from '../../group.service';
 import { GroupOutgoing, GroupIncoming } from 'src/app/core/models/group';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from 'src/app/core/components/confirmation-dialog/confirmation-dialog.component';
-import { delay } from 'rxjs/operators';
-import { del } from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-group-overview',

@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Gebruiker uitnodigen</h1>
+<div mat-dialog-content>
+  <p>Stuur een uitnodiging naar een nieuw lid</p>
+  <mat-form-field>
+    <input matInput placeholder="Email" [formControl]="emailFormControl" s />
+    <mat-error
+      *ngIf="
+        emailFormControl.hasError('email') &&
+        !emailFormControl.hasError('required')
+      "
+    >
+      Voer een geldig email adres in
+    </mat-error>
+    <mat-error *ngIf="emailFormControl.hasError('required')">
+      Email is <strong>verplicht</strong>
+    </mat-error>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">
+    Annuleren
+  </button>
+  <button mat-button (click)="onSend()" [disabled]="!emailFormControl.valid" >Verzenden</button>
+</div>

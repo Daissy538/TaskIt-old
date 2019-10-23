@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using TaskItApi.Entities;
@@ -55,8 +56,7 @@ namespace TaskItApi.Handlers
         public string CreateInviteToken(User user, Group group)
         {
             Claim[] claims = ClaimExtension.GenerateInviteClaims(user.ID, group.ID);
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AppSettings:AppSecret"]));
-            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            SigningCredentials credentials = CreateSigningCredentials();
 
             IdentityModelEventSource.ShowPII = true;
 
@@ -64,13 +64,76 @@ namespace TaskItApi.Handlers
             {
                 Subject = new ClaimsIdentity(claims, "jwt"),
                 Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = credentials
+                SigningCredentials = credentials,
+                Issuer = user.ID.ToString(),
+                Audience = user.ID.ToString()
             };
 
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+            JwtSecurityToken token = tokenHandler.CreateJwtSecurityToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        /// <summary>
+        /// Validate subscribe token
+        /// Method checks if the user is authorized to subscribe on the given group.
+        /// </summary>
+        /// <param name="token">the subscribe token</param>
+        /// <param name="user">the active user</param>
+        /// <returns>true if the user is authorized to subscribe, false otherwise</returns>
+        public bool ValidateSubscribeToken(string token, User user)
+        {
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            SigningCredentials credentials = CreateSigningCredentials();
+
+            TokenValidationParameters validationParameters =
+            new TokenValidationParameters
+            {
+                ValidIssuer = user.ID.ToString(),
+                ValidAudience = user.ID.ToString(),
+                IssuerSigningKey = credentials.Key,                
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuer = true,
+                ValidateIssuerSigningKey = true
+            };
+
+            SecurityToken tokenValidated;
+
+            try
+            {
+                tokenHandler.ValidateToken(token, validationParameters, out tokenValidated);
+            }
+            catch (Exception exception)
+            {                
+                return false;
+            }          
+            
+            return true;
+        }
+
+        /// <summary>
+        /// Get group id out of token
+        /// </summary>
+        /// <param name="token">The token</param>
+        /// <returns>The group ID</returns>
+        public int GetGroupID(string token)
+        {
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityToken jwtSecurityToken = tokenHandler.ReadJwtToken(token);
+
+            int groupID = jwtSecurityToken.Claims.GetUserDataClaim();
+
+            return groupID;
+        }
+
+        private SigningCredentials CreateSigningCredentials()
+        {
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["AppSettings:AppSecret"]));
+            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            return credentials;
         }
     }
 }

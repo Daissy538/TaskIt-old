@@ -18,7 +18,6 @@ namespace TaskItApi.Repositories.Interfaces
         /// <param name="userId">The active user id</param>
         /// <returns>Returns the group if the user is subscribed on it</returns>
         Group FindGroupOfUser(int groupId, int userId);
-
-
+        
     }
 }

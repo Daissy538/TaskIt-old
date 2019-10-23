@@ -13,6 +13,9 @@ namespace TaskItApi.Maps
             CreateMap<GroupIncomingDTO, Group>();
 
             CreateMap<Group, GroupOutgoingDTO>()
+                .ForMember(dto => dto.Members, s => s.MapFrom(src => src.Members));
+
+            CreateMap<Group, GroupOutgoingDTO>()
                 .ForMember(dto => dto.ColorName, s => s.MapFrom(src => src.Color.Name))
                 .ForMember(dto => dto.ColorValue, s => s.MapFrom(src => src.Color.Value))
                 .ForMember(dto => dto.IconName, s => s.MapFrom(src => src.Icon.Name))

@@ -4,9 +4,7 @@ import {
   Input,
   Output,
   EventEmitter,
-  OnChanges,
-  HostListener,
-  SimpleChanges
+  OnChanges
 } from '@angular/core';
 import { GroupOutgoing, GroupIncoming } from 'src/app/core/models/group';
 import {
@@ -32,6 +30,7 @@ export class GroupUpdateComponent implements OnInit, OnChanges {
   icons: Icon[];
   @Input()
   colors: Color[];
+  
   @Output()
   onUpdate = new EventEmitter<GroupOutgoing>();
 

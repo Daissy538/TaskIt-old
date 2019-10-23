@@ -2,6 +2,10 @@
 
 namespace TaskItApi.Handlers.Interfaces
 {
+    /// <summary>
+    /// Handler for creating, validating and reading JWT tokens
+    /// https://jwt.io/
+    /// </summary>
     public interface ITokenHandler
     {
         /// <summary>
@@ -18,5 +22,21 @@ namespace TaskItApi.Handlers.Interfaces
         /// <param name="group">The Group where the user is invited for</param>
         /// <returns>Return jwt token</returns>
         string CreateInviteToken(User user, Group group);
+
+        /// <summary>
+        /// Validate subscribe token
+        /// Method checks if the user is authorized to subscribe on the given group.
+        /// </summary>
+        /// <param name="token">the subscribe token</param>
+        /// <param name="user">the active user</param>
+        /// <returns>true if the user is authorized to subscribe, false otherwise</returns>
+        bool ValidateSubscribeToken(string token, User user);
+
+        /// <summary>
+        /// Get group id out of token
+        /// </summary>
+        /// <param name="token">The token</param>
+        /// <returns>The group ID</returns>
+        int GetGroupID(string token);
     }
 }

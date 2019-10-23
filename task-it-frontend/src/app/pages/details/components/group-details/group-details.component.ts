@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Color } from 'src/app/core/models/color';
 import { Icon } from 'src/app/core/models/Icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { InviteOutgoingDTO } from 'src/app/core/models/email';
+import { UserService } from 'src/app/modules/user/user.service';
 
 @Component({
   selector: 'app-group-details',
@@ -21,6 +23,7 @@ export class GroupDetailsComponent implements OnInit {
 
   constructor(
     private groupService: GroupService,
+    private userService: UserService,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private router: Router
@@ -42,20 +45,31 @@ export class GroupDetailsComponent implements OnInit {
   }
 
   updateGroup(event: GroupOutgoing) {
-    this.groupService.updateGroup(event).subscribe(response => {
-      this.group = response;
-      this.snackBar.open('De wijzigingen zijn opgeslagen', 'X', {
-        panelClass: ['custom-ok']
-      });
-      return;
-    }, error => {
-      return;
-    });
+    this.groupService.updateGroup(event).subscribe(
+      response => {
+        this.group = response;
+        this.snackBar.open('De wijzigingen zijn opgeslagen', 'X', {
+          panelClass: ['custom-ok']
+        });
+        return;
+      },
+      error => {
+        return;
+      }
+    );
   }
 
   getGroupDetails(groupId: number) {
     this.groupService.getGroupByID(groupId).subscribe(response => {
       this.group = response;
+    });
+  }
+
+  sendInviteEmail(event: InviteOutgoingDTO) {
+    this.userService.inviteUser(event, this.group.id).subscribe(response => {
+      this.snackBar.open('Uitnodiging is verstuurd', 'X', {
+        panelClass: ['custom-ok']
+      });
     });
   }
 

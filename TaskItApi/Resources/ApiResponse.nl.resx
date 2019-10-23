@@ -132,4 +132,7 @@
   <data name="RegisterUser_Error" xml:space="preserve">
     <value>Kon gebruiker niet registreren</value>
   </data>
+  <data name="SubscribeGroup_Error" xml:space="preserve">
+    <value>Niet geautoriseerd om lid te worden van de groep</value>
+  </data>
 </root>

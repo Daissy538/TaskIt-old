@@ -17,16 +17,24 @@ namespace TaskItApi.Services
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger _logger;
-        private readonly IEmailHandler _emailHandler;        
+        private readonly IEmailHandler _emailHandler;
+        private readonly ITokenHandler _tokenHandler;
 
-        public GroupService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<IGroupService> logger, IEmailHandler emailHandler)
+        public GroupService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<IGroupService> logger, IEmailHandler emailHandler, ITokenHandler tokenHandler)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _logger = logger;
-            _emailHandler = emailHandler;          
+            _emailHandler = emailHandler;
+            _tokenHandler = tokenHandler;
         }
 
+        /// <summary>
+        /// Create a group by an user
+        /// </summary>
+        /// <param name="groupDto">The group details</param>
+        /// <param name="userId">The user that create the group</param>
+        /// <returns>The current subscripted groups of the user</returns>
         public IEnumerable<Group> Create(GroupIncomingDTO groupDto, int userId)
         { 
             if(!UserExist(userId))
@@ -61,6 +69,12 @@ namespace TaskItApi.Services
             return groupsOfUser;
         }
 
+        /// <summary>
+        /// Delete a group by group id
+        /// </summary>
+        /// <param name="groupId">The id of the group</param>
+        /// <param name="userId">The user that delete the group</param>
+        /// <returns>The current subscripted groups of the user</returns>
         public IEnumerable<Group> Delete(int groupId, int userId)
         {
             Group group;
@@ -96,6 +110,11 @@ namespace TaskItApi.Services
             return groupsOfUser;
         }
 
+        /// <summary>
+        /// Get the all the groups where the user is subscribed on
+        /// </summary>
+        /// <param name="userId">The active user</param>
+        /// <returns>The subscribed groups of the user</returns>
         public IEnumerable<Group> GetGroups(int userId)
         {
             if (!UserExist(userId))
@@ -108,6 +127,12 @@ namespace TaskItApi.Services
             return groups;
         }
 
+        /// <summary>
+        /// Get group details based on the groupId. If the user is subscribed on
+        /// </summary>
+        /// <param name="groupId">The group id</param>
+        /// <param name="userId">The active user</param>
+        /// <returns>the group, null if the group doesn't exist or the user is not a subscriber</returns>
         public Group GetGroup(int groupId, int userId)
         {
             Group group;
@@ -123,6 +148,13 @@ namespace TaskItApi.Services
             return group;
         }
 
+        /// <summary>
+        /// Update the selected groupd
+        /// </summary>
+        /// <param name="groupId">The group to be updated</param>
+        /// <param name="newGroupData">the updated group data</param>
+        /// <param name="userId">the user that requested the update</param>
+        /// <returns>The updated group</returns>
         public Group Update(int groupId, GroupIncomingDTO newgroupData, int userId)
         {
             Group group;
@@ -161,16 +193,23 @@ namespace TaskItApi.Services
             return group;
         }
 
+        /// <summary>
+        /// Invite user to a group
+        /// </summary>
+        /// <param name="emailAddress">the email of the user to be invited</param>
+        /// <param name="groupID">The group where the user is invited for</param>
+        /// <param name="sendingUserID">The id of the user that is sending the invitation</param>
+        /// <returns>true if the invitation is send, false otherwise</returns>
         public bool InviteUserToGroup(int sendingUserID, string emailAddress, int groupID)
         {
             User recievingUser = _unitOfWork.UserRepository.GetUser(emailAddress);
             User sendingUser = _unitOfWork.UserRepository.GetUser(sendingUserID);
             Group group = RetrieveGroupById(groupID, sendingUserID);
 
-            if (recievingUser == default(User) && sendingUser == default(User) && group == default(Group))
+            if (recievingUser == default(User) || sendingUser == default(User) || group == default(Group) || Equals(recievingUser.ID, sendingUser.ID))
             {
                 _logger.LogError($"Couldn't send invation to {emailAddress} from {sendingUserID} for group {groupID}: Incomplete or Incorrect data");
-                throw new NullReferenceException("Couldn't send invation");
+                throw new InvalidInputException("Couldn't send invation");
             }
 
             try
@@ -181,6 +220,45 @@ namespace TaskItApi.Services
             catch (Exception exception)
             {
                 _logger.LogError($"Could not send invite email to {emailAddress}");
+                throw exception;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Subscribe to group
+        /// </summary>
+        /// <param name="userID">The active user id</param>
+        /// <param name="token">The subscribe token</param>
+        /// <returns>true if succesfull subscribed</returns>
+        public bool SubscribeToGroup(int userID, string token)
+        {
+            User user = _unitOfWork.UserRepository.GetUser(userID);
+
+            if(!_tokenHandler.ValidateSubscribeToken(token, user))
+            {
+                _logger.LogError($"Could not subscribe user {userID} to group: Invalid subscribtion token");
+                throw new UnauthorizedAccessException("User has no persion to subscribe to group");
+            }
+
+            int groupID = _tokenHandler.GetGroupID(token);
+
+            Subscription subscription = new Subscription()
+            {
+                DateOfSubscription = DateTime.Now,
+                GroupID = groupID,
+                UserID = user.ID
+            };
+
+            try
+            {
+                _unitOfWork.SubscriptionRepository.SubscribeUser(groupID, userID);
+                _unitOfWork.SaveChanges();                
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"Could not add subscription to database");
                 throw exception;
             }
 

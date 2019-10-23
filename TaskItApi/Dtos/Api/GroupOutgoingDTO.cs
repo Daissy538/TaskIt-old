@@ -38,7 +38,7 @@ namespace TaskItApi.Dtos
         /// <summary>
         /// The member that are subscribed on the group
         /// </summary>
-        public IEnumerable<SubscriptionOutgoingDto> Members;
+        public IEnumerable<SubscriptionOutgoingDto> Members { get; set; }
     }
 }
 

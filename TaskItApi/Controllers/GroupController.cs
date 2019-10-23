@@ -183,7 +183,12 @@ namespace TaskItApi.Controllers
             try
             {
                 _groupService.InviteUserToGroup(userId, inviteIncoming.RecievingMail, ID);
-                return Ok(true);
+                return Ok();
+            }
+            catch(InvalidInputException invalidInputException)
+            {
+                _logger.LogWarning($"Could not send invite email", invalidInputException);
+                return Ok(); //to preserve the privacy of the users. There will not be error message send when input is invalid.
             }
             catch(Exception exception)
             {
@@ -196,20 +201,20 @@ namespace TaskItApi.Controllers
         /// Subscribe user to a group
         /// </summary>
         [HttpPost]
-        [Route("Subscribe/{token}")]
-        public async Task<ActionResult<Boolean>> SubscribeToGroup(string token)
+        [Route("Subscribe")]
+        public async Task<ActionResult<Boolean>> SubscribeToGroup([FromBody] TokenDto tokenDTO)
         {
-            int userId = HttpContext.User.GetCurrentUserId();
+            int userID = HttpContext.User.GetCurrentUserId();
 
             try
             {
-
-            }catch(Exception exception)
-            {
-
+                _groupService.SubscribeToGroup(userID, tokenDTO.Token);
+                return Ok(true);
             }
-
-            return Ok(true);
+            catch(Exception exception)
+            {
+                return BadRequest(_localizer["SubscribeGroup_Error"].Value);
+            }            
         }
     }
 }

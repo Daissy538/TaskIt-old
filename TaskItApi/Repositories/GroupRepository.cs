@@ -31,12 +31,13 @@ namespace TaskItApi.Repositories
 
         public Group FindGroupOfUser(int groupId, int userId)
         {
-            Group group = FindByCondition(g => g.ID ==  groupId &&
+            Group group = FindByCondition(g => g.ID == groupId &&
                                                g.Members.Where(m => m.User.ID == userId)
                                                .Any())
                                           .Include(g => g.Icon)
                                           .Include(g => g.Color)
                                           .Include(g => g.Members)
+                                            .ThenInclude(m => m.User)
                                           .FirstOrDefault();
 
             return group;

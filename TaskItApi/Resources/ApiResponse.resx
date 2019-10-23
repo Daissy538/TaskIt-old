@@ -132,4 +132,7 @@
   <data name="RegisterUser_Error" xml:space="preserve">
     <value>Couldn't register user</value>
   </data>
+  <data name="SubscribeGroup_Error" xml:space="preserve">
+    <value>Not authorized to subscribe to the group</value>
+  </data>
 </root>
