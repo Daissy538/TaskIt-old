@@ -113,7 +113,6 @@ export class AuthenticationService {
   public getUserName(): string {
     const username = localStorage.getItem('name');
     if (username) {
-      console.log(username);
       return username;
     }
 
