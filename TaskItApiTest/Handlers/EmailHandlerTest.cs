@@ -20,7 +20,7 @@ namespace TaskItApiTest.Handlers
         {
             _configMock = new Mock<IConfiguration>();
             _configMock.Setup(c => c[It.Is<string>(s => s.Equals("AppSettings:AppSecret"))]).Returns("TESTSTRINGSECRET");
-            _configMock.Setup(c => c.GetSection(It.Is<string>(s => s.Equals("ApiBaseUrl"))).Value).Returns("https://localhost:44384");
+            _configMock.Setup(c => c.GetSection(It.Is<string>(s => s.Equals("InviteEmailUrl"))).Value).Returns("https://localhost:44384");
 
             _resourcesHelper = new Mock<IResourcesHelper>();
             _resourcesHelper.Setup(r => r.GetInviteEmailTemplatePath()).Returns(GetInviteEmailPath());
@@ -54,10 +54,10 @@ namespace TaskItApiTest.Handlers
                 Name = "Group1" 
             };
 
+            
             EmailDTO result = emailHandler.CreateInviteEmail(recievingUser, sendingUser, group);
 
             Assert.Equal(result.RecievingAdrress, recievingUser.Email);
-            Assert.Equal(result.SendingAdrdress, sendingUser.Email);
             Assert.Contains(group.Name, result.Message);
             Assert.Contains(recievingUser.Name, result.Message);
         }
