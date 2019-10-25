@@ -216,5 +216,27 @@ namespace TaskItApi.Controllers
                 return BadRequest(_localizer["SubscribeGroup_Error"].Value);
             }            
         }
+
+        [HttpDelete]
+        [Route("{ID}/Unsubscribe")]
+        public async Task<ActionResult<Boolean>> Unsubscribe(int ID)
+        {
+            int userID = HttpContext.User.GetCurrentUserId();
+
+            try
+            {
+                _groupService.Unsubscribe(userID, ID);
+                return Ok(true);
+            }
+            catch (InvalidOperationException invalidOperationException)
+            {
+                _logger.LogWarning($"Could unsubscribe user {userID}", invalidOperationException);
+                return BadRequest(_localizer["UnsubscribeGroup_Error_UserMim"].Value);
+            }catch(Exception exception)
+            {
+                _logger.LogWarning($"Could unsubscribe user {userID}", exception);
+                return StatusCode(500, _localizer["InternalError"].Value);
+            }
+        }
     }
 }

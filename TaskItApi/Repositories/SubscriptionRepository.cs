@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Linq;
 using TaskItApi.Entities;
 using TaskItApi.Exceptions;
@@ -28,7 +27,7 @@ namespace TaskItApi.Repositories
 
             if(hasAlreadySubscribed)
             {
-                throw new InvalidInputException($"User is already subscribed to the group");
+                throw new InvalidInputException($"User {userID} is already subscribed to the group {groupID}");
             }
 
             Subscription subscription = new Subscription()
@@ -39,6 +38,26 @@ namespace TaskItApi.Repositories
             };
 
             Create(subscription);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Unsubscribe user for group
+        /// </summary>
+        /// <param name="groupID">The group</param>
+        /// <param name="userID">The user</param>
+        /// <returns>true if succesfull unsubscribed</returns>
+        public bool UnSubscribeUser(int groupID, int userID)
+        {
+            Subscription subscription = FindByCondition(s => s.UserID == userID && s.GroupID == groupID).FirstOrDefault();
+
+            if (subscription == default(Subscription))
+            {
+                throw new InvalidInputException($"User {userID} is not subscribed for group {groupID}");
+            }
+
+            Delete(subscription);
 
             return true;
         }

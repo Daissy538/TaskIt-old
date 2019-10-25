@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TaskItApi.Dtos;
+using TaskItApi.Dtos.Api;
 using TaskItApi.Entities;
 using TaskItApi.Exceptions;
 using TaskItApi.Handlers.Interfaces;
@@ -263,6 +264,32 @@ namespace TaskItApi.Services
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Unsubcribe to group
+        /// </summary>
+        /// <param name="userID">The active user</param>
+        /// <param name="groupID">The group to be unsubscribed/param>
+        /// <returns>new group data</returns>
+        public void Unsubscribe(int userID, int groupID)
+        {
+            Group group = _unitOfWork.GroupRepository.FindGroupOfUser(groupID, userID);
+
+            if (group == (default(Group)))
+            {
+                _logger.LogError($"Try to unsubscribe user with id: {userID} from group: {groupID}. But group doesn't exist for user: {userID}");
+                throw new InvalidInputException("User is not subscribed on given group");
+            }
+
+            if(group.Members.Count <= 1)
+            {
+                _logger.LogWarning($"Try to unsubscribe user: {userID} from group: {groupID}. But group can't have less than one subscriber.");
+                throw new InvalidOperationException("Can't have less than one subscribe on a group");
+            }
+
+            _unitOfWork.SubscriptionRepository.UnSubscribeUser(groupID, userID);
+            _unitOfWork.SaveChanges();
         }
 
         /// <summary>

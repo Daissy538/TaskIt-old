@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using TaskItApi.Dtos;
+using TaskItApi.Dtos.Api;
 using TaskItApi.Entities;
 
 namespace TaskItApi.Services.Interfaces
@@ -66,5 +67,13 @@ namespace TaskItApi.Services.Interfaces
         /// <param name="token">The subscribe token</param>
         /// <returns>true if succesfull subscribed</returns>
         bool SubscribeToGroup(int userID, string token);
+
+        /// <summary>
+        /// Unsubcribe to group
+        /// </summary>
+        /// <param name="userID">The active user</param>
+        /// <param name="groupID">The group to be unsubscribed from</param>
+        /// <returns>new group data</returns>
+        void Unsubscribe(int userID, int groupID);
     }
 }

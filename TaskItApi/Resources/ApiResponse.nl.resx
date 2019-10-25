@@ -135,4 +135,7 @@
   <data name="SubscribeGroup_Error" xml:space="preserve">
     <value>Niet geautoriseerd om lid te worden van de groep</value>
   </data>
+  <data name="UnsubscribeGroup_Error_UserMim" xml:space="preserve">
+    <value>Kan niet het enigste lid van een groep afmelden</value>
+  </data>
 </root>

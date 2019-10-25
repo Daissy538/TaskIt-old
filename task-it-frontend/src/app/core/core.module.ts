@@ -11,7 +11,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { CommonModule } from '@angular/common';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   imports: [
@@ -37,7 +38,10 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatIconModule,
     MatGridListModule,
     ScrollingModule,
-    MatTooltipModule
-  ]
+    MatTooltipModule,
+    ConfirmationDialogComponent
+  ],
+  declarations: [ConfirmationDialogComponent],
+  entryComponents: [ConfirmationDialogComponent]
 })
 export class CoreModule {}

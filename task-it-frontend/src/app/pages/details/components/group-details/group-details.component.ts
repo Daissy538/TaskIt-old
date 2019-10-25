@@ -7,6 +7,7 @@ import { Icon } from 'src/app/core/models/Icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { InviteOutgoingDTO } from 'src/app/core/models/email';
 import { UserService } from 'src/app/modules/user/user.service';
+import { Member } from 'src/app/core/models/member';
 
 @Component({
   selector: 'app-group-details',
@@ -70,6 +71,12 @@ export class GroupDetailsComponent implements OnInit {
       this.snackBar.open('Uitnodiging is verstuurd', 'X', {
         panelClass: ['custom-ok']
       });
+    });
+  }
+
+  unsubscribeUser(event: Member) {
+    this.userService.unsubscribeUser(this.group.id).subscribe(repsonse => {
+      this.router.navigate(['/dashboard']);
     });
   }
 
