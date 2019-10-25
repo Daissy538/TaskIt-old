@@ -122,7 +122,6 @@ namespace TaskItApiTest.ServiceTests
             TokenDto result = authenticationService.AuthenicateUser(newUser);
 
             Assert.NotNull(result);
-            Assert.NotNull(result.Token);
         }
 
         [Fact]

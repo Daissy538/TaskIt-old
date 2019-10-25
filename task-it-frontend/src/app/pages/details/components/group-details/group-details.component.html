@@ -19,7 +19,7 @@
     </div>
     <div fxLayout="column" fxFlex="10%"></div>
     <div fxLayout="column" fxFlex="50%">
-      <app-user-overview [members]="group?.members" (sendInvitation)="sendInviteEmail($event)"></app-user-overview>
+      <app-user-overview [members]="group?.members" (sendInvitation)="sendInviteEmail($event)" (unsubscribe)="unsubscribeUser($event)"></app-user-overview>
     </div>
   </div>
 </div>

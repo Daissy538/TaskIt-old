@@ -27,6 +27,7 @@ namespace TaskItApiTest.ServiceTests
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IConfiguration> _configMock;
         private readonly Mock<IEmailHandler> _emailHandler;
+        private readonly Mock<ITokenHandler> _tokenHandler;
         private readonly IMapper _mapper;
 
         //Mock user
@@ -60,6 +61,10 @@ namespace TaskItApiTest.ServiceTests
             _userRepositoryMock.Setup(u => u.ContainceUser(It.Is<int>(i => i != this._mockID))).Throws(new InvalidInputException("User doesn't exist"));
             _userRepositoryMock.Setup(u => u.GetUser(It.Is<string>(s => s.ToLower() == this._mockEmail))).Returns(user);
             _userRepositoryMock.Setup(u => u.GetUser(It.Is<string>(s => s.ToLower() != this._mockEmail))).Throws(new InvalidInputException("User doesn't exist"));
+            _userRepositoryMock.Setup(u => u.ContainceUser(It.Is<string>(s => s.ToLower() == this._mockEmail))).Returns(true);
+            _userRepositoryMock.Setup(u => u.ContainceUser(It.Is<string>(s => s.ToLower() != this._mockEmail))).Returns(false);
+            _userRepositoryMock.Setup(u => u.ContainceUser(It.Is<int>(i => i == _mockID))).Returns(true);
+            _userRepositoryMock.Setup(u => u.ContainceUser(It.Is<int>(i => i != _mockID))).Returns(false);
 
             _groupRepositoryMock = new Mock<IGroupRepository>();
             _subscriptionRepositoryMock = new Mock<ISubscriptionRepository>();
@@ -77,6 +82,7 @@ namespace TaskItApiTest.ServiceTests
             _configMock.Setup(c => c[It.Is<string>(s => s.Equals("AppSettings:AppSecret"))]).Returns("TESTSTRINGSECRET");
 
             _emailHandler = new Mock<IEmailHandler>();
+            _tokenHandler = new Mock<ITokenHandler>();
 
             var mappingConfig = new MapperConfiguration(mc =>
             {
@@ -89,7 +95,7 @@ namespace TaskItApiTest.ServiceTests
         [Fact]
         public async System.Threading.Tasks.Task Test_CreateGroup()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object);
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object, _tokenHandler.Object);
 
             GroupIncomingDTO newGroup = new GroupIncomingDTO()
             {
@@ -109,7 +115,7 @@ namespace TaskItApiTest.ServiceTests
         
         public async System.Threading.Tasks.Task Test_CreateGroup_NonExistingUser()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object);
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object, _tokenHandler.Object);
 
             GroupIncomingDTO newGroup = new GroupIncomingDTO()
             {
@@ -126,7 +132,7 @@ namespace TaskItApiTest.ServiceTests
         [Fact]
         public async System.Threading.Tasks.Task Test_DeleteGroup()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object);
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object, _tokenHandler.Object);
 
             Color color = new Color()
             {
@@ -163,7 +169,7 @@ namespace TaskItApiTest.ServiceTests
         [Fact]
         public async System.Threading.Tasks.Task Test_DeleteGroup_NotExisting()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object);
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object, _tokenHandler.Object);
 
             Assert.Throws<InvalidInputException>(() => groupService.Delete(2, this._mockID));
         }
@@ -171,7 +177,7 @@ namespace TaskItApiTest.ServiceTests
         [Fact]
         public async System.Threading.Tasks.Task Test_UpdateGroup()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object);
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object, _tokenHandler.Object);
 
             Color color = new Color()
             {
@@ -219,7 +225,7 @@ namespace TaskItApiTest.ServiceTests
         [Fact]
         public async System.Threading.Tasks.Task Test_UpdateGroup_InvalidUser()
         {
-            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object);
+            GroupService groupService = new GroupService(_mapper, _unitOfWorkMock.Object, _loggerFactory.CreateLogger<IGroupService>(), _emailHandler.Object, _tokenHandler.Object);
 
             Color color = new Color()
             {

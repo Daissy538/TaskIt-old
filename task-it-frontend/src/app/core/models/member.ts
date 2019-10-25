@@ -1,20 +1,20 @@
 export class Member {
-  userId: number;
+  userID: number;
   userName: string;
-  groupId: number;
+  groupID: number;
   groupName: string;
   dateOfSubscription: Date;
 
   public constructor(
-    userId: number,
+    userID: number,
     userName: string,
-    groupId: number,
+    groupID: number,
     groupName: string,
     dateOfSubscription: Date
   ) {
-    this.userId = userId;
+    this.userID = userID;
     this.userName = userName;
-    this.groupId = groupId;
+    this.groupID = groupID;
     this.groupName = groupName;
     this.dateOfSubscription = dateOfSubscription;
   }
