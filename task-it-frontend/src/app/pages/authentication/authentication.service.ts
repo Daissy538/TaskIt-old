@@ -110,10 +110,21 @@ export class AuthenticationService {
     return null;
   }
 
+  public getUserName(): string {
+    const username = localStorage.getItem('name');
+    if (username) {
+      console.log(username);
+      return username;
+    }
+
+    return null;
+  }
+
   private setSession(jwtToken: string) {
     const token = jwt_decode(jwtToken);
 
     localStorage.setItem('id', token['nameid']);
+    localStorage.setItem('name', token['unique_name']);
     localStorage.setItem('token', jwtToken);
     localStorage.setItem('expirationDate', token['exp']);
   }
