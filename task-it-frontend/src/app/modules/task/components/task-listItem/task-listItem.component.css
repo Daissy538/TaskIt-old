@@ -1,0 +1,9 @@
+.task-item-container {
+    width: 75%;
+    height: 50px;
+    padding: 5px;
+    border-color: white;
+    border-radius: 4px;
+    position: relative;
+    z-index: 1;
+  }
