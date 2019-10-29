@@ -37,7 +37,7 @@ namespace TaskItApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<ActionResult<UserOutGoingDto>> Register([FromBody]UserInComingDto userInComingData)
+        public async Task<ActionResult<UserOutGoingDTO>> Register([FromBody]UserInComingDto userInComingData)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace TaskItApi.Controllers
         /// </summary>
         [HttpPost]
         [Route("{id:int}/Update")]
-        public async Task<ActionResult<UserOutGoingDto>> Update(int Id)
+        public async Task<ActionResult<UserOutGoingDTO>> Update(int Id)
         {
             return null;
         }

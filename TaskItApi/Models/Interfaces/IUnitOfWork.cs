@@ -9,7 +9,8 @@ namespace TaskItApi.Models.Interfaces
         ISubscriptionRepository SubscriptionRepository { get; }
         IColorRepository ColorRepository { get;  }
         IIconRepository IconRepository { get;  }
-
+        ITaskHolderRepository TaskHolderRepository { get;  }
+        ITaskRepository TaskRepository { get; }
         int SaveChanges();
 
         void Dispose();

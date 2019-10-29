@@ -129,7 +129,7 @@ namespace TaskItApi
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IGroupService, GroupService>();
             services.AddTransient<IDefaultService, DefaultService>();
-            services.AddTransient<IEmailHandler, EmailHandler>(); 
+            services.AddTransient<ITaskService, TaskService>();
             
             //Repositories
             services.AddTransient<IUserRepository, UserRepository>();
@@ -137,6 +137,8 @@ namespace TaskItApi
             services.AddTransient<ISubscriptionRepository, SubscriptionRepository>();
             services.AddTransient<IColorRepository, ColorRepository>();
             services.AddTransient<IIconRepository, IconRepository>();
+            services.AddTransient<ITaskRepository, TaskRepository>();
+            services.AddTransient<ITaskHolderRepository, TaskHolderRepository>();
 
             //Models
             services.AddTransient<IUnitOfWork, UnitOfWork>();

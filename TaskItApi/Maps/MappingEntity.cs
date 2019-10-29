@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using TaskItApi.Dtos;
+using TaskItApi.Dtos.Api;
+using TaskItApi.Dtos.Api.Outgoing;
 using TaskItApi.Entities;
 
 namespace TaskItApi.Maps
@@ -29,6 +31,13 @@ namespace TaskItApi.Maps
 
             CreateMap<Color, ColorDTO>();
             CreateMap<Icon, IconDTO>();
+
+            CreateMap<Task, TaskOutgoingDTO>()
+                .ForMember(dto => dto.GroupColor, s => s.MapFrom(src => src.Group.Color.Value));
+
+            CreateMap<TaskHolder, TaskHolderOutgoingDTO>()
+                .ForMember(dto => dto.Username, s => s.MapFrom(src => src.User.Name))
+                .ForMember(dto => dto.Email, s => s.MapFrom(src => src.User.Email));
 
         }
     }
