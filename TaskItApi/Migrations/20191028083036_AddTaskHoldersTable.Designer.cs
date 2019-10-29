@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskItApi.Models;
 
 namespace TaskItApi.Migrations
 {
     [DbContext(typeof(TaskItDbContext))]
-    partial class TaskItDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191028083036_AddTaskHoldersTable")]
+    partial class AddTaskHoldersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,9 +215,6 @@ namespace TaskItApi.Migrations
                     b.Property<int>("GroupID")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -226,8 +225,6 @@ namespace TaskItApi.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("GroupID");
-
-                    b.HasIndex("StatusID");
 
                     b.ToTable("Tasks");
                 });
@@ -252,22 +249,6 @@ namespace TaskItApi.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("TaskHolder");
-                });
-
-            modelBuilder.Entity("TaskItApi.Entities.TaskStatus", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("TaskStatus");
                 });
 
             modelBuilder.Entity("TaskItApi.Entities.User", b =>
@@ -333,12 +314,6 @@ namespace TaskItApi.Migrations
                     b.HasOne("TaskItApi.Entities.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TaskItApi.Entities.TaskStatus", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

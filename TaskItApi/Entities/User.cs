@@ -10,7 +10,7 @@ namespace TaskItApi.Entities
     public class User
     {
         [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         [Required]
         public string Email { get; set; }
@@ -21,5 +21,6 @@ namespace TaskItApi.Entities
         [Required]
         public string Name { get; set; }
         public ICollection<Subscription> Subscriptions { get; set; }
+        public ICollection<TaskHolder> TaskHolders { get; set; }
     }
 }

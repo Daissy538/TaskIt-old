@@ -17,12 +17,17 @@ namespace TaskItApi.Models
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<Icon> Icons { get; set; }
         public DbSet<Color> Colors { get; set; }
+        public DbSet<TaskHolder> TaskHolders { get; set; }
 
+        /// <summary>
+        /// Seed the database when created
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             DbSeeder.SeedColors(modelBuilder);
             DbSeeder.SeedIcons(modelBuilder);
+            DbSeeder.SeedTaskStatuses(modelBuilder);
         }
-
      }
 }
