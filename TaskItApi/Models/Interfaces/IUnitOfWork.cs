@@ -11,6 +11,8 @@ namespace TaskItApi.Models.Interfaces
         IIconRepository IconRepository { get;  }
         ITaskHolderRepository TaskHolderRepository { get;  }
         ITaskRepository TaskRepository { get; }
+        ITaskStatusRepository TaskStatusRepository { get; }
+
         int SaveChanges();
 
         void Dispose();

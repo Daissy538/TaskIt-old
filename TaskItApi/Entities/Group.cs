@@ -23,5 +23,6 @@ namespace TaskItApi.Entities
         public int ColorID { get; set; }
         public Color Color { get; set; }
         public ICollection<Subscription> Members { get; set; }
+        public ICollection<Task> Tasks { get; set; }
     }
 }

@@ -20,6 +20,7 @@ namespace TaskItApi.Entities
         [Required]
         public DateTime Until { get; set; }
         [Required]
+        public int StatusID { get; set; }
         public TaskStatus Status { get; set; }
         [Required]
         public int GroupID { get; set; }
@@ -27,3 +28,4 @@ namespace TaskItApi.Entities
 
         public ICollection<TaskHolder> TaskHolders { get; set; }
     }
+}

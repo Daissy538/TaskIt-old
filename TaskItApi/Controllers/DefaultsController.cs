@@ -24,7 +24,6 @@ namespace TaskItApi.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IStringLocalizer<ApiResponse> _localizer;
-        private readonly IStringLocalizer<Colors> _localizerColors;
 
         public DefaultsController(IDefaultService defaultService, IMapper mapper, ILogger<DefaultsController> logger, IStringLocalizer<ApiResponse> localizer, IStringLocalizer<Colors> localizerColors)
         {

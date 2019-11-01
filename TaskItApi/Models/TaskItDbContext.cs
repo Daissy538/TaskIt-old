@@ -18,6 +18,7 @@ namespace TaskItApi.Models
         public DbSet<Icon> Icons { get; set; }
         public DbSet<Color> Colors { get; set; }
         public DbSet<TaskHolder> TaskHolders { get; set; }
+        public DbSet<TaskStatus> TaskStatuses { get; set; }
 
         /// <summary>
         /// Seed the database when created

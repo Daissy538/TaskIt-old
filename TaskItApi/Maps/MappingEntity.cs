@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TaskItApi.Dtos;
 using TaskItApi.Dtos.Api;
+using TaskItApi.Dtos.Api.Incoming;
 using TaskItApi.Dtos.Api.Outgoing;
 using TaskItApi.Entities;
 
@@ -39,6 +40,7 @@ namespace TaskItApi.Maps
                 .ForMember(dto => dto.Username, s => s.MapFrom(src => src.User.Name))
                 .ForMember(dto => dto.Email, s => s.MapFrom(src => src.User.Email));
 
+            CreateMap<TaskIncomingDTO, Task>();
         }
     }
 }

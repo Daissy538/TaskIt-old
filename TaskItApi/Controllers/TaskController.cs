@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -15,6 +16,9 @@ using TaskItApi.Services.Interfaces;
 
 namespace TaskItApi.Controllers
 {
+    [Authorize]
+    [Route("[controller]")]
+    [ApiController]
     public class TaskController : ControllerBase
     {
         private readonly ITaskService _taskService;
@@ -54,6 +58,59 @@ namespace TaskItApi.Controllers
             catch (Exception exception)
             {
                 _logger.LogError($"User {userId} could not create task", taskIncomingDTO, exception);
+                return StatusCode(500, _localizer["InternalError"].Value);
+            }
+        }
+
+        /// <summary>
+        /// Get task of group
+        /// </summary>
+        /// <param name="groupID">The group id</param>
+        /// <returns>Returns the list of tasks</returns>
+        [HttpGet]
+        [Route("All/Group/{groupID}")]
+        public async Task<ActionResult<IEnumerable<TaskOutgoingDTO>>> GetTaskOfGroup(int groupID)
+        {
+            int userID = HttpContext.User.GetCurrentUserId();
+
+            try
+            {
+                IEnumerable<Entities.Task> tasks = _taskService.GetTasksOfGroup(groupID, userID);
+                IEnumerable<TaskOutgoingDTO> result = _mapper.Map<IEnumerable<TaskOutgoingDTO>>(tasks);
+                return Ok(result);
+            }
+            catch (InvalidInputException invalidInputException)
+            {
+                _logger.LogInformation($"User {userID} could not retrieve task", invalidInputException);
+                return BadRequest(_localizer["CreateGroup_Error"].Value);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"User {userID} could not retrieve tasks for group {groupID}", exception);
+                return StatusCode(500, _localizer["InternalError"].Value);
+            }
+        }
+
+        /// <summary>
+        /// Get task of group
+        /// </summary>
+        /// <param name="groupID">The group id</param>
+        /// <returns>Returns the list of tasks</returns>
+        [HttpGet]
+        [Route("All")]
+        public async Task<ActionResult<IEnumerable<TaskOutgoingDTO>>> GetTaskOfUser()
+        {
+            int userID = HttpContext.User.GetCurrentUserId();
+
+            try
+            {
+                IEnumerable<Entities.Task> tasks = _taskService.GetTasksOfUser(userID);
+                IEnumerable<TaskOutgoingDTO> result = _mapper.Map<IEnumerable<TaskOutgoingDTO>>(tasks);
+                return Ok(result);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError($"User {userID} could not retrieve tasks", exception);
                 return StatusCode(500, _localizer["InternalError"].Value);
             }
         }

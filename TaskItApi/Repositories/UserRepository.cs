@@ -21,13 +21,8 @@ namespace TaskItApi.Repositories
         }
 
         public void AddUser(User user)
-        {
-            user.Email = user.Email.ToLower();
-
-            IEnumerable<User> ExistingUsersWithSameEmail = FindByCondition(u => u.Email == user.Email)
-                                                           .ToList();
-
-            if (ExistingUsersWithSameEmail.Any())
+        {            
+            if (ContainceUser(user.Email))
             {
                 _logger.LogError($"Could not register user with {user.Email}. Email already exist");
                 throw new InvalidInputException($"User with email {user.Email} already exist");
@@ -72,8 +67,10 @@ namespace TaskItApi.Repositories
 
         public bool ContainceUser(string email)
         {
+            email = email.ToLower();
             bool result = FindByCondition(u => u.Email == email).Any();
             return result;
         }
     }
 }
+

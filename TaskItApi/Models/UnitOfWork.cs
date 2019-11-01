@@ -18,8 +18,19 @@ namespace TaskItApi.Models
         public ISubscriptionRepository SubscriptionRepository { get; private set; }
         public IColorRepository ColorRepository { get; private set;  }
         public IIconRepository IconRepository { get; private set; }
+        public ITaskHolderRepository TaskHolderRepository { get; }
+        public ITaskRepository TaskRepository { get; }
+        public ITaskStatusRepository TaskStatusRepository { get; }
 
-        public UnitOfWork(TaskItDbContext taskItDbContext, IUserRepository userRepository, IGroupRepository groupRepository, ISubscriptionRepository subscriptionRepository, IColorRepository colorRepository, IIconRepository iconRepository)
+        public UnitOfWork(TaskItDbContext taskItDbContext, 
+            IUserRepository userRepository, 
+            IGroupRepository groupRepository, 
+            ISubscriptionRepository subscriptionRepository, 
+            IColorRepository colorRepository, 
+            IIconRepository iconRepository,
+            ITaskHolderRepository taskHolderRepository, 
+            ITaskRepository taskRepository, 
+            ITaskStatusRepository taskStatusRepository)
         {
             _taskItDbContext = taskItDbContext;
 
@@ -28,6 +39,9 @@ namespace TaskItApi.Models
             SubscriptionRepository = subscriptionRepository;
             ColorRepository = colorRepository;
             IconRepository = iconRepository;
+            TaskHolderRepository = taskHolderRepository;
+            TaskRepository = taskRepository;
+            TaskStatusRepository = taskStatusRepository;
         }
 
         /// <summary>

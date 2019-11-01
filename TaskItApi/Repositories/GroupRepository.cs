@@ -36,11 +36,22 @@ namespace TaskItApi.Repositories
                                                .Any())
                                           .Include(g => g.Icon)
                                           .Include(g => g.Color)
+                                          .Include(g => g.Tasks)
                                           .Include(g => g.Members)
                                             .ThenInclude(m => m.User)
                                           .FirstOrDefault();
 
             return group;
+        }
+
+        public bool IsSubscribed(int groupID, int userID)
+        {
+            bool isSubScribed = FindByCondition(g => g.ID == groupID && g.Members
+                                                    .Where(m => m.User.ID == userID)
+                                                    .Any())
+                                .Any();
+
+            return isSubScribed;
         }
     }
 }

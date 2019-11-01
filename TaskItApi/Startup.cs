@@ -145,6 +145,7 @@ namespace TaskItApi
             services.AddTransient<IIconRepository, IconRepository>();
             services.AddTransient<ITaskRepository, TaskRepository>();
             services.AddTransient<ITaskHolderRepository, TaskHolderRepository>();
+            services.AddTransient<ITaskStatusRepository, TaskStatusRepository>();
 
             //Models
             services.AddTransient<IUnitOfWork, UnitOfWork>();
