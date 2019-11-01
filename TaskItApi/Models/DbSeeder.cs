@@ -52,7 +52,7 @@ namespace TaskItApi.Models
             for (int i = 0; i < taskStatusesList.Count(); i++)
             {
                 StringValueAttribute stringValueAttribute = taskStatusesList[i].GetStringValueAttribute();                
-                modelBuilder.Entity<TaskStatus>().HasData(new TaskStatus { ID = i + 1, Status = stringValueAttribute.Value });
+                modelBuilder.Entity<TaskStatus>().HasData(new TaskStatus {ID = i + 1, Status = stringValueAttribute.Value });
             };            
         }
     }
