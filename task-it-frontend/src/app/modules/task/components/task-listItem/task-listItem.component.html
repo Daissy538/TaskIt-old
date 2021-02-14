@@ -1,10 +1,12 @@
 <div class="task-item-container">
   <div fxLayout="row" fxFlexFill>
       <div fxLayout="column">
-        <p>{{task.}}</p>
+        <p>{{task.ID}}</p>
+        <p>{{task.Title}}</p>
       </div>
       <div fxLayout="column">
-
+        <p>{{task.Until | date:'hh'}}</p>
+        <p>{{task.Until | date:'hh:mm'}}</p>
       </div>
   </div>
 </div>

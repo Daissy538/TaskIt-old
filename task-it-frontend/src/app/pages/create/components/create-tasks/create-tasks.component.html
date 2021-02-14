@@ -1,11 +1,22 @@
 <div class="content-container">
-  <div fxLayout="row">
-    <h1 fxLayoutAlign="start center">
-      Nieuwe taken
-    </h1>
+  <div class="tasks-title" fxLayout="row">
+    <span fxLayoutAlign="start center">
+      <h3>
+        Taken
+      </h3>
+    </span>
+    <span class="empty-space"></span>
+    <span fxLayoutAlign="end center">
+      <button
+        mat-button
+        (click)="onCreateGroup()"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </span>
   </div>
-
   <div class="content-container">
-
+    <div></div>
+    <app-taks-list tasks=""></app-taks-list>
   </div>
 </div>

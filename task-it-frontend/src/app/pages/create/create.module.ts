@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDialogModule} from '@angular/material/dialog';
 import { GroupModule } from 'src/app/modules/group/group.module';
+import { TaskModule } from 'src/app/modules/task/task.module';
 
 
 
@@ -23,6 +24,7 @@ import { GroupModule } from 'src/app/modules/group/group.module';
     ReactiveFormsModule,
     MatSelectModule,
     GroupModule,
+    TaskModule,
     CoreModule
   ],
   declarations: [CreateGroupComponent]

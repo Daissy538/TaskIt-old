@@ -9,6 +9,7 @@ import { CoreModule } from 'src/app/core/core.module';
     CommonModule,
     CoreModule
   ],
-  declarations: [TaksListComponent, TaskListItemComponent]
+  declarations: [TaksListComponent, TaskListItemComponent],
+  exports: [TaskListItemComponent]
 })
 export class TaskModule { }
