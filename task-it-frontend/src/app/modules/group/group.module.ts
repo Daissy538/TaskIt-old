@@ -27,7 +27,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule
   ],
   declarations: [GroupOverviewComponent, GroupItemComponent, GroupUpdateComponent, IconSelectorComponent],
-  exports: [GroupOverviewComponent, GroupItemComponent, GroupUpdateComponent],
-  entryComponents: [IconSelectorComponent]
+  exports: [GroupOverviewComponent, GroupItemComponent, GroupUpdateComponent]
 })
 export class GroupModule {}

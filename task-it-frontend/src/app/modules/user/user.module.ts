@@ -20,7 +20,6 @@ import { MatInputModule } from '@angular/material/input';
     CoreModule
   ],
   declarations: [UserOverviewComponent, UserInviteDialogComponent],
-  exports: [UserOverviewComponent],
-  entryComponents: [UserInviteDialogComponent]
+  exports: [UserOverviewComponent]
 })
 export class UserModule { }

@@ -41,7 +41,6 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     MatTooltipModule,
     ConfirmationDialogComponent
   ],
-  declarations: [ConfirmationDialogComponent],
-  entryComponents: [ConfirmationDialogComponent]
+  declarations: [ConfirmationDialogComponent]
 })
 export class CoreModule {}
