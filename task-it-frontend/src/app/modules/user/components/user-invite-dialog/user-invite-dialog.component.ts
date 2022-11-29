@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 
 export interface InvitationDialogData {
   groupName: string;
@@ -12,14 +12,14 @@ export interface InvitationDialogData {
   styleUrls: ['./user-invite-dialog.component.css']
 })
 export class UserInviteDialogComponent implements OnInit {
-  emailFormControl: FormControl;
+  emailFormControl: UntypedFormControl;
 
   constructor(
     public dialogRef: MatDialogRef<UserInviteDialogComponent>
   ) {}
 
   ngOnInit() {
-    this.emailFormControl = new FormControl('', [
+    this.emailFormControl = new UntypedFormControl('', [
       Validators.required,
       Validators.email
     ]);

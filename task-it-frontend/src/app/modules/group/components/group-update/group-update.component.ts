@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 import { GroupOutgoing, GroupIncoming } from 'src/app/core/models/group';
 import {
-  FormGroup,
-  FormControl,
+  UntypedFormGroup,
+  UntypedFormControl,
   Validators,
-  FormBuilder
+  UntypedFormBuilder
 } from '@angular/forms';
 import { Icon } from 'src/app/core/models/Icon';
 import { Color } from 'src/app/core/models/color';
@@ -39,13 +39,13 @@ export class GroupUpdateComponent implements OnInit, OnChanges {
 
   inWriteMode: boolean;
 
-  groupUpdateForm: FormGroup;
-  title: FormControl;
-  description: FormControl;
-  icon: FormControl;
-  color: FormControl;
+  groupUpdateForm: UntypedFormGroup;
+  title: UntypedFormControl;
+  description: UntypedFormControl;
+  icon: UntypedFormControl;
+  color: UntypedFormControl;
 
-  constructor(private formBuilder: FormBuilder, private dialog: MatDialog) {}
+  constructor(private formBuilder: UntypedFormBuilder, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.setInReadMode();
@@ -54,10 +54,10 @@ export class GroupUpdateComponent implements OnInit, OnChanges {
       this.setInReadMode();
     });
 
-    this.title = new FormControl('', [Validators.required]);
-    this.description = new FormControl();
-    this.icon = new FormControl();
-    this.color = new FormControl();
+    this.title = new UntypedFormControl('', [Validators.required]);
+    this.description = new UntypedFormControl();
+    this.icon = new UntypedFormControl();
+    this.color = new UntypedFormControl();
 
     this.groupUpdateForm = this.formBuilder.group({
       title: this.title,

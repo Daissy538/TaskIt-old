@@ -119,6 +119,6 @@
           }
         }
       }
-    }},
-  "defaultProject": "task-it-frontend"
+    }
+  }
 }
