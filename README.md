@@ -2,8 +2,8 @@
 Tool for managing chores in your household. 
 
 #Used Technics/ Frameworks
-* .Net Core 3.0
-* Angular 8.*
+* .Net Core 7.0
+* Angular 14.*
 * Angular Materials
 * Swagger
 * SQL
