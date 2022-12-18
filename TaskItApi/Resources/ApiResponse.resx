@@ -135,4 +135,7 @@
   <data name="SubscribeGroup_Error" xml:space="preserve">
     <value>Not authorized to subscribe to the group</value>
   </data>
+  <data name="UnsubscribeGroup_Error_UserMim" xml:space="preserve">
+    <value>Can't remove the only subscribed user of the group</value>
+  </data>
 </root>

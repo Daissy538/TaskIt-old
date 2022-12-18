@@ -40,13 +40,15 @@ namespace TaskItApi.Controllers
         /// </summary>
         [HttpPost]
         [Route("Create")]
-        public async Task<ActionResult<IEnumerable<GroupOutgoingDTO>>> Create([FromBody]GroupIncomingDTO groupDto)
+        public async Task<ActionResult<IEnumerable<GroupOutgoingDTO>>> Create(GroupIncomingDTO groupDto)
         {
             int userId = HttpContext.User.GetCurrentUserId();
 
             try
             {
-                IEnumerable<Group> groups = _groupService.Create(groupDto, userId);
+                Group group = _mapper.Map<Group>(groupDto);
+
+                IEnumerable<Group> groups = await _groupService.CreateAsync(group, userId);
                 IEnumerable<GroupOutgoingDTO> groupDtos = _mapper.Map<IEnumerable<GroupOutgoingDTO>>(groups);
 
                 return Ok(groupDtos);
@@ -74,7 +76,7 @@ namespace TaskItApi.Controllers
 
             try
             {
-                IEnumerable<Group> groups = _groupService.Delete(id, userId);
+                IEnumerable<Group> groups = await _groupService.DeleteAsync(id, userId);
                 IEnumerable<GroupOutgoingDTO> groupDtos = _mapper.Map<IEnumerable<GroupOutgoingDTO>>(groups);
 
                 return Ok(groupDtos);
@@ -102,7 +104,8 @@ namespace TaskItApi.Controllers
 
             try
             {
-                Group group = _groupService.Update(id, groupDto, userId);
+                Group groupRequest = _mapper.Map<Group>(groupDto);
+                Group group = await _groupService.UpdateAsync(groupRequest, userId);
                 GroupOutgoingDTO response = _mapper.Map<GroupOutgoingDTO>(group);
 
                 return Ok(response);
@@ -130,7 +133,7 @@ namespace TaskItApi.Controllers
 
             try
             {
-                IEnumerable<Group> groups = _groupService.GetGroups(userId);
+                IEnumerable<Group> groups = await _groupService.GetGroupsAsync(userId);
                 IEnumerable<GroupOutgoingDTO> groupDtos = _mapper.Map<IEnumerable<GroupOutgoingDTO>>(groups);
 
                 return Ok(groupDtos);
@@ -153,15 +156,10 @@ namespace TaskItApi.Controllers
 
             try
             {
-                Group group = _groupService.GetGroup(id, userId);
+                Group group = await _groupService.GetGroup(id, userId);
                 GroupOutgoingDTO result = _mapper.Map<GroupOutgoingDTO>(group);
 
                 return Ok(result);
-            }
-            catch (InvalidInputException invalidInputException)
-            {
-                _logger.LogInformation($"User {userId} could not get group with id: {id}", invalidInputException);
-                return BadRequest(_localizer["DeleteGroup_Error"].Value);
             }
             catch (Exception exception)
             {
@@ -176,7 +174,7 @@ namespace TaskItApi.Controllers
         /// </summary>
         [HttpPost]
         [Route("{ID}/Invite")]
-        public async Task<ActionResult<Boolean>> InviteUserToGroup( int ID, [FromBody]InviteIncomingDTO inviteIncoming)
+        public async Task<ActionResult<bool>> InviteUserToGroup( int ID, [FromBody]InviteIncomingDTO inviteIncoming)
         {
             int userId = HttpContext.User.GetCurrentUserId();
 
@@ -202,7 +200,7 @@ namespace TaskItApi.Controllers
         /// </summary>
         [HttpPost]
         [Route("Subscribe")]
-        public async Task<ActionResult<Boolean>> SubscribeToGroup([FromBody] TokenDto tokenDTO)
+        public async Task<ActionResult<bool>> SubscribeToGroup([FromBody] TokenDto tokenDTO)
         {
             int userID = HttpContext.User.GetCurrentUserId();
 
@@ -215,6 +213,28 @@ namespace TaskItApi.Controllers
             {
                 return BadRequest(_localizer["SubscribeGroup_Error"].Value);
             }            
+        }
+
+        [HttpDelete]
+        [Route("{ID}/Unsubscribe")]
+        public async Task<ActionResult<Boolean>> Unsubscribe(int ID)
+        {
+            int userID = HttpContext.User.GetCurrentUserId();
+
+            try
+            {
+                _groupService.Unsubscribe(userID, ID);
+                return Ok(true);
+            }
+            catch (InvalidOperationException invalidOperationException)
+            {
+                _logger.LogWarning($"Could unsubscribe user {userID}", invalidOperationException);
+                return BadRequest(_localizer["UnsubscribeGroup_Error_UserMim"].Value);
+            }catch(Exception exception)
+            {
+                _logger.LogWarning($"Could unsubscribe user {userID}", exception);
+                return StatusCode(500, _localizer["InternalError"].Value);
+            }
         }
     }
 }

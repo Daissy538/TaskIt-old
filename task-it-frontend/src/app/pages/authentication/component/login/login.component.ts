@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators
 } from '@angular/forms';
 import { AuthenticationService } from '../../authentication.service';
@@ -14,18 +14,18 @@ import { User } from 'src/app/core/models/user';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  email: FormControl;
-  password: FormControl;
-  loginForm: FormGroup;
+  email: UntypedFormControl;
+  password: UntypedFormControl;
+  loginForm: UntypedFormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private authenicationService: AuthenticationService
   ) {}
 
   ngOnInit() {
-    this.email = new FormControl('', [Validators.required, Validators.email]);
-    this.password = new FormControl('', [Validators.required]);
+    this.email = new UntypedFormControl('', [Validators.required, Validators.email]);
+    this.password = new UntypedFormControl('', [Validators.required]);
 
     this.loginForm = this.formBuilder.group({
       email: this.email,
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
    * Gets error message for the invalid form fields
    * @param controller The form field where an error occured
    */
-  getErrorMessage(controller: FormControl) {
+  getErrorMessage(controller: UntypedFormControl) {
     return controller.hasError('required')
     ? 'Veld is verplicht'
     : controller.hasError('email')

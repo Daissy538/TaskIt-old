@@ -8,12 +8,16 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  userName: string;
+
   constructor(
     private authService: AuthenticationService,
     private router: Router
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.userName = this.authService.getUserName();
+  }
 
   canLogout(): boolean {
     return this.authService.isLoggedIn();

@@ -6,7 +6,6 @@ import { GroupItemComponent } from './components/group-item/group-item.component
 import { CoreModule } from 'src/app/core/core.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from 'src/app/core/components/confirmation-dialog/confirmation-dialog.component';
 import { GroupUpdateComponent } from './components/group-update/group-update.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,8 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
     CoreModule,
     MatSelectModule
   ],
-  declarations: [GroupOverviewComponent, GroupItemComponent, ConfirmationDialogComponent, GroupUpdateComponent, IconSelectorComponent],
-  exports: [GroupOverviewComponent, GroupItemComponent, GroupUpdateComponent],
-  entryComponents: [ConfirmationDialogComponent, IconSelectorComponent]
+  declarations: [GroupOverviewComponent, GroupItemComponent, GroupUpdateComponent, IconSelectorComponent],
+  exports: [GroupOverviewComponent, GroupItemComponent, GroupUpdateComponent]
 })
 export class GroupModule {}

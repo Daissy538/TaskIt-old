@@ -33,4 +33,10 @@ export class UserService {
 
     return this.http.post(inviteUserUrl, inviteUserData);
   }
+
+  public unsubscribeUser(groupID: number): Observable<any> {
+    const unsubscribeUser =
+      this.groupBaseUrl.toString() + '/' + groupID + '/Unsubscribe';
+    return this.http.delete(unsubscribeUser);
+  }
 }

@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/TaskIt.Domain/bin/Debug/net6.0
+/TaskIt.Domain/obj
+/TaskIt.Infrastructure/bin/Debug/net6.0
+/TaskIt.Infrastructure/obj/Debug/net6.0
+/TaskIt.Infrastructure/obj
+/TaskItApiTest/obj
+/TaskItApiTest/bin/Debug

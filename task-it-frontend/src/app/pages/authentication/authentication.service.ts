@@ -50,7 +50,7 @@ export class AuthenticationService {
         return;
       }
 
-      this.router.navigate(['../../dashboard'], {relativeTo: this.route} );
+      this.router.navigate(['../../dashboard'], { relativeTo: this.route });
     });
   }
 
@@ -59,7 +59,7 @@ export class AuthenticationService {
    */
   logOut() {
     localStorage.clear();
-    this.router.navigate(['../auth/login'], {relativeTo: this.route} );
+    this.router.navigate(['../auth/login'], { relativeTo: this.route });
   }
 
   /**
@@ -97,10 +97,33 @@ export class AuthenticationService {
     return null;
   }
 
+  /**
+   * Gets user id
+   * @returns user id
+   */
+  public getUserID(): number {
+    const userID = localStorage.getItem('id');
+    if (userID) {
+      return parseInt(userID);
+    }
+
+    return null;
+  }
+
+  public getUserName(): string {
+    const username = localStorage.getItem('name');
+    if (username) {
+      return username;
+    }
+
+    return null;
+  }
+
   private setSession(jwtToken: string) {
     const token = jwt_decode(jwtToken);
 
-    localStorage.setItem('id', token['id']);
+    localStorage.setItem('id', token['nameid']);
+    localStorage.setItem('name', token['unique_name']);
     localStorage.setItem('token', jwtToken);
     localStorage.setItem('expirationDate', token['exp']);
   }

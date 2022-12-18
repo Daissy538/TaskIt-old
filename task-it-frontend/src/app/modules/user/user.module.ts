@@ -8,6 +8,7 @@ import { UserInviteDialogComponent } from './components/user-invite-dialog/user-
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -19,7 +20,6 @@ import { MatInputModule } from '@angular/material/input';
     CoreModule
   ],
   declarations: [UserOverviewComponent, UserInviteDialogComponent],
-  exports: [UserOverviewComponent],
-  entryComponents: [UserInviteDialogComponent]
+  exports: [UserOverviewComponent]
 })
 export class UserModule { }

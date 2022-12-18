@@ -4,7 +4,7 @@
   </span>
   <span class="empty-space"></span>
   <span fxLayoutAlign="start center">
-    <mat-icon (click)="inviteUser()" class="add-button">add</mat-icon>
+    <mat-icon (click)="inviteUser()" class="click-button">add</mat-icon>
   </span>
 </div>
 <div class="white-line-hor"></div>
@@ -12,7 +12,7 @@
   <mat-list role="list">
     <mat-list-item *ngFor="let member of members">
       <p>{{ member.userName }}</p>
-      <mat-icon>delete</mat-icon>
+      <mat-icon *ngIf="isActiveUser(member)" class="click-button" (click)="unsubscribeUser(member)">delete</mat-icon>
     </mat-list-item>
   </mat-list>
 </div>

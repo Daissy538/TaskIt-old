@@ -17,7 +17,6 @@ import { GroupModule } from 'src/app/modules/group/group.module';
     CoreModule,
     DragDropModule
   ],
-  declarations: [DashboardComponent],
-  entryComponents: [ConfirmationDialogComponent]
+  declarations: [DashboardComponent]
 })
 export class DashboardModule { }

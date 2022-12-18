@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormControl,
+  UntypedFormControl,
   Validators,
-  FormGroup,
-  FormBuilder
+  UntypedFormGroup,
+  UntypedFormBuilder
 } from '@angular/forms';
 import { User } from 'src/app/core/models/user';
 import { AuthenticationService } from '../../authentication.service';
@@ -14,28 +14,28 @@ import { AuthenticationService } from '../../authentication.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  email: FormControl;
-  name: FormControl;
-  password: FormControl;
-  confirmPassword: FormControl;
+  email: UntypedFormControl;
+  name: UntypedFormControl;
+  password: UntypedFormControl;
+  confirmPassword: UntypedFormControl;
 
-  registerForm: FormGroup;
+  registerForm: UntypedFormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private authenicationService: AuthenticationService
   ) {}
 
   ngOnInit() {
-    this.email = new FormControl('', [Validators.required, Validators.email]);
-    this.name = new FormControl('', [Validators.required]);
-    this.password = new FormControl('', [
+    this.email = new UntypedFormControl('', [Validators.required, Validators.email]);
+    this.name = new UntypedFormControl('', [Validators.required]);
+    this.password = new UntypedFormControl('', [
       Validators.required,
       Validators.pattern(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
       )
     ]);
-    this.confirmPassword = new FormControl('', [Validators.required]);
+    this.confirmPassword = new UntypedFormControl('', [Validators.required]);
 
     this.registerForm = this.formBuilder.group(
       {
@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit {
     };
   }
 
-  getErrorMessage(controller: FormControl) {
+  getErrorMessage(controller: UntypedFormControl) {
     return controller.hasError('required')
       ? 'Veld is verplicht'
       : controller.hasError('email')

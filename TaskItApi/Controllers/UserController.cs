@@ -1,10 +1,12 @@
 ﻿
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using TaskIt.Core.Dtos;
 using TaskItApi.Dtos;
 using TaskItApi.Exceptions;
 using TaskItApi.Resources;
@@ -21,14 +23,16 @@ namespace TaskItApi.Controllers
         private readonly IAuthenticationService _authenicationService;
         private readonly ILogger<UserController> _logger;
         private readonly IStringLocalizer<ApiResponse> _localizer;
+        private readonly IMapper _mapper;
 
         public UserController(IUserService userService
-                              ,IAuthenticationService authenticationService, ILogger<UserController> logger, IStringLocalizer<ApiResponse> localizer)
+                              , IAuthenticationService authenticationService, ILogger<UserController> logger, IStringLocalizer<ApiResponse> localizer, IMapper mapper)
         {
             _userService = userService;
             _authenicationService = authenticationService;
             _logger = logger;
             _localizer = localizer;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -37,11 +41,11 @@ namespace TaskItApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<ActionResult<UserOutGoingDto>> Register([FromBody]UserInComingDto userInComingData)
+        public async Task<ActionResult<UserOutGoingDto>> Register(UserInComingDto userInComingData)
         {
             try
             {
-                _authenicationService.RegisterUser(userInComingData);
+                await _authenicationService.RegisterUserAsync(userInComingData.Name, userInComingData.Email, userInComingData.Password);
                 return Ok();
             }catch(InvalidInputException invalidInputException)
             {
@@ -61,11 +65,12 @@ namespace TaskItApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("Auth")]
-        public ActionResult<string> Authenticate ([FromBody]UserInComingDto userInComingData)
+        public async Task<ActionResult<string>> Authenticate (UserInComingDto userInComingData)
         {
             try
             {
-                TokenDto token =  _authenicationService.AuthenicateUser(userInComingData);
+                var request = this._mapper.Map<AuthenticateDto>(userInComingData);
+                string token =  await _authenicationService.AuthenticateUser(request);
                 
                 return Ok(token);
             }

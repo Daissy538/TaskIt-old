@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
-  FormControl,
+  UntypedFormGroup,
+  UntypedFormControl,
   Validators,
-  FormBuilder
+  UntypedFormBuilder
 } from '@angular/forms';
 import { GroupService } from 'src/app/modules/group/group.service';
 import { Color } from 'src/app/core/models/color';
@@ -20,11 +20,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-group.component.scss']
 })
 export class CreateGroupComponent implements OnInit {
-  groupCreateForm: FormGroup;
-  title: FormControl;
-  description: FormControl;
-  icon: FormControl;
-  color: FormControl;
+  groupCreateForm: UntypedFormGroup;
+  title: UntypedFormControl;
+  description: UntypedFormControl;
+  icon: UntypedFormControl;
+  color: UntypedFormControl;
 
   selectedColor: Color;
   selectedIcon: Icon;
@@ -32,7 +32,7 @@ export class CreateGroupComponent implements OnInit {
   icons: Icon[] = [];
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private groupService: GroupService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
@@ -40,10 +40,10 @@ export class CreateGroupComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.title = new FormControl('', [Validators.required]);
-    this.description = new FormControl();
-    this.icon = new FormControl();
-    this.color = new FormControl();
+    this.title = new UntypedFormControl('', [Validators.required]);
+    this.description = new UntypedFormControl();
+    this.icon = new UntypedFormControl();
+    this.color = new UntypedFormControl();
 
     this.groupCreateForm = this.formBuilder.group({
       title: this.title,
@@ -56,7 +56,7 @@ export class CreateGroupComponent implements OnInit {
     this.initDefaults();
   }
 
-  getErrorMessage(controller: FormControl) {
+  getErrorMessage(controller: UntypedFormControl) {
     return controller.hasError('required') ? 'Veld is verplicht' : '';
   }
 
